@@ -511,6 +511,46 @@ SMODS.ObjectType({
     end,
 })
 
+local fourthwall_gradient = SMODS.Gradient({
+    key="fourthwall",
+    colours = {
+    HEX("ff0000"),
+    HEX("ff6600"),
+    HEX("ffff00"),
+    HEX("4bc292"),
+    HEX("1e9eba"),
+    HEX("00ffff"),
+    HEX("0000ff"),
+    HEX("708b91"),
+    HEX("ef0098"),
+    HEX("ff00ff"),
+    HEX("ff0000"),
+    HEX("ff6600"),
+    HEX("ffff00"),
+    HEX("4bc292"),
+    HEX("1e9eba"),
+    HEX("00ffff"),
+    HEX("0000ff"),
+    HEX("708b91"),
+    HEX("ef0098"),
+    HEX("ff00ff")
+    },
+    cycle = 1
+})
+
+SMODS.Rarity({
+    key = "4TH WALL",
+    loc_txt = {
+        name = "4TH WALL"
+    },
+    badge_colour = fourthwall_gradient,
+    default_weight = 0.005,
+    pools = { ["Joker"] = true },
+    get_weight = function(self, weight, object_type)
+        return weight
+    end
+})
+
 SMODS.Sound {
     key = "tngt_canigetsomeicecream",
     path = "canigetsomeicecream.ogg"
@@ -3809,7 +3849,7 @@ SMODS.Joker {
 }
 ]]
 
---[[
+
 SMODS.Joker {
 	key = 'you',
 	loc_txt = {
@@ -3819,7 +3859,7 @@ SMODS.Joker {
 		}
 	},
 	config = { extra = {} },
-	rarity = 4,
+	rarity = "tngt_4TH WALL",
 	atlas = 'ModdedVanilla3',
 	pos = { x = 0, y = 1 },
 	soul_pos = { x = 4, y = 1 },
@@ -3843,12 +3883,10 @@ SMODS.Joker {
 			card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
 				{ message = localize('k_duplicated_ex') })
 		end
-	end,
-in_pool = function(self, args)
-        return G.GAME.pool_flags.vremade_gros_michel_extinct
-    end
+	end
 }
-]]
+
+
 SMODS.Joker {
     key = 'flamingo',
     loc_txt = {
