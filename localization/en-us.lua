@@ -1,46 +1,23 @@
 return {
     descriptions = {
         Joker = {
-            j_mvan_original = {
+            j_tngt_original = {
                 name = "The original {C:attention}starwalker{}",
                 text = {
                     "* I will also   {C:attention}join{}"
                 }
             },
-            j_mvan_puzzles = {
+            j_tngt_johncena = {
+                name = {
+                    '{f:tngt_chinese,s:2}冰淇淋{}',
+                    "{s:0.4}(Bing Chilling)",
+                },
                 text = {
-                    {
-                        "{s:1.5}Alright, go {C:blue,s:1.5}Ahead{}",
-                    },
-                    {
-                        "{s:0.8,C:inactive}Jimbo says :{}",
-                        "{s:1.5}Hehehehe, {X:mult,C:white,s:1.5}AAAAAAAAAAAAAAAAAA{}",
-                    }
+                    "{C:blue}+#1#{} Chips and {X:blue,C:white}X#3#{} Chips",
+                    "{C:blue}-#2#{} Chips and {X:blue,C:white}-X#4#{} Chips for every hand played"
                 }
             },
-            j_mvan_omori = {
-                text = {
-                    "{f:mvan_omori}Played Dark suits give {f:mvan_omori,C:red}you{} {f:mvan_omori}something.{}",
-                }
-            },
-            j_mvan_dependencies = {
-                name = '{C:red}Missing Dependencies!{}',
-                text = {
-                    {
-                        "Below this textbox is what you're missing to use this Joker :",
-                    },
-                    {
-                        "{X:mult,C:white}Bitches{}",
-                    },
-                    {
-                        "{C:green}A will to live.{}",
-                    },
-                    {
-                        "{C:money}Bank account.{}",
-                    }
-                }
-            },
-            j_mvan_birdthatihate = {
+            j_tngt_birdthatihate = {
                 text = {
                     {
                         "{X:mult,C:white}X#1#{} Mult for each played cards",
@@ -50,7 +27,13 @@ return {
                         "{C:red}You{} might wanna turn {C:blue}down{} the {C:attention}volume.{}"
                     }
                 }
-            }
+            },
+            j_tngt_fourloko = {
+                name = {
+                    "What is that name for a hand type that has four cards",
+			        "with a matching ranks {C:inactive}(suits may differ.){} again?"
+                },
+            },
         },
         Other = {
             ahead = {
@@ -58,6 +41,19 @@ return {
                 text = {
                     "A mod by Haya named {C:attention}Payasaka's Terrible Addition.",
                     "{s:2}Play it.{}",
+                }
+            },
+            Loss = {
+                name = 'Loss',
+                text = {
+                    "|  | |",
+                    "| |  | _"
+                }
+            },
+            scary = {
+                name = "@_@'",
+                text = {
+                    "U- uhm.."
                 }
             },
             Dark = {
@@ -71,6 +67,22 @@ return {
                 text = {
                     "I FUCKING LOVE KASANE TETO.",
                     "GRAAAAAAAAAAAAAAAAAAAAHHH",
+                }
+            },
+            crazy = {
+                name = {
+                    "This {C:attention}Joker{} will trick {C:red}you{}",
+                    "into thinking it's the {C:green}same{} colors!",
+                },
+                text = {
+                    "to see it, {C:dark_edition}Stick your finger in your ass!",
+                }
+            },
+            bepis = {
+                name = "{C:blue}@BepisFever",
+                text = {
+                    "Shoutout to {X:blue,C:white}@BepisFever{} for helping",
+                    "me through this entire modding"
                 }
             }
         }

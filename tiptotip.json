@@ -1,0 +1,13 @@
+{
+    "id": "tangent",
+    "name": "Tangents",
+    "author": ["Nxkoo"],
+    "description": "What if Shenanigans and Randomness had a baby?",
+    "prefix": "tngt",
+    "main_file": "imrocksolidrnouuugh.lua",
+    "badge_colour": "185ea6",
+    "dependencies": [
+        "Steamodded (>=1.0.0~ALPHA-1225a)"
+    ],
+    "version": "1.0.0"
+}
