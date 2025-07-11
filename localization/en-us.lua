@@ -84,7 +84,19 @@ return {
                     "Shoutout to {X:blue,C:white}@BepisFever{} for helping",
                     "me through this entire modding"
                 }
-            }
+            },
+            ilovetv = {
+                name = "I LOVE TV!",
+                text = {
+                    "\"I LOVE TV\" = {X:mult,C:white}+X1{} Mult"
+                }
+            },
+            manually = {
+                name = "Updates manually, every day",
+                text = {
+                    "Mike will update me every day, so don't touch that dial yet, kid"
+                }
+            },
         }
     }
 }

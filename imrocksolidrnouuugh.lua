@@ -242,30 +242,45 @@ nxkoo_dies.custom_ui = function(mod_nodes)
     }
 end
 
+local animatedSprites = {}
+
+function add_animated_sprite(card, config)
+    if config and config.increment_pos then
+        local add_x = card.children.center.sprite_pos.x + (config.increment_pos.x or 0)
+        local add_y = card.children.center.sprite_pos.y + (config.increment_pos.y or 0)
+        config.increment_pos = nil
+        config.end_pos = {x = add_x, y = add_y}
+    end
+    if config and config.go_back and not config.saved_pos then
+        config.saved_pos = {x = card.children.center.sprite_pos.x, y = card.children.center.sprite_pos.y}
+    end
+    animatedSprites[#animatedSprites + 1] = {["card"] = card, ["config"] = config, ["count_delay"] = 0}
+end
+
+function remove_all_running_animation(card)
+    for i,v in ipairs(animatedSprites) do
+        if v.card == card then table.remove(animatedSprites, i) end
+    end
+end
+
 function remove_running_animation(card, ids)
     if type(ids) == "table" then
-        for _, v in ipairs(ids) do
+        for _,v in ipairs(ids) do
             remove_running_animation(card, v)
         end
     else
         if not card then
-            for i, v in ipairs(animatedSprites) do
-                if v.config and v.config.id == id then
-                    table.remove(animatedSprites, i); break
-                end
+            for i,v in ipairs(animatedSprites) do
+                if v.config and v.config.id == id then table.remove(animatedSprites, i); break end
             end
         else
             if not ids then
-                for i, v in ipairs(animatedSprites) do
-                    if v.card == card then
-                        table.remove(animatedSprites, i); break
-                    end
+                for i,v in ipairs(animatedSprites) do
+                    if v.card == card then table.remove(animatedSprites, i); break end
                 end
             else
-                for i, v in ipairs(animatedSprites) do
-                    if v.card == card and v.config and v.config.id == ids then
-                        table.remove(animatedSprites, i); break
-                    end
+                for i,v in ipairs(animatedSprites) do
+                    if v.card == card and v.config and v.config.id == ids then table.remove(animatedSprites, i); break end
                 end
             end
         end
@@ -274,11 +289,11 @@ end
 
 function get_running_animation(card, id)
     if not card then
-        for _, v in ipairs(animatedSprites) do
+        for _,v in ipairs(animatedSprites) do
             if v.config and v.config.id == id then return v end
         end
     else
-        for _, v in ipairs(animatedSprites) do
+        for _,v in ipairs(animatedSprites) do
             if v.card == card and v.config and v.config.id == id then return v end
         end
     end
@@ -286,14 +301,14 @@ end
 
 function modify_running_animation(card, id, new_config)
     if not card then
-        for i, v in ipairs(animatedSprites) do
+        for i,v in ipairs(animatedSprites) do
             if v.config and v.config.id == id then
                 animatedSprites[i]["config"] = new_config
                 break
             end
         end
     else
-        for i, v in ipairs(animatedSprites) do
+        for i,v in ipairs(animatedSprites) do
             if v.card == card and v.config and v.config.id == id then
                 animatedSprites[i]["config"] = new_config
                 break
@@ -304,28 +319,22 @@ end
 
 function disable_running_animation(card, ids, disable)
     if type(ids) == "table" then
-        for _, v in ipairs(ids) do
+        for _,v in ipairs(ids) do
             disable_running_animation(card, ids, disable)
         end
     else
         if not card then
-            for i, v in ipairs(animatedSprites) do
-                if v.config and v.config.id == id then
-                    animatedSprites[i]["config"]["disabled"] = disable; break
-                end
+            for i,v in ipairs(animatedSprites) do
+                if v.config and v.config.id == id then animatedSprites[i]["config"]["disabled"] = disable; break end
             end
         else
             if not ids then
-                for i, v in ipairs(animatedSprites) do
-                    if v.card == card then
-                        animatedSprites[i]["config"]["disabled"] = disable; break
-                    end
+                for i,v in ipairs(animatedSprites) do
+                    if v.card == card then animatedSprites[i]["config"]["disabled"] = disable; break end
                 end
             else
-                for i, v in ipairs(animatedSprites) do
-                    if v.card == card and v.config and v.config.id == ids then
-                        animatedSprites[i]["config"]["disabled"] = disable; break
-                    end
+                for i,v in ipairs(animatedSprites) do
+                    if v.card == card and v.config and v.config.id == ids then animatedSprites[i]["config"]["disabled"] = disable; break end
                 end
             end
         end
@@ -335,9 +344,9 @@ end
 local game_update_ref = Game.update
 function Game:update(dt)
     game_update_ref(self, dt)
-
+   
     if #animatedSprites > 0 then
-        for i, v in ipairs(animatedSprites) do
+        for i,v in ipairs(animatedSprites) do
             local card = v.card
             if card and card.children and card.children.center and card.children.center.set_sprite_pos and not v.disabled then
                 v.config = v.config or {}
@@ -359,7 +368,7 @@ function Game:update(dt)
                     v.set_start_pos = true
                     current_x = start_pos.x or current_x
                     current_y = start_pos.y or current_y
-                    card.children.center:set_sprite_pos({ x = current_x, y = current_y })
+                    card.children.center:set_sprite_pos({x = current_x, y = current_y})
                 end
 
                 v.count_delay = v.count_delay or 0
@@ -436,8 +445,8 @@ function Game:update(dt)
                             end
                         end
                     end
-
-                    card.children.center:set_sprite_pos({ x = current_x, y = current_y })
+                
+                    card.children.center:set_sprite_pos({x = current_x, y = current_y})
                     if v.config.one_shot and current_x == (end_pos.x or 0) and current_y == (end_pos.y or 0) then
                         table.remove(animatedSprites, i)
                         if v.config and v.config.go_back then
@@ -453,7 +462,7 @@ end
 local card_remove_ref = Card.remove
 function Card:remove()
     local ret = card_remove_ref(self)
-    for i, v in ipairs(animatedSprites) do
+    for i,v in ipairs(animatedSprites) do
         if v.card == self then table.remove(animatedSprites, i) end
     end
     return ret
@@ -5411,7 +5420,7 @@ SMODS.Joker {
         text = {
             "Knocking on this door will gain you {C:red}+25{} Mult.",
             "{C:inactive}(Only knock {C:attention}once{} {C:inactive}per {C:attention}Ante{}{C:inactive}, he's {C:red}busy{}{C:inactive}){}",
-            "{C:inactive}(Currently {C:red}#1# Knocks{}{C:inactive}, you are the one who knocks.)"
+            "{C:inactive}(Currently {C:red}#2# Knocks{}{C:inactive}, you are the one who knocks.)"
         }
     },
     rarity = 2,
@@ -5458,7 +5467,7 @@ SMODS.Joker {
             main_start = {
                 { n = G.UIT.T, config = { text = " | I AM THE DANGER! |", scale = 0.4, colour = G.C.RED } },
                 { n = G.UIT.T, config = { text = " Knocks: " .. (card.ability.extra.knock_count or 0), scale = 0.35, colour = G.C.MULT } },
-                { n = G.UIT.T, config = { text = " | Current Mult: +" .. (card.ability.extra.knock_count or 0) * 10, scale = 0.35, colour = G.C.MULT } }
+                { n = G.UIT.T, config = { text = " | Current Mult: +" .. (total_mult or 0) * 10, scale = 0.35, colour = G.C.MULT } }
             }
         }
     end
@@ -6610,7 +6619,7 @@ SMODS.Joker {
 }
 
 SMODS.Atlas {
-    key = " s",
+    key = "tennas",
     path = "tennas.png",
     px = 64,
     py = 64,
@@ -6623,7 +6632,6 @@ SMODS.Joker {
     frames = 93,
     frame_delay = 0.01,
     atlas = "tennas",
-    cost = 5,
     loc_txt = {
         name = "{f:tngt_DETERMINATION}Mr. (Ant) Tenna{}",
         text = {
@@ -6636,11 +6644,13 @@ SMODS.Joker {
     },
     config = {
 		extra = {
-			ILOVETV = 27,
+			ILOVETV = 31,
 			tenna_mult = 1 
 		}
 	},
     loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = { key = 'ilovetv', set = 'Other' }
+    info_queue[#info_queue + 1] = { key = 'manually', set = 'Other' }
 		return {
 			vars = { card.ability.extra.tenna_mult, card.ability.extra.ILOVETV * card.ability.extra.tenna_mult } 
 		}
