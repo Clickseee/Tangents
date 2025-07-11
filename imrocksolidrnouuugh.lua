@@ -242,6 +242,30 @@ nxkoo_dies.custom_ui = function(mod_nodes)
     }
 end
 
+--Thank you PERKOLATED and HPR
+function Card:resize(mod, force_save)
+    self:hard_set_T(self.T.x, self.T.y, self.T.w * mod, self.T.h * mod)
+    remove_all(self.children)
+    self.children = {}
+    self.children.shadow = Moveable(0, 0, 0, 0)
+    self:set_sprites(self.config.center, self.base.id and self.config.card)
+end
+
+local mainmenuref2 = Game.main_menu
+Game.main_menu = function(change_context)
+    local ret = mainmenuref2(change_context)
+
+    local newcard = Card(G.title_top.T.x, G.title_top.T.y, G.CARD_W, G.CARD_H, G.P_CARDS.empty,
+        G.P_CENTERS.j_tngt_wherethefuck, { bypass_discovery_center = true })
+    G.title_top.T.w = G.title_top.T.w * 1.7675
+    G.title_top.T.x = G.title_top.T.x - 0.8
+    G.title_top:emplace(newcard)
+    newcard:start_materialize()
+    newcard:resize(1.1 * 1.2)
+    newcard.no_ui = true
+    return ret
+end
+
 local animatedSprites = {}
 
 function add_animated_sprite(card, config)
@@ -2400,8 +2424,6 @@ SMODS.Joker {
             return {
                 sound = "tngt_onlyaspoonful",
                 dollars = card.ability.extra.blind_dollars,
-                message = localize { type = 'variable', key = 'a_h_size_plus', vars = { card.ability.extra.h_size } },
-                colour = G.C.MONEY,
                 card = card
             }
         end
