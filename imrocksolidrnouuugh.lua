@@ -2469,11 +2469,7 @@ SMODS.Joker {
 
             return {
                 card = card,
-                sound = 'tngt_ineedamedicbag',
-                extra = {
-                    message = localize('k_from_leftovers'),
-                    colour = G.C.UI.TEXT_LIGHT
-                }
+                sound = 'tngt_ineedamedicbag'
             }
         end
     end
