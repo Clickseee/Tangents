@@ -94,7 +94,7 @@ return {
             manually = {
                 name = "Updates manually, every day",
                 text = {
-                    "{C:dark_edition}Mike{} will update me }C:attention}every day{},",
+                    "{C:dark_edition}Mike{} will update me {C:attention}every day{},",
                     "so {C:red}don't{} touch that dial yet, folks"
                 }
             },
