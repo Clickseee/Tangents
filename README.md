@@ -12,3 +12,6 @@
 - SleepyG11 (on discord)
 - HuyTheKiller (on discord)
 - senfinbrare (on discord)
+
+# HOW TO DOWNLOAD??????????
+green big obvious button on top, said download ZIP, enjyo
