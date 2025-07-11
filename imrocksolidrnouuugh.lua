@@ -5410,7 +5410,9 @@ SMODS.Joker {
 local click_ref = Card.click
 function Card:click()
     local ret = click_ref(self)
-    SMODS.calculate_context { clicked_card = self }
+    if G.jokers then
+        SMODS.calculate_context { clicked_card = self }
+    end
 end
 
 SMODS.Joker {
@@ -5441,7 +5443,6 @@ SMODS.Joker {
             if G.GAME.round_resets.ante ~= card.ability.extra.last_click_round then
                 card.ability.extra.knock_count = (card.ability.extra.knock_count or 0) + 1
                 card.ability.extra.last_click_round = G.GAME.round_resets.ante
-
                 card:juice_up(0.5, 0.5)
                 play_sound('tngt_iamindanger', 1.0 + math.random() * 0.1)
             end
@@ -5467,7 +5468,7 @@ SMODS.Joker {
             main_start = {
                 { n = G.UIT.T, config = { text = " | I AM THE DANGER! |", scale = 0.4, colour = G.C.RED } },
                 { n = G.UIT.T, config = { text = " Knocks: " .. (card.ability.extra.knock_count or 0), scale = 0.35, colour = G.C.MULT } },
-                { n = G.UIT.T, config = { text = " | Current Mult: +" .. (total_mult or 0) * 10, scale = 0.35, colour = G.C.MULT } }
+                { n = G.UIT.T, config = { text = " | Current Mult: +" .. (card.ability.extra.knock_count or 0) * (card.ability.extra.mult_per_knock or 25), scale = 0.35, colour = G.C.MULT } }
             }
         }
     end
