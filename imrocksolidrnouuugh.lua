@@ -1154,7 +1154,7 @@ SMODS.Joker {
     loc_txt = {
         name = 'Dear {C:gold}God{}, please {C:red}strike{} this {C:attention}Joker{} down.',
         text = {
-            "After #2# {C:attention}Rounds{}, sell this Cat to make",
+            "After #2# {C:attention}Rounds{}, sell this Cat to",
             "add {C:dark_edition}Negative.{} to a random Joker",
             "{C:inactive}(Currently {C:attention}#1#{}{C:inactive}/{}{C:inactive}#2#{} {C:inactive}Rounds)"
         }
@@ -6627,15 +6627,37 @@ SMODS.Joker {
     loc_txt = {
         name = "{f:tngt_DETERMINATION}Mr. (Ant) Tenna{}",
         text = {
-            "{f:tngt_DETERMINATION}HE'S GROOVY, NEVER GLOOBY.",
-            "{C:inactive,f:tngt_DETERMINATION}(He does nothing, for now.. Stay tuned!)"
+					"{X:mult,C:white,f:tngt_DETERMINATION}X#1#{} {f:tngt_DETERMINATION}Mult for each time",
+					"{f:tngt_DETERMINATION}the words {C:attention}{f:tngt_DETERMINATION}\"I LOVE TV\"{}",
+					"{f:tngt_DETERMINATION}have been said in the {C:attention,f:tngt_DETERMINATION}Balatro Discord Server{}",
+					"{C:inactive,f:tngt_DETERMINATION}(Currently {X:mult,C:white,f:tngt_DETERMINATION}X#2#{C:inactive,f:tngt_DETERMINATION} Mult)",
+					"{C:blue,s:0.7,f:tngt_DETERMINATION}https://discord.gg/balatro{}",
         }
     },
-    rarity = 1,
+    config = {
+		extra = {
+			ILOVETV = 27,
+			tenna_mult = 1 
+		}
+	},
+    loc_vars = function(self, info_queue, card)
+		return {
+			vars = { card.ability.extra.tenna_mult, card.ability.extra.ILOVETV * card.ability.extra.tenna_mult } 
+		}
+	end,
+    rarity = 3,
+    cost = 6,
     unlocked = true,
     discovered = true,
     set_ability = function(self, card, initial, delay_sprites)
         add_animated_sprite(card)
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+				return {
+					x_mult = card.ability.extra.ILOVETV * card.ability.extra.tenna_mult
+				}
+			end
     end
 }
 
