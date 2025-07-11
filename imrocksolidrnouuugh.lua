@@ -4,6 +4,15 @@
 -- Especially Somethingcom515 and N' for the HUGE help
 -- And of course, the people who play the mod, and the people who play the mod's mod, and the mod's mod's mod.
 
+--- Talisman compat
+to_big = to_big or function(num)
+    return num
+end
+
+to_number = to_number or function(num)
+    return num
+end
+
 nxkoo_dies = {
     show_mustard = false,
     mustard_timer = 0,
@@ -233,194 +242,6 @@ nxkoo_dies.custom_ui = function(mod_nodes)
     }
 end
 
---- Talisman compat
-to_big = to_big or function(num)
-    return num
-end
-
-to_number = to_number or function(num)
-    return num
-end
-
-SMODS.ObjectType({
-    key = "Food",
-    default = "j_reserved_parking",
-    cards = {},
-    inject = function(self)
-        SMODS.ObjectType.inject(self)
-        -- insert base game food jokers
-        self:inject_card(G.P_CENTERS.j_gros_michel)
-        self:inject_card(G.P_CENTERS.j_egg)
-        self:inject_card(G.P_CENTERS.j_ice_cream)
-        self:inject_card(G.P_CENTERS.j_cavendish)
-        self:inject_card(G.P_CENTERS.j_turtle_bean)
-        self:inject_card(G.P_CENTERS.j_diet_cola)
-        self:inject_card(G.P_CENTERS.j_popcorn)
-        self:inject_card(G.P_CENTERS.j_ramen)
-        self:inject_card(G.P_CENTERS.j_selzer)
-    end,
-})
-
-SMODS.Sound {
-    key = "tngt_canigetsomeicecream",
-    path = "canigetsomeicecream.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_onlyaspoonful",
-    path = "onlyaspoonful.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_neverforget",
-    path = "neverforget.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_birdthatihate",
-    path = "birdthatihate.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_thatFUCKINbirdthatihate",
-    path = "thatFUCKINbirdthatihate.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_snowgrave",
-    path = "snowgrave.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_recruit",
-    path = "recruit.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_shitass",
-    path = "shitass.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_bwomp",
-    path = "bwomp.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_dealsogood",
-    path = "dealsogood.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_iamindanger",
-    path = "iamindanger.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_NOW",
-    path = "NOW.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_mustard",
-    path = "mustard.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_aughhh",
-    path = "aughhh.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_ineedamedicbag",
-    path = "ineedamedicbag.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_connectionterminated",
-    path = "connectionterminated.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_eggwah",
-    path = "eggwah.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_pingas",
-    path = "pingas.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_damn",
-    path = "damn.ogg"
-}
-
-SMODS.Sound {
-    key = "tngt_flashbang",
-    path = "flashbang.ogg"
-}
-
-SMODS.Atlas {
-    key = "modicon",
-    path = "modicon.png",
-    px = 34,
-    py = 34
-}
-
-SMODS.Atlas {
-    key = "balatro",
-    path = "balatro.png",
-    px = 332,
-    py = 216,
-    prefix_config = { key = false }
-}:register()
-
---Thank you PERKOLATED and HPR
-function Card:resize(mod, force_save)
-    self:hard_set_T(self.T.x, self.T.y, self.T.w * mod, self.T.h * mod)
-    remove_all(self.children)
-    self.children = {}
-    self.children.shadow = Moveable(0, 0, 0, 0)
-    self:set_sprites(self.config.center, self.base.id and self.config.card)
-end
-
-local mainmenuref2 = Game.main_menu
-Game.main_menu = function(change_context)
-    local ret = mainmenuref2(change_context)
-
-    local newcard = Card(G.title_top.T.x, G.title_top.T.y, G.CARD_W, G.CARD_H, G.P_CARDS.empty,
-        G.P_CENTERS.j_tngt_wherethefuck, { bypass_discovery_center = true })
-    G.title_top.T.w = G.title_top.T.w * 1.7675
-    G.title_top.T.x = G.title_top.T.x - 0.8
-    G.title_top:emplace(newcard)
-    newcard:start_materialize()
-    newcard:resize(1.1 * 1.2)
-    newcard.no_ui = true
-    return ret
-end
-
-local animatedSprites = {}
-
-function add_animated_sprite(card, config)
-    if config and config.increment_pos then
-        local add_x = card.children.center.sprite_pos.x + (config.increment_pos.x or 0)
-        local add_y = card.children.center.sprite_pos.y + (config.increment_pos.y or 0)
-        config.increment_pos = nil
-        config.end_pos = { x = add_x, y = add_y }
-    end
-    if config and config.go_back and not config.saved_pos then
-        config.saved_pos = { x = card.children.center.sprite_pos.x, y = card.children.center.sprite_pos.y }
-    end
-    animatedSprites[#animatedSprites + 1] = { ["card"] = card, ["config"] = config, ["count_delay"] = 0 }
-end
-
-function remove_all_running_animation(card)
-    for i, v in ipairs(animatedSprites) do
-        if v.card == card then table.remove(animatedSprites, i) end
-    end
-end
-
 function remove_running_animation(card, ids)
     if type(ids) == "table" then
         for _, v in ipairs(ids) do
@@ -637,6 +458,141 @@ function Card:remove()
     end
     return ret
 end
+
+SMODS.ObjectType({
+    key = "Food",
+    default = "j_reserved_parking",
+    cards = {},
+    inject = function(self)
+        SMODS.ObjectType.inject(self)
+        -- insert base game food jokers
+        self:inject_card(G.P_CENTERS.j_gros_michel)
+        self:inject_card(G.P_CENTERS.j_egg)
+        self:inject_card(G.P_CENTERS.j_ice_cream)
+        self:inject_card(G.P_CENTERS.j_cavendish)
+        self:inject_card(G.P_CENTERS.j_turtle_bean)
+        self:inject_card(G.P_CENTERS.j_diet_cola)
+        self:inject_card(G.P_CENTERS.j_popcorn)
+        self:inject_card(G.P_CENTERS.j_ramen)
+        self:inject_card(G.P_CENTERS.j_selzer)
+    end,
+})
+
+SMODS.Sound {
+    key = "tngt_canigetsomeicecream",
+    path = "canigetsomeicecream.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_onlyaspoonful",
+    path = "onlyaspoonful.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_neverforget",
+    path = "neverforget.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_birdthatihate",
+    path = "birdthatihate.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_thatFUCKINbirdthatihate",
+    path = "thatFUCKINbirdthatihate.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_snowgrave",
+    path = "snowgrave.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_recruit",
+    path = "recruit.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_shitass",
+    path = "shitass.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_bwomp",
+    path = "bwomp.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_dealsogood",
+    path = "dealsogood.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_iamindanger",
+    path = "iamindanger.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_NOW",
+    path = "NOW.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_mustard",
+    path = "mustard.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_aughhh",
+    path = "aughhh.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_ineedamedicbag",
+    path = "ineedamedicbag.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_connectionterminated",
+    path = "connectionterminated.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_eggwah",
+    path = "eggwah.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_pingas",
+    path = "pingas.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_damn",
+    path = "damn.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_flashbang",
+    path = "flashbang.ogg"
+}
+
+SMODS.Atlas {
+    key = "modicon",
+    path = "modicon.png",
+    px = 34,
+    py = 34
+}
+
+SMODS.Atlas {
+    key = "balatro",
+    path = "balatro.png",
+    px = 332,
+    py = 216,
+    prefix_config = { key = false }
+}:register()
+
 
 SMODS.Sound {
     key = 'THX',
@@ -6737,7 +6693,7 @@ SMODS.Joker {
 }
 
 SMODS.Atlas {
-    key = "tennas",
+    key = " s",
     path = "tennas.png",
     px = 64,
     py = 64,
