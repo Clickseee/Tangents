@@ -2271,12 +2271,8 @@ SMODS.Joker {
     unlocked = true,
     discovered = true,
     loc_vars = function(self, info_queue, card)
-        local username = G.PROFILES[G.SETTINGS.profile].name
         return {
-            vars = {},
-            main_start = {
-                { n = G.UIT.T, config = { text = username .. " Get The Banana.", scale = 0.35, colour = G.C.RARITY[4] } }
-            }
+            vars = {}
         }
     end,
     calculate = function(self, card, context)
