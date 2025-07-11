@@ -5281,9 +5281,6 @@ SMODS.Joker {
                 }
             end
         end
-    end,
-    add_to_deck = function(self, card)
-        G.GAME.seed = G.GAME.seed + 1
     end
 }
 
