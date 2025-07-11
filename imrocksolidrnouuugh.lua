@@ -5140,8 +5140,7 @@ SMODS.Joker {
     end,
 
     calculate = function(self, card, context)
-        if context.joker_main then
-            if pseudorandom('Marketpliers' .. card.UID) < G.GAME.probabilities.normal / card.ability.extra.chance then
+    if context.joker_main and pseudorandom('mustard') < G.GAME.probabilities.normal / card.ability.extra.chance then
                 card:juice_up(1, 0.8)
                 play_sound('tarot1', 1.2)
                 return {
@@ -5156,7 +5155,6 @@ SMODS.Joker {
                     card_eval = card
                 }
             end
-        end
     end
 }
 
@@ -5352,7 +5350,7 @@ SMODS.Joker {
     config = {
         extra = {
             reward = 200,
-            quit_chance = 1 / 3
+            quit_chance = 3
         }
     },
     loc_vars = function(self, info_queue, card)
@@ -5366,7 +5364,7 @@ SMODS.Joker {
     end,
     calculate = function(self, card, context)
         if context.selling_self and not context.blueprint then
-            if pseudorandom('getthefuckout') < card.ability.extra.quit_chance then
+            if pseudorandom('gettthefuckout') < G.GAME.probabilities.normal / card.ability.extra.quit_chance then
                 G.E_MANAGER:add_event(Event({
                     func = function()
                         love.event.quit()
