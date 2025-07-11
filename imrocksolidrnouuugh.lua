@@ -1589,7 +1589,7 @@ SMODS.Joker {
     discovered = true,
     config = { extra = { xmult = 2 } },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.xmult, card.ability.extra.xmult * atlussy } }
+        return { vars = { card.ability.extra.xmult, card.ability.extra.xmult + atlussy } }
     end,
     calculate = function(self, card, context)
         if context.joker_main then
@@ -1629,7 +1629,7 @@ SMODS.Joker {
                         SMODS.add_card {
                             set = 'Joker',
                             rarity = pseudorandom_element({ 'Common', 'Uncommon', 'Rare', 'Legendary' }, pseudoseed('BIGRIG')),
-                            key_append = 'spawned_by_boss' -- optional: useful for tracking
+                            key_append = 'spawned_by_boss'
                         }
                         G.GAME.joker_buffer = 0
                         return true
@@ -2462,8 +2462,8 @@ SMODS.Joker {
     loc_txt = {
         name = "{C:attention}One{} thing, i {C:red}don't{} know {C:attention}why{}..",
         text = {
-            "Gains {X:mult,C:white}X#1#{} for each {C:attention}played{} cards.",
-            "{C:inactive}(Currently {X:mult,C:white}X#3#{} {C:inactive}Mult.)",
+            "Gains {X:mult,C:white}X#2#{} for each {C:attention}played{} cards.",
+            "{C:inactive}(Currently {X:mult,C:white}X#1#{} {C:inactive}Mult.)",
             "{C:inactive,s:0.7}(To be honest, this is just the worst version of Duplicare)",
             "{C:inactive,s:0.7}(It's here for balancing reason.)"
         }
@@ -2474,56 +2474,44 @@ SMODS.Joker {
     cost = 6,
     unlocked = true,
     discovered = true,
-    config = {
-        extra = {
-            base_xmult = 1,
-            mult_per_card = 0.1,
-            cards_played = 0
-        }
-    },
-    loc_vars = function(self, info_queue, card)
-        return {
-            vars = {
-                card.ability.extra.mult_per_card,
-                card.ability.extra.cards_played,
-                card.ability.extra.base_xmult + (card.ability.extra.cards_played * card.ability.extra.mult_per_card)
-            }
-        }
-    end,
+    config = { extra = { Xmult = 1, Xmult_mod = 0.1 } }, -- From Cryptid, but i did tweak some shit to make it work here
+    loc_vars = function(self, info_queue, center)
+		return {
+			vars = {
+				number_format(center.ability.extra.Xmult),
+				number_format(center.ability.extra.Xmult_mod),
+			},
+		}
+	end,
     calculate = function(self, card, context)
-        if context.end_of_round and not context.blueprint then
-            local prev_mult = card.ability.extra.base_xmult +
-            (card.ability.extra.cards_played * card.ability.extra.mult_per_card)
-
-            card.ability.extra.cards_played = card.ability.extra.cards_played + #context.scoring_hand
-
-            local new_mult = card.ability.extra.base_xmult +
-            (card.ability.extra.cards_played * card.ability.extra.mult_per_card)
-
-            if new_mult > prev_mult then
-                return {
-                    message = localize {
-                        type = 'variable',
-                        key = 'a_xmult',
-                        vars = { new_mult }
-                    },
-                    colour = G.C.MULT
-                }
-            end
-        end
-
-        if context.joker_main then
-            return {
-                xmult = card.ability.extra.base_xmult +
-                (card.ability.extra.cards_played * card.ability.extra.mult_per_card)
-            }
-        end
-    end,
-    remove_from_deck = function(self, card, from_debuff)
-        if not from_debuff then
-            card.ability.extra.cards_played = 0
-        end
-    end
+		if
+			not context.blueprint
+			and (
+				(context.post_trigger and context.other_joker ~= card)
+				or (context.individual and context.cardarea == G.play)
+			)
+		then
+			card.ability.extra.Xmult = (card.ability.extra.Xmult) + (card.ability.extra.Xmult_mod)
+			card_eval_status_text(card, "extra", nil, nil, nil, { message = localize("k_upgrade_ex") })
+		end
+		if context.joker_main and card.ability.extra.Xmult then
+			if context.forcetrigger then
+				card.ability.extra.Xmult =
+					(card.ability.extra.Xmult) + (card.ability.extra.Xmult_mod)
+			end
+			return {
+				message = localize({
+					type = "variable",
+					key = "a_xmult",
+					vars = {
+						number_format(card.ability.extra.Xmult),
+					},
+				}),
+				Xmult_mod = (card.ability.extra.Xmult),
+				colour = G.C.MULT,
+			}
+		end
+	end
 }
 
 SMODS.Joker {
