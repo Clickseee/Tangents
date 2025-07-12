@@ -2517,7 +2517,7 @@ SMODS.Joker {
             local club_batches = math.floor((G.GAME.current_round.clubs_played or 0) / card.ability.extra.clubs_required)
             return {
                 xchips = club_batches * card.ability.extra.xchips,
-                card_eval_status = (club_batches > 0) and 'active' or nil
+                card_eval_status = (club_batches > 1) and 'active' or nil
             }
         end
     end,
