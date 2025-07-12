@@ -1451,25 +1451,12 @@ SMODS.Joker {
     unlocked = true,
     discovered = true,
     eternal_compat = true,
-    config = { extra = { mult_per_low_card = 0.8 } },
-
+    config = { extra = { mult_per_low_card = 0.8, current_xmult = 1 } },
     loc_vars = function(self, info_queue, card)
-        local current_xmult = 1
-        if G.play and G.play.cards then
-            local low_card_count = 0
-            for _, played_card in ipairs(G.play.cards) do
-                local rank = played_card:get_id()
-                if rank >= 2 and rank <= 5 then
-                    low_card_count = low_card_count + 1
-                end
-            end
-            current_xmult = 1 + (card.ability.extra.mult_per_low_card * low_card_count)
-        end
-
         return {
             vars = {
                 card.ability.extra.mult_per_low_card,
-                current_xmult
+                card.ability.extra.current_xmult
             }
         }
     end,
