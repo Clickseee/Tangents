@@ -1414,7 +1414,8 @@ SMODS.Joker {
     end,
 
     calculate = function(self, card, context)
-    if context.joker_main and pseudorandom('mustard') < G.GAME.probabilities.normal / card.ability.extra.chance then
+    if context.joker_main then
+    if SMODS.pseudorandom_probability(card, 'mustard', 1, card.ability.extra.chance) then
                 card:juice_up(1, 0.8)
                 play_sound('tarot1', 1.2)
                 return {
@@ -1428,7 +1429,7 @@ SMODS.Joker {
                     mult = card.ability.extra.base_mult,
                     card_eval = card
                 }
-            end
+            end 
     end
 }
 
