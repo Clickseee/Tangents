@@ -9,5 +9,6 @@
     "dependencies": [
         "Steamodded (>=1.0.0~ALPHA-1225a)"
     ],
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "allow_redistribution": true
 }
