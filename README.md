@@ -1,4 +1,7 @@
+<img width="1550" height="500" alt="logo" src="https://github.com/user-attachments/assets/a52bbcdb-5fcf-4ea2-ac9e-a17104bd454b" />
+
 # Tangents
+
  Shenanigans and Randomness had a hot steamy intimate time
 
  # CREDITS TO THESE PEOPLE WHO HELPED ME/FOR THEIR CODES REFERENCE
