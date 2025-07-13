@@ -7793,7 +7793,7 @@ SMODS.Joker {
             uses_remaining = 2,
             hands_given = 2,
             discards_given = 2,
-            key_cooldown = 0 -- Prevents key spamming
+            key_cooldown = 0 -- spam
         }
     },
 
@@ -7802,7 +7802,6 @@ SMODS.Joker {
     end,
 
     calculate = function(self, card, context)
-        -- Reset at start of round
         if context.setting_blind and not context.blueprint then
             card.ability.extra.uses_remaining = 2
             return {
@@ -7810,27 +7809,16 @@ SMODS.Joker {
                 colour = G.C.BLUE
             }
         end
-
-        -- Main activation check
         if G.STATE == G.STATES.PLAY_TAROT and
             card.ability.extra.uses_remaining > 0 and
             love.keyboard.isDown("f1") and
             card.ability.extra.key_cooldown <= 0 then
-            -- Set cooldown (about 0.5 seconds)
             card.ability.extra.key_cooldown = 10
-
-            -- Consume use
             card.ability.extra.uses_remaining = card.ability.extra.uses_remaining - 1
-
-            -- Grant resources
             ease_hands_played(card.ability.extra.hands_given)
             ease_discard(card.ability.extra.discards_given)
-
-            -- Visual effects
             card:juice_up(0.5, 0.5)
             play_sound('chips2', 1.1, 0.8)
-
-            -- Floating text
             G.E_MANAGER:add_event(Event({
                 trigger = 'immediate',
                 func = function()
@@ -7851,8 +7839,6 @@ SMODS.Joker {
                 colour = G.C.BLUE
             }
         end
-
-        -- Handle cooldown
         if card.ability.extra.key_cooldown > 0 then
             card.ability.extra.key_cooldown = card.ability.extra.key_cooldown - 1
         end
