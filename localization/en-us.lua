@@ -98,6 +98,22 @@ return {
                     "so {C:red}don't{} touch that dial yet, folks"
                 }
             },
+            tldf = {
+                name = "In summary:",
+                text = {
+                    "Played {C:attention}Stone{} cards permanently gains {X:mult,C:white}X#1#{} Mult",
+                    "if the operators catches on fire."
+                }
+            },
+            jank = {
+                name = "DUE TO SMODS JANK:",
+                text = {
+                    "All of the things that {C:red}decreases{} your {C:gold}money",
+                    "{C:inactive}(i.e Rentals, Boss Blinds. etc)",
+                    "{C:attention}counts{} as your {C:red}spending{}, so be {C:green}wise",
+                    "(it's just like in real life)"
+                }
+            },
         }
     }
 }
