@@ -531,7 +531,7 @@ local fourthwall_gradient = SMODS.Gradient({
     cycle = 1
 })
 
-nxkoo_dies.badge_colour = fourthwall_gradient
+SMODS.current_mod.badge_colour = fourthwall_gradient
 
 SMODS.Rarity({
     key = "4TH WALL",
@@ -1083,7 +1083,7 @@ SMODS.Joker {
     },
     unlocked = true,
     discovered = true,
-    blueprint_compat = true,
+    blueprint_compat = false,
     rarity = 1,
     atlas = 'ModdedVanilla10',
     pos = { x = 0, y = 0 },
@@ -1112,40 +1112,20 @@ SMODS.Joker {
     cost = 3,
     unlocked = true,
     discovered = true,
-    config = { extra = { mult_per_card = 4, mult_mod = 4 } },
+    config = { extra = { mult = 4 } },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.mult_per_card } }
+        return { vars = { card.ability.extra.mult } }
     end,
     calculate = function(self, card, context)
-        if context.joker_main and context.scoring_hand then
-            local total_mult = #context.scoring_hand * card.ability.extra.mult_per_card
-
-            for i = 1, #context.scoring_hand do
-                G.E_MANAGER:add_event(Event({
-                    trigger = 'after',
-                    delay = 0.05 * i,
-                    blockable = false,
-                    func = function()
-                        play_sound('tngt_pingas')
-                        return true
-                    end
-                }))
-            end
-
-            G.E_MANAGER:add_event(Event({
-                trigger = 'after',
-                delay = 0.05 * #context.scoring_hand + 0.1,
-                blockable = false,
-                func = function()
-                    card:juice_up(0.3, 0.3)
-                    return true
-                end
-            }))
-
+        if context.individual and not context.repetition and 
+           not context.end_of_round and context.cardarea == G.play then
+            local sound = "tngt_pingas"
             return {
-                mult_mod = card.ability.extra.mult_per_card,
-                message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult_per_card } },
-                sound = "tngt_pingas",
+                focus = context.other_card,
+                mult_mod = card.ability.extra.mult,
+                message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}},
+                sound = sound,
+                colour = G.C.RED
             }
         end
     end
@@ -1173,7 +1153,7 @@ SMODS.Joker {
         return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain } }
     end,
     calculate = function(self, card, context)
-        if context.end_of_round and not context.blueprint then
+        if context.end_of_round and context.main_eval and not context.blueprint then
             card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
             return {
                 message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.xmult } },
@@ -1484,7 +1464,7 @@ SMODS.Joker {
     end,
 
     calculate = function(self, card, context)
-        if context.joker_main then
+        if context.joker_main and context.main_eval and not context.blueprint then
             if SMODS.pseudorandom_probability(card, 'mustard', 1, card.ability.extra.chance) then
                 card:juice_up(1, 0.8)
                 play_sound('tarot1', 1.2)
@@ -1940,7 +1920,7 @@ SMODS.Joker {
     end,
     unlocked = true,
     discovered = true,
-    blueprint_compat = true,
+    blueprint_compat = false,
     rarity = 2,
     atlas = 'ModdedVanilla6',
     pos = { x = 0, y = 0 },
@@ -2522,7 +2502,7 @@ SMODS.Joker {
     end,
     calculate = function(self, card, context)
         if context.joker_main and context.full_hand then
-            if hand_chips > mult then
+            if to_big(hand_chips) > to_big(mult) then
                 play_sound('tngt_neverforget', 1.2)
                 card:juice_up(0.5, 0.5)
                 return {
@@ -3212,7 +3192,7 @@ SMODS.Joker {
             "{C:inactive}Does nothing?"
         }
     },
-    blueprint_compat = true,
+    blueprint_compat = false,
     perishable_compat = false,
     eternal_compat = true,
     rarity = 2,
@@ -3657,7 +3637,7 @@ SMODS.Joker {
     cost = 4,
     discovered = true,
     unlocked = true,
-    blueprint_compat = true,
+    blueprint_compat = false,
     perishable_compat = true,
     atlas = 'ModdedVanilla10',
     pos = { x = 3, y = 1 },
@@ -4537,7 +4517,7 @@ SMODS.Joker {
     cost = 4,
     discovered = true,
     unlocked = true,
-    blueprint_compat = true,
+    blueprint_compat = false,
     perishable_compat = true,
     atlas = 'ModdedVanilla11',
     pos = { x = 3, y = 1 },
@@ -4648,6 +4628,9 @@ SMODS.Joker {
     atlas = 'ModdedVanilla11',
     pos = { x = 2, y = 0 },
     cost = 4,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
     unlocked = true,
     discovered = true,
     config = { extra = { chance = 4 } },
@@ -4737,6 +4720,9 @@ SMODS.Joker {
     cost = 4,
     unlocked = true,
     discovered = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
     config = {
         extra = {
             streak = 0,
@@ -4792,6 +4778,8 @@ SMODS.Joker {
     unlocked = true,
     discovered = true,
     blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
     config = { extra = { chance = 4 } },
     loc_vars = function(self, info_queue, card)
         return {
@@ -4842,6 +4830,8 @@ SMODS.Joker {
     unlocked = true,
     discovered = true,
     blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
     rarity = 3,
     atlas = 'ModdedVanilla5',
     pos = { x = 0, y = 0 },
@@ -4897,6 +4887,9 @@ SMODS.Joker {
     atlas = 'ModdedVanilla11',
     pos = { x = 1, y = 0 },
     cost = 5,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
     unlocked = true,
     discovered = true,
     config = { extra = { fee = 15 } },
@@ -4927,7 +4920,7 @@ SMODS.Joker {
         end
         if context.setting_blind and not context.blueprint then
             local fee = card.ability.extra.fee
-            if G.GAME.dollars >= fee then
+            if to_big(G.GAME.dollars) <= to_big(card.ability.extra.fee) then
                 G.GAME.dollars = G.GAME.dollars - fee
                 return {
                     ease_dollars(fee)
@@ -6089,7 +6082,7 @@ SMODS.Joker {
 
         if G.shop_jokers and not context then
             for _, shop_card in ipairs(G.shop_jokers.cards) do
-                if shop_card.config.center.key == self.key and G.GAME.dollars >= shop_card.cost then
+                if shop_card.config.center.key == self.key and to_big(G.GAME.dollars) >= shop_card.cost then
                     G.FUNCS.buy_from_shop(shop_card)
                     return {
                         message = "Whaddup slime",
@@ -7362,7 +7355,7 @@ SMODS.Joker {
     cost = 20,
     unlocked = true,
     discovered = true,
-    blueprint_compat = false,
+    blueprint_compat = true,
     eternal_compat = true,
     config = {},
 
@@ -7495,7 +7488,7 @@ SMODS.Joker {
     cost = 20,
     unlocked = true,
     discovered = true,
-    blueprint_compat = false,
+    blueprint_compat = true,
     eternal_compat = true,
     config = {
         extra = {
@@ -7726,7 +7719,7 @@ SMODS.Joker {
     cost = 20,
     unlocked = true,
     discovered = true,
-    blueprint_compat = false,
+    blueprint_compat = true,
     eternal_compat = true,
     config = {
         extra = {
