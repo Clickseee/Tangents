@@ -1758,7 +1758,8 @@ SMODS.Joker {
         text = {
             "This Kanye gains {X:green,C:white}+1!{} Mult for",
             "each time he's {C:attention}gotten{} into a {C:red}controversy{}",
-            "{C:inactive}(Currently {X:green,C:white}6!{} {C:inactive}Mult)"
+            "{C:inactive}(Currently {X:green,C:white}6!{} {C:inactive}Mult)",
+            "{C:inactive,s:2}(there's no factorial mult context for this game, so have a +Mult)"
         }
     },
     rarity = 2,
@@ -1780,7 +1781,7 @@ SMODS.Joker {
     calculate = function(self, card, context)
         if context.joker_main then
             return {
-                xmult = 720
+                mult = 7.2
             }
         end
     end
