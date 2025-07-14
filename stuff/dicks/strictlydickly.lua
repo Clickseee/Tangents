@@ -241,6 +241,18 @@ function love.draw()
             jumpscare_system.enabled = false
             jumpscare_system.active = false
             print("[Terror Deck] Jumpscare system disabled due to image load failure")
+        if #jumpscare_state.images == 0 then
+            for i = 1, 5 do
+                local full_path = jumpscare_state.path .. "assets/customimages/jumpscare_" .. i .. ".png"
+                if love.filesystem.getInfo(full_path) then
+                    local file_data = love.filesystem.newFileData(full_path)
+                    local tempimagedata = love.image.newImageData(file_data)
+                    jumpscare_state.images[i] = love.graphics.newImage(tempimagedata)
+                else
+                    jumpscare_state.images[i] = love.graphics.newImage(1, 1)
+                    print("Jumpscare image missing: " .. full_path)
+                end
+            end
         end
     end
 end
