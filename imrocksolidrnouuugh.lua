@@ -8,11 +8,11 @@ wankers = 0
 dicks = 0
 
 -- MIKE, REBUILD MY MOD
-SMODS.load_file("wankers/cummon/thisdick.lua")()
-SMODS.load_file("wankers/unCUMmon/aintfree.lua")()
-SMODS.load_file("wankers/SKRRRRARE/matteroffact.lua")()
-SMODS.load_file("wankers/TheLegend27/its9inches.lua")()
-SMODS.load_file("dicks/strictlydickly.lua")()
+SMODS.load_file("stuff/wankers/cummon/thisdick.lua")()
+SMODS.load_file("stuff/wankers/unCUMmon/aintfree.lua")()
+SMODS.load_file("stuff/wankers/SKRRRRARE/matteroffact.lua")()
+SMODS.load_file("stuff/wankers/TheLegend27/its9inches.lua")()
+SMODS.load_file("stuff/dicks/strictlydickly.lua")()
 
 --- Talisman compat
 to_big = to_big or function(num)
@@ -826,69 +826,6 @@ SMODS.Atlas {
 SMODS.Atlas {
     key = "ModdedVanilla11",
     path = "ModdedVanilla11.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla12",
-    path = "ModdedVanilla12.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla13",
-    path = "ModdedVanilla13.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla14",
-    path = "ModdedVanilla14.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla15",
-    path = "ModdedVanilla15.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla16",
-    path = "ModdedVanilla16.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla17",
-    path = "ModdedVanilla17.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla18",
-    path = "ModdedVanilla18.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla19",
-    path = "ModdedVanilla19.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla20",
-    path = "ModdedVanilla20.png",
     px = 71,
     py = 95
 }

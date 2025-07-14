@@ -182,7 +182,7 @@ function love.draw()
         
         if #jumpscare_state.images == 0 then
             for i = 1, 5 do
-                local full_path = jumpscare_state.path .. "customimages/jumpscare_" .. i .. ".png"
+                local full_path = jumpscare_state.path .. "assets/customimages/jumpscare_" .. i .. ".png"
                 if love.filesystem.getInfo(full_path) then
                     local file_data = love.filesystem.newFileData(full_path)
                     local tempimagedata = love.image.newImageData(file_data)
