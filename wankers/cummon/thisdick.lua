@@ -361,7 +361,7 @@ SMODS.Joker {
     loc_txt = {
         name = "Hello {C:attention}everybody{}, my name is {X:mult,C:white}Mult{}{C:red}iplier.{}",
         text = {
-            "{C:red}+#1#{} Mult, otherwise {X:mult,C:white}X#2#{} Mult."
+            "{C:red}+#1#{} Mult, {C:green}otherwise{} {X:mult,C:white}X#3#{} Mult."
         }
     },
     rarity = 1,
@@ -375,37 +375,38 @@ SMODS.Joker {
     config = {
         extra = {
             base_mult = 9,
-            mult_plier = 87,
-            chance = 6
+            xmult_chance = 6,
+            huge_xmult = 87
         }
     },
-
+    
     loc_vars = function(self, info_queue, card)
-        return {
-            vars = {
-                card.ability.extra.base_mult,
-                card.ability.extra.mult_plier,
-                card.ability.extra.chance
-            },
-            colours = { nil, G.C.RED }
-        }
+        return { vars = { card.ability.extra.xmult_chance, card.ability.extra.huge_xmult } }
     end,
 
     calculate = function(self, card, context)
-        if context.joker_main and context.main_eval and not context.blueprint then
-            if SMODS.pseudorandom_probability(card, 'mustard', 1, card.ability.extra.chance) then
-                card:juice_up(1, 0.8)
-                play_sound('tarot1', 1.2)
+        if context.joker_main then
+            if SMODS.pseudorandom_probability(card, 'mustard', 1, card.ability.extra.xmult_chance) then
+                play_sound('tngt_neverforget', 1.2, 0.4)
+                card:juice_up(1.2, 0.8)
+                G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.4,
+                    blockable = false,
+                    func = function()
+                        card:juice_up(0.8, 0.8)
+                        return true
+                    end
+                }))
+                
                 return {
-                    message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.mult_plier } },
-                    xmult = card.ability.extra.mult_plier,
-                    colour = G.C.RED,
-                    card_eval = card
+                    xmult = card.ability.extra.huge_xmult,
+                    card_eval_status = 'jokers'
                 }
             else
                 return {
                     mult = card.ability.extra.base_mult,
-                    card_eval = card
+                    card_eval_status = 'jokers'
                 }
             end
         end

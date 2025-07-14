@@ -1224,6 +1224,38 @@ function love.draw()
         love.graphics.draw(nxkoo_dies.current_flashbang, 0, 0, 0, _xscale, _yscale)
     end
 end
+local updatehook = Game.update
+function Game:update(dt)
+    updatehook(self, dt)
+    if nxkoo_dies.show_flashbang then
+        nxkoo_dies.flashbang_timer = nxkoo_dies.flashbang_timer - dt
+        if nxkoo_dies.flashbang_timer <= 0 then
+            nxkoo_dies.show_flashbang = false
+            nxkoo_dies.current_flashbang = nil
+        end
+    end
+end
+
+local drawhook = love.draw
+function love.draw()
+    drawhook()
+
+    function load_flashbang(fn)
+        local full_path = (nxkoo_dies.path .. "customimages/" .. fn)
+        local file_data = assert(NFS.newFileData(full_path))
+        local tempflashbangdata = assert(love.image.newImageData(file_data))
+        return (assert(love.graphics.newImage(tempflashbangdata)))
+    end
+
+    local _xscale = love.graphics.getWidth() / 1920
+    local _yscale = love.graphics.getHeight() / 1080
+
+    if nxkoo_dies.show_flashbang and nxkoo_dies.current_flashbang then
+        local alpha = math.min(1, nxkoo_dies.flashbang_timer * 2)
+        love.graphics.setColor(1, 1, 1, alpha)
+        love.graphics.draw(nxkoo_dies.current_flashbang, 0, 0, 0, _xscale, _yscale)
+    end
+end
 
 SMODS.Joker {
     key = "flasbangout",
@@ -1286,6 +1318,24 @@ SMODS.Joker {
             card.ability.extra.shown_flashbangs[flashbang_key] = true
             card.ability.extra.flashbangs_shown = card.ability.extra.flashbangs_shown + 1
 
+            -- Spawn Ash Baby after 5 unique flashbangs
+            if card.ability.extra.flashbangs_shown >= 5 and not card.ability.extra.ashbaby_spawned then
+                if #G.jokers.cards < G.jokers.config.card_limit then
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            SMODS.add_card({
+                                set = "Joker",
+                                key = "j_tngt_ashbaby",
+                                key_append = "from_flasbangout"
+                            })
+                            card.ability.extra.ashbaby_spawned = true
+                            play_sound('tarot1', 1.4, 0.3)
+                            return true
+                        end
+                    }))
+                end
+            end
+
             G.E_MANAGER:add_event(Event({
                 trigger = 'after',
                 delay = 0.2,
@@ -1300,29 +1350,6 @@ SMODS.Joker {
     end,
 
     calculate = function(self, card, context)
-        local current_time = love.timer.getTime()
-        if current_time - card.ability.extra.last_flashbang_time < 2 then
-            card.ability.extra.flashbang_intensity = card.ability.extra.flashbang_intensity + 1
-        else
-            card.ability.extra.flashbang_intensity = math.max(0, card.ability.extra.flashbang_intensity - 1)
-        end
-        card.ability.extra.last_flashbang_time = current_time
-        if card.ability.extra.flashbang_intensity >= 5 and not card.ability.extra.ashbaby_spawned then
-            if #G.jokers.cards < G.jokers.config.card_limit then
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        SMODS.add_card({
-                            set = "Joker",
-                            key = "j_tngt_ashbaby",
-                            key_append = "from_flasbangout"
-                        })
-                        card.ability.extra.ashbaby_spawned = true
-                        play_sound('tarot1', 1.4, 0.3)
-                        return true
-                    end
-                }))
-            end
-        end
         if context.starting_shop and not context.blind then
             play_sound("tngt_flashbang")
             self:show_omnipotent_flashbang(card, 'shop')
@@ -1423,10 +1450,9 @@ SMODS.Joker {
     remove_from_deck = function(self, card, from_debuff)
         card.ability.extra.shown_flashbangs = {}
         card.ability.extra.flashbangs_shown = 0
-        card.ability.extra.flashbang_intensity = 0
-        card.ability.extra.ashbaby_spawned = false
     end
 }
+
 SMODS.Joker {
     key = "birdthatihate",
     loc_txt = {
@@ -1438,7 +1464,7 @@ SMODS.Joker {
     cost = 6,
     unlocked = true,
     discovered = true,
-    config = { extra = { xmult = 2 } },
+    config = { extra = { xmult = 2, mult = 0 } },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.xmult } }
     end,
@@ -1446,11 +1472,14 @@ SMODS.Joker {
         if context.individual and context.cardarea == G.play then
             local c = context.other_card
             local is_last_card = c == G.play.cards[#G.play.cards]
-
+            local sound = "tngt_birdthatihate"
             return {
                 xmult = 2,
-                sound = is_last_card and "tngt_thatFUCKINbirdthatihate" or "tngt_birdthatihate",
-                message = is_last_card and "T H A T  F U C K I N '  B I R D  T H A T  I  H A T E." or nil
+                focus = context.other_card,
+                mult_mod = card.ability.extra.mult,
+                message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}} or is_last_card and "T H A T  F U C K I N '  B I R D  T H A T  I  H A T E." or nil,
+                sound = sound or is_last_card and "tngt_thatFUCKINbirdthatihate" or "tngt_birdthatihate",
+                colour = G.C.RED
             }
         end
     end
