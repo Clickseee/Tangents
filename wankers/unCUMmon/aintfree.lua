@@ -186,12 +186,39 @@ SMODS.Joker {
     end,
 }
 
+-- HUGE shoutout to Somethingcom525 for helping me code this
+local oldsetcost = Card.set_cost
+function Card:set_cost()
+    local g = oldsetcost(self)
+    if next(SMODS.find_card("j_tngt_dealmaker")) then self.cost = pseudorandom('dealmaker_cost_'..self.sort_id, 0.001, 100) end
+    return g
+end
+
+local cost_dt = 0
+local oldgameupdate = Game.update
+function Game:update(dt)
+    local g = oldgameupdate(self, dt)
+    if G.shop and G.jokers and next(SMODS.find_card("j_tngt_dealmaker")) then
+        cost_dt = cost_dt + dt
+        if cost_dt > 0.2 then 
+            cost_dt = cost_dt - 0.2
+            for i, v in ipairs({G.shop_jokers, G.shop_vouchers, G.shop_booster}) do
+                for ii, vv in ipairs(v.cards) do
+                    vv:set_cost()
+                end
+            end
+        end
+    end
+    return g
+end
+
 SMODS.Joker {
     key = 'dealmaker',
     loc_txt = {
         name = 'Dealmaker',
         text = {
-            "Played {C:attention}face cards{} will earn you a random amount of {C:gold,s:1.5,E:2}[[KROMER]]{}",
+            "{X:gold,C:white,f:tngt_DETERMINATION,s:1.5}[[KROMER]]{} for every played {C:attention}Face{} cards",
+            "Shop prices {C:attention}randomize{} constantly",
             "{C:inactive,s:0.7}WHAT THE [[FIFTY DOLLARS SPECIAL.]]{}"
         }
     },
@@ -208,15 +235,13 @@ SMODS.Joker {
     cost = 4,
     calculate = function(self, card, context)
         if context.starting_shop then
-            local has_joker = next(SMODS.find_card("j_tngt_dealmaker"))
-            if has_joker then
-                return {
-                    message = "DEALS SO GOOD I'LL [$!$$] MYSELF",
-                    sound = "tngt_dealsogood",
-                    colour = G.C.YELLOW
-                }
-            end
+            return {
+                message = "DEALS SO GOOD I'LL [$!$$] MYSELF",
+                sound = "tngt_dealsogood",
+                colour = G.C.YELLOW
+            }
         end
+        
         if context.individual and context.cardarea == G.play and context.other_card:is_face() then
             local amount = pseudorandom('BIGSHOT', 1, 8)
             G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + amount

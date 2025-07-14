@@ -1,10 +1,38 @@
-local jumpscare_state = {
+local jumpscare_system = {
     active = false,
     timer = 0,
-    images = {},
+    enabled = true,
     current_image = 1,
-    path = "Mods/Tangents/" 
+    path = "Mods/Tangents/",
+    loaded_images = {}
 }
+local function load_jumpscare_image(index)
+    if jumpscare_system.loaded_images[index] then
+        return jumpscare_system.loaded_images[index]
+    end
+
+    local filename = "jumpscare_"..index..".png"
+    local full_path = jumpscare_system.path.."customimages/"..filename
+
+    -- Verify file exists
+    if not love.filesystem.getInfo(full_path) then
+        print("[Terror Deck] Missing image:", filename)
+        return nil
+    end
+    local success, img = pcall(function()
+        local file_data = love.filesystem.newFileData(full_path)
+        local img_data = love.image.newImageData(file_data)
+        return love.graphics.newImage(img_data)
+    end)
+
+    if success and img then
+        jumpscare_system.loaded_images[index] = img 
+        return img
+    else
+        print("[Terror Deck] Failed to load image:", filename, "Error:", img)
+        return nil
+    end
+end
 
 SMODS.Back {
     key = "elon",
@@ -135,73 +163,84 @@ SMODS.Back {
     end,
 
     calculate = function(self, back, context)
-        if context.end_of_round and not context.individual and not context.blueprint and not context.repetition then
+        if context.end_of_round and not context.blueprint then
             if pseudorandom('terror_tag') < 0.25 then
-                return {
-                    sound = 'tarot1',
-                    func = function()
-                        add_tag(Tag("tag_negative"))
-                        play_sound('tngt_neverforget', 1.2)
-                    end
-                }
+                pcall(function()
+                    return {
+                        message = "YO WAI-",
+                        colour = G.C.PURPLE,
+                        sound = 'tarot1',
+                        func = function()
+                            add_tag(Tag("tag_negative"))
+                            play_sound('tngt_neverforget', 1.2)
+                            G.E_MANAGER:add_event(Event({
+                                func = function()
+                                    G.playing_card:juice_up(0.8, 0.5)
+                                    return true
+                                end
+                            }))
+                        end
+                    }
+                end)
             end
 
-            if pseudorandom('terror_scare') < 0.5 then
-                G.E_MANAGER:add_event(Event({
-                    delay = 1.5,
-                    func = function()
-                        jumpscare_state.current_image = pseudorandom(1, 5, pseudorandom('jumpscare_img'))
-                        jumpscare_state.active = true
-                        jumpscare_state.timer = 0.5
-                        play_sound('tngt_jumpscare'..pseudorandom("fuckface",1, 5))
-                        return true
-                    end
-                }))
+            if jumpscare_system.enabled and pseudorandom('terror_scare') < 0.5 then
+                pcall(function()
+                    G.E_MANAGER:add_event(Event({
+                        delay = 1.5,
+                        func = function()
+                            jumpscare_system.current_image = pseudorandom(1, 5, pseudorandom('jumpscare_img'))
+                            jumpscare_system.active = true
+                            jumpscare_system.timer = 0.5
+                            
+                            pcall(function()
+                                play_sound('holo1', 1.5, 0.8)
+                            end)
+                            
+                            return true
+                        end
+                    }))
+                end)
             end
         end
+    end,
+
+    locked_loc_vars = function(self, info_queue, back)
+        return { vars = { "Complete a run with the Black Deck at stake level 3+" } }
+    end,
+    check_for_unlock = function(self, args)
+        return args.type == 'win_deck' and get_deck_win_stake('b_black') >= 3
     end
 }
 
 local updatehook = Game.update
 function Game:update(dt)
     updatehook(self, dt)
-    if jumpscare_state.active then
-        jumpscare_state.timer = jumpscare_state.timer - dt
-        if jumpscare_state.timer <= 0 then
-            jumpscare_state.active = false
+    if jumpscare_system.active then
+        jumpscare_system.timer = jumpscare_system.timer - dt
+        if jumpscare_system.timer <= 0 then
+            jumpscare_system.active = false
         end
     end
 end
-
-
 local drawhook = love.draw
 function love.draw()
     drawhook()
 
-    if jumpscare_state.active then
+    if jumpscare_system.active and jumpscare_system.enabled then
+        local img = load_jumpscare_image(jumpscare_system.current_image)
         
-        if #jumpscare_state.images == 0 then
-            for i = 1, 5 do
-                local full_path = jumpscare_state.path .. "customimages/jumpscare_" .. i .. ".png"
-                if love.filesystem.getInfo(full_path) then
-                    local file_data = love.filesystem.newFileData(full_path)
-                    local tempimagedata = love.image.newImageData(file_data)
-                    jumpscare_state.images[i] = love.graphics.newImage(tempimagedata)
-                else
-                    jumpscare_state.images[i] = love.graphics.newImage(1, 1)
-                    print("Jumpscare image missing: " .. full_path)
-                end
-            end
+        if img then
+            local _xscale = love.graphics.getWidth() / 1920
+            local _yscale = love.graphics.getHeight() / 1080
+            local alpha = math.min(1, jumpscare_system.timer * 2)
+            
+            love.graphics.setColor(1, 1, 1, alpha)
+            love.graphics.draw(img, 0, 0, 0, _xscale, _yscale)
+        else
+            jumpscare_system.enabled = false
+            jumpscare_system.active = false
+            print("[Terror Deck] Jumpscare system disabled due to image load failure")
         end
-
-        local _xscale = love.graphics.getWidth() / 1920
-        local _yscale = love.graphics.getHeight() / 1080
-        local alpha = math.min(1, jumpscare_state.timer * 2)
-
-        love.graphics.setColor(1, 1, 1, alpha)
-        love.graphics.draw(
-            jumpscare_state.images[jumpscare_state.current_image],
-            0, 0, 0, _xscale, _yscale
-        )
     end
 end

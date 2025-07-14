@@ -1475,11 +1475,10 @@ SMODS.Joker {
             local sound = "tngt_birdthatihate"
             return {
                 focus = context.other_card,
-                mult_mod = card.ability.extra.mult,
-                message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}},
+                xmult_mod = card.ability.extra.xmult,
+                message = localize{type='variable',key='a_mult',vars={card.ability.extra.xmult}},
                 sound = sound,
                 extra = { 
-                            xmult = 2,
                             sound = is_last_card and "tngt_thatFUCKINbirdthatihate" or "tngt_birdthatihate",
                             message = is_last_card and "T H A T  F U C K I N '  B I R D  T H A T  I  H A T E." or nil
                 },

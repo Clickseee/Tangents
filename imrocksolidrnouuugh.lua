@@ -31,6 +31,7 @@ nxkoo_dies = {
     show_flashbang = false,
     flashbang_timer = 0,
     current_flashbang = nil,
+    default_flashbang = love.graphics.newImage("Mods/Tangents/customimages/jumpscare_2.png"),
     path = SMODS.current_mod.path,
     flashbangs = {
         shop = "shop_flashbang.png",
