@@ -16,6 +16,7 @@
 - HuyTheKiller (on discord)
 - senfinbrare (on discord)
 - Victin (on discord)
+- trif (on discord0 [FOR THE UPCOMING BOOSTER CODE]
 
 # HOW TO DOWNLOAD??????????
 green big obvious button on top, said download ZIP, enjyo
