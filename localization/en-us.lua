@@ -36,6 +36,12 @@ return {
             },
         },
         Other = {
+            artist = {
+                name = 'Art made by:',
+                text = {
+                    "{X:dark_edition,C:white}@ssecun"
+                }
+            },
             ahead = {
                 name = '{C:blue}Ahead{}',
                 text = {

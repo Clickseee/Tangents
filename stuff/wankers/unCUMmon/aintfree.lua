@@ -215,16 +215,16 @@ end
 SMODS.Joker {
     key = 'dealmaker',
     loc_txt = {
-        name = 'Dealmaker',
+        name = '{f:tngt_DETERMINATION}DealMaker',
         text = {
-            "{X:gold,C:white,f:tngt_DETERMINATION,s:1.5}[[KROMER]]{} for every played {C:attention}Face{} cards",
-            "Shop prices {C:attention}randomize{} constantly",
+            "Free {X:gold,C:white,f:tngt_DETERMINATION,s:1.5}[[KROMER]]{} for every played {C:attention}Face{} cards",
+            "{C:inactive}({C:attention}Shop's{} {C:money}pricing{} {C:inactive}will be {C:dark_edition}unstable{} {C:inactive}by this {C:attention}Joker's appearance{}{C:inactive})",
             "{C:inactive,s:0.7}WHAT THE [[FIFTY DOLLARS SPECIAL.]]{}"
         }
     },
     config = {},
     loc_vars = function(self, info_queue, card)
-        return {}
+        info_queue[#info_queue + 1] = { key = "artist", set = "Other" }
     end,
     unlocked = true,
     discovered = true,
@@ -2336,7 +2336,6 @@ SMODS.Joker {
     end
 }
 
-
 SMODS.Joker {
     key = 'lockin',
     loc_txt = {
@@ -2352,52 +2351,48 @@ SMODS.Joker {
     cost = 5,
     unlocked = true,
     discovered = true,
-    config = { extra = {} },
-
+    config = {extra = {multiplier = 2}},
+    loc_vars = function(self, info_queue, card)
+        return {vars = {card.ability.extra.multiplier}}
+    end,
+    
     calculate = function(self, card, context)
-        if context.ending_shop and not context.blueprint then
-            local purchases_made = false
-
-            for _, joker in ipairs(G.jokers.cards) do
-                if joker.ability.shop_was_bought then
-                    purchases_made = true
-                    break
+        if (context.buying_card or context.open_booster) and card.ability.active then
+            card.ability.active = false
+            return {
+                message = localize("k_disabled_ex"),
+                colour = G.C.RED
+            }
+        end
+        if context.end_of_round and context.cardarea == G.jokers and not context.blueprint then
+            card.ability.active = true
+            return {
+                message = localize("k_reset")
+            }
+        end
+        if context.ending_shop and card.ability.active and not context.blueprint then
+            local current_dollars = G.GAME.dollars
+            G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + current_dollars * (card.ability.extra.multiplier - 1)
+            return {
+                dollars = current_dollars * (card.ability.extra.multiplier - 1),
+                
+                message = "LOCK THE FUCK IN!",
+                colour = G.C.MONEY,
+                message_card = card,
+                func = function()
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            G.GAME.dollar_buffer = 0
+                            return true
+                        end
+                    }))
                 end
-            end
-
-            if not purchases_made then
-                for _, consumable in ipairs(G.consumeables.cards) do
-                    if consumable.ability.shop_was_bought then
-                        purchases_made = true
-                        break
-                    end
-                end
-            end
-
-            if not purchases_made then
-                return {
-                    dollars = G.GAME.dollars,
-                    message = "LOCK THE FUCK IN.",
-                    colour = G.C.MONEY,
-                    message_card = card
-                }
-            end
+            }
         end
     end,
-
+    
     add_to_deck = function(self, card, from_debuff)
-        local original_buy_card = buy_card
-        buy_card = function(args)
-            local bought_card = original_buy_card(args)
-            if bought_card then
-                bought_card.ability.shop_was_bought = true
-            end
-            return bought_card
-        end
-    end,
-
-    remove_from_deck = function(self, card, from_debuff)
-        buy_card = G.FUNCS.buy_card
+        card.ability.active = true
     end
 }
 

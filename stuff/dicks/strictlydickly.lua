@@ -66,6 +66,65 @@ SMODS.Back {
     end
 }
 
+local cost_dt = 0
+local oldgameupdate = Game.update
+function Game:update(dt)
+    local g = oldgameupdate(self, dt)
+    if G.shop and next(SMODS.find_card("j_tngt_dealmaker")) then
+        cost_dt = cost_dt + dt
+        if cost_dt > 0.2 then 
+            cost_dt = 0
+            G.GAME.current_round.reroll_cost = pseudorandom('dealmaker_reroll', 1, G.GAME.current_round.reroll_cost + 100)
+        end
+    end
+    return g
+end
+
+local original_calculate_reroll_cost = calculate_reroll_cost
+function calculate_reroll_cost(...)
+    local cost = original_calculate_reroll_cost(...)
+    if next(SMODS.find_card("j_tngt_dealmaker")) then
+        G.GAME.current_round.reroll_cost = pseudorandom('dealmaker_reroll', 1, G.GAME.current_round.reroll_cost + 100)
+    end
+    return cost
+end
+
+SMODS.Back {
+    key = "gangsta",
+    loc_txt = {
+        name = "Gangsta Deck",
+        text = {
+            "Start with {C:money}$50{}",
+            "and a {C:dark_edition}Negative{} {C:red}Eternal{} {C:attention,f:tngt_DETERMINATION}DealMaker{}",
+            "{C:money}$2{} per remaining {C:red}discards{} and {C:blue}hands{}"
+        }
+    },
+    unlocked = true,
+    discovered = true,
+    atlas = "dicks",
+    pos = { x = 3, y = 1 },
+    config = { dollars = 50, extra_hand_bonus = 2, extra_discard_bonus = 2 },
+    loc_vars = function(self, info_queue, back)
+        return { vars = { self.config.extra_hand_bonus, self.config.extra_discard_bonus } }
+    end,
+    apply = function(self)
+        G.E_MANAGER:add_event(Event({
+            trigger = 'immediate',
+            delay = 0.1,
+            func = function()
+                SMODS.add_card({
+                    key = "j_tngt_dealmaker",
+                    edition = "e_negative",
+                    stickers = { "eternal" },
+                    area = G.jokers,
+                    discovered = true
+                })
+                return true
+            end
+        }))
+    end
+}
+
 SMODS.Back {
     key = "pyro",
     loc_txt = {

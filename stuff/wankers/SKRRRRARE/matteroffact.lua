@@ -217,7 +217,7 @@ SMODS.Joker {
 local ease_dollars_ref = ease_dollars
 function ease_dollars(amount, instant, silent)
     local ret = ease_dollars_ref(amount, instant, silent)
-    if amount < 0 and G.GAME.dollars_spent then
+    if to_big(amount) < to_big(0) and G.GAME.dollars_spent then
         G.GAME.dollars_spent = G.GAME.dollars_spent - amount -- dear god please add an actual spending detection
     end
 

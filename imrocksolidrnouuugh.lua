@@ -45,7 +45,8 @@ nxkoo_dies = {
 
 nxkoo_dies.optional_features = function()
     return {
-        quantum_enhancements = true
+        quantum_enhancements = true,
+        post_trigger = true
     }
 end
 
@@ -827,6 +828,13 @@ SMODS.Atlas {
 SMODS.Atlas {
     key = "ModdedVanilla11",
     path = "ModdedVanilla11.png",
+    px = 71,
+    py = 95
+}
+
+SMODS.Atlas {
+    key = "ModdedVanilla12",
+    path = "ModdedVanilla12.png",
     px = 71,
     py = 95
 }
