@@ -203,13 +203,6 @@ SMODS.Back {
                 end)
             end
         end
-    end,
-
-    locked_loc_vars = function(self, info_queue, back)
-        return { vars = { "Complete a run with the Black Deck at stake level 3+" } }
-    end,
-    check_for_unlock = function(self, args)
-        return args.type == 'win_deck' and get_deck_win_stake('b_black') >= 3
     end
 }
 
@@ -243,7 +236,7 @@ function love.draw()
             print("[Terror Deck] Jumpscare system disabled due to image load failure")
         if #jumpscare_system.loaded_images == 0 then
             for i = 1, 5 do
-                local full_path = jumpscare_system.path .. "assets/customimages/jumpscare_" .. i .. ".png"
+                local full_path = jumpscare_system.path .. "/customimages/jumpscare_" .. i .. ".png"
                 if love.filesystem.getInfo(full_path) then
                     local file_data = love.filesystem.newFileData(full_path)
                     local tempimagedata = love.image.newImageData(file_data)
