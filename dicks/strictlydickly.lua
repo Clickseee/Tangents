@@ -3,7 +3,7 @@ local jumpscare_system = {
     timer = 0,
     enabled = true,
     current_image = 1,
-    path = "Mods/Tangents/assets",
+    path = "Mods/Tangents/",
     loaded_images = {}
 }
 local function load_jumpscare_image(index)
@@ -192,7 +192,7 @@ SMODS.Back {
                             jumpscare_system.current_image = pseudorandom(1, 5, pseudorandom('jumpscare_img'))
                             jumpscare_system.active = true
                             jumpscare_system.timer = 0.5
-                            
+                        ,
                             pcall(function()
                                 play_sound('holo1', 1.5, 0.8)
                             end)
@@ -241,19 +241,6 @@ function love.draw()
             jumpscare_system.enabled = false
             jumpscare_system.active = false
             print("[Terror Deck] Jumpscare system disabled due to image load failure")
-        if #jumpscare_system.loaded_images == 0 then
-            for i = 1, 5 do
-                local full_path = jumpscare_system.path .. "assets/customimages/jumpscare_" .. i .. ".png"
-                if love.filesystem.getInfo(full_path) then
-                    local file_data = love.filesystem.newFileData(full_path)
-                    local tempimagedata = love.image.newImageData(file_data)
-                    jumpscare_system.loaded_images[i] = love.graphics.newImage(tempimagedata)
-                else
-                    jumpscare_system.loaded_images[i] = love.graphics.newImage(1, 1)
-                    print("Jumpscare image missing: " .. full_path)
-                end
-            end
         end
     end
-end
 end
