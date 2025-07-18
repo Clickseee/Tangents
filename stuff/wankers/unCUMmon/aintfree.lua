@@ -450,8 +450,7 @@ SMODS.Joker {
             vars = {
                 card.ability.extra.base_xmult,
                 card.ability.extra.rounds_remaining,
-                card.ability.extra.reward_dollars,
-                localize(card.ability.extra.reward_rarity, 'rarities')
+                card.ability.extra.reward_dollars
             }
         }
     end,
@@ -3398,7 +3397,6 @@ SMODS.Joker {
 }
 ]]
 
---[[
 SMODS.Joker {
 	key = 'waddle',
 	loc_txt = {
@@ -3497,5 +3495,5 @@ SMODS.Joker {
 			end
 		end
 	}
-]]
+
 
