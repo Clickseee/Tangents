@@ -7,12 +7,7 @@
 wankers = 0
 dicks = 0
 
--- MIKE, REBUILD MY MOD
-SMODS.load_file("stuff/wankers/cummon/thisdick.lua")()
-SMODS.load_file("stuff/wankers/unCUMmon/aintfree.lua")()
-SMODS.load_file("stuff/wankers/SKRRRRARE/matteroffact.lua")()
-SMODS.load_file("stuff/wankers/TheLegend27/its9inches.lua")()
-SMODS.load_file("stuff/dicks/strictlydickly.lua")()
+
 
 --- Talisman compat
 to_big = to_big or function(num)
@@ -25,7 +20,7 @@ end
 
 tangentry = SMODS.current_mod
 
-nxkoo_dies = {
+G.nxkoo_dies = {
     show_mustard = false,
     mustard_timer = 0,
     show_image = false,
@@ -45,7 +40,7 @@ nxkoo_dies = {
     }
 }
 
-nxkoo_dies.optional_features = function()
+tangentry.optional_features = function()
     return {
         quantum_enhancements = true,
         post_trigger = true
@@ -1001,3 +996,10 @@ function Game:init_game_object()
     ret.current_round.castle2_card = { suit = 'Spades' }
     return ret
 end
+
+-- MIKE, REBUILD MY MOD
+SMODS.load_file("stuff/wankers/cummon/thisdick.lua")()
+SMODS.load_file("stuff/wankers/unCUMmon/aintfree.lua")()
+SMODS.load_file("stuff/wankers/SKRRRRARE/matteroffact.lua")()
+SMODS.load_file("stuff/wankers/TheLegend27/its9inches.lua")()
+SMODS.load_file("stuff/dicks/strictlydickly.lua")()
