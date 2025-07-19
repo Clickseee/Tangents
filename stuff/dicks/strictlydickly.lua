@@ -301,7 +301,7 @@ function love.draw()
                     local tempimagedata = love.image.newImageData(file_data)
                     jumpscare_system.loaded_images[i] = love.graphics.newImage(tempimagedata)
                 else
-                    jumpscare_system.loaded_images[i] = love.graphics.newImage(1, 1)
+                    --jumpscare_system.loaded_images[i] = love.graphics.newImage(1, 1)
                     print("Jumpscare image missing: " .. full_path)
                 end
             end
