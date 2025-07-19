@@ -195,7 +195,7 @@ tangentry.config_tab = function()
                 label = "{C:white}Sex?",
                 desc =
                 "{C:inactive}Pretty self explanatory if you ask me.{}",
-                ref_table = nxkoo_dies.config,
+                ref_table = tangentry.config,
                 ref_value =
                 "items"
             }),
@@ -203,7 +203,7 @@ tangentry.config_tab = function()
                 label = "{C:white}Premium Mode",
                 desc =
                 "{C:inactive}Only available for Discord Nitro user.",
-                ref_table = nxkoo_dies.config,
+                ref_table = tangentry.config,
                 ref_value =
                 "premium"
             }),
@@ -211,20 +211,20 @@ tangentry.config_tab = function()
                 label = "{X:dark_edition,C:white}HYPERDEATH{} {C:dark_edition}MODE",
                 desc = "{C:inactive}Biblically accurate and personalized .exe",
                 ref_table =
-                    nxkoo_dies.config,
+                    tangentry.config,
                 ref_value = "hypergod"
             }),
             create_toggle_spec({
                 label = "{C:white}Sane person?",
                 desc = "{C:inactive}Click this to make your run more immersive",
                 ref_table =
-                    nxkoo_dies.config,
+                    tangentry.config,
                 ref_value = "gurp"
             }),
             create_toggle_spec({
                 label = "{C:white}Homosexual?",
                 ref_table =
-                    nxkoo_dies.config,
+                    tangentry.config,
                 ref_value = "gurp"
             }),
         }
