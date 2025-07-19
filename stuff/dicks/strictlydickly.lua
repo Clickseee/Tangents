@@ -1,3 +1,5 @@
+tangentry = SMODS.current_mod
+
 local jumpscare_system = {
     active = false,
     timer = 0,
