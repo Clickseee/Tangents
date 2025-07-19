@@ -23,7 +23,7 @@ to_number = to_number or function(num)
     return num
 end
 
-tangentry = SMODS.current_mod
+local tangentry = SMODS.current_mod
 
 nxkoo_dies = {
     show_mustard = false,
