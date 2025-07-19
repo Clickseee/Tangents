@@ -18,10 +18,10 @@ local function load_jumpscare_image(index)
     local full_path = jumpscare_system.path.."customimages/"..filename
 
     -- Verify file exists
-    if not love.filesystem.getInfo(full_path) then
+    --[[if not love.filesystem.getInfo(full_path) then
         print("[Terror Deck] Missing image:", filename)
         return nil
-    end
+    end]]
     local success, img = pcall(function()
         local file_data = love.filesystem.newFileData(full_path)
         local img_data = love.image.newImageData(file_data)
