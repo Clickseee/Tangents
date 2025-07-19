@@ -1,5 +1,5 @@
 tangentry = SMODS.current_mod
-tangentpath = string.gsub(tangentpath, "\\", "/")
+tangentpath = string.gsub(tangentry.path, "\\", "/")
 
 local jumpscare_system = {
     active = false,
