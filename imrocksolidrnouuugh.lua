@@ -25,7 +25,7 @@ end
 
 tangentry = SMODS.current_mod
 
-nxkoo_dies = {
+G.nxkoo_dies = {
     show_mustard = false,
     mustard_timer = 0,
     show_image = false,
@@ -45,7 +45,7 @@ nxkoo_dies = {
     }
 }
 
-nxkoo_dies.optional_features = function()
+tangentry.optional_features = function()
     return {
         quantum_enhancements = true,
         post_trigger = true

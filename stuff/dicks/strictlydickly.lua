@@ -6,7 +6,7 @@ local jumpscare_system = {
     timer = 0,
     enabled = true,
     current_image = 1,
-    path = tangentpath.."assets",
+    path = tangentpath .. "assets",
     loaded_images = {}
 }
 local function load_jumpscare_image(index)
@@ -14,8 +14,8 @@ local function load_jumpscare_image(index)
         return jumpscare_system.loaded_images[index]
     end
 
-    local filename = "jumpscare_"..index..".png"
-    local full_path = jumpscare_system.path.."customimages/"..filename
+    local filename = "jumpscare_" .. index .. ".png"
+    local full_path = jumpscare_system.path .. "customimages/" .. filename
 
     -- Verify file exists
     --[[if not love.filesystem.getInfo(full_path) then
@@ -29,7 +29,7 @@ local function load_jumpscare_image(index)
     end)
 
     if success and img then
-        jumpscare_system.loaded_images[index] = img 
+        jumpscare_system.loaded_images[index] = img
         return img
     else
         print("[Terror Deck] Failed to load image:", filename, "Error:", img)
@@ -75,7 +75,7 @@ function Game:update(dt)
     local g = oldgameupdate(self, dt)
     if G.shop and next(SMODS.find_card("j_tngt_dealmaker")) then
         cost_dt = cost_dt + dt
-        if cost_dt > 0.2 then 
+        if cost_dt > 0.2 then
             cost_dt = 0
             G.GAME.current_round.reroll_cost = pseudorandom('dealmaker_reroll', 1, G.GAME.current_round.reroll_cost + 100)
         end
@@ -219,7 +219,7 @@ SMODS.Back {
                 timer = 0,
                 images = {},
                 current_image = 1,
-                path = tangentpath.."assets"
+                path = tangentpath .. "assets"
             }
         end
     end,
@@ -251,14 +251,14 @@ SMODS.Back {
                     G.E_MANAGER:add_event(Event({
                         delay = 1.5,
                         func = function()
-                            jumpscare_system.current_image = pseudorandom(1, 5, pseudorandom('jumpscare_img'))
-                            jumpscare_system.active = true
-                            jumpscare_system.timer = 0.5
-                            
+                            G.nxkoo_dies.jumpscare_png = load_image("jumpscare_"..pseudorandom(1, 5, pseudorandom('jumpscare_img')))
+                            G.nxkoo_dies.show_image = true
+                            G.nxkoo_dies.image_timer = 0.5
+
                             pcall(function()
                                 play_sound('holo1', 1.5, 0.8)
                             end)
-                            
+
                             return true
                         end
                     }))
@@ -278,37 +278,38 @@ function Game:update(dt)
         end
     end
 end
+
 local drawhook = love.draw
 function love.draw()
     drawhook()
 
     if jumpscare_system.active and jumpscare_system.enabled then
         local img = load_jumpscare_image(jumpscare_system.current_image)
-        
+
         if img then
             local _xscale = love.graphics.getWidth() / 1920
             local _yscale = love.graphics.getHeight() / 1080
             local alpha = math.min(1, jumpscare_system.timer * 2)
-            
+
             love.graphics.setColor(1, 1, 1, alpha)
             love.graphics.draw(img, 0, 0, 0, _xscale, _yscale)
         else
             jumpscare_system.enabled = false
             jumpscare_system.active = false
             print("[Terror Deck] Jumpscare system disabled due to image load failure")
-        if #jumpscare_system.loaded_images == 0 then
-            for i = 1, 5 do
-                local full_path = jumpscare_system.path .. "/customimages/jumpscare_" .. i .. ".png"
-                if love.filesystem.getInfo(full_path) then
-                    local file_data = love.filesystem.newFileData(full_path)
-                    local tempimagedata = love.image.newImageData(file_data)
-                    jumpscare_system.loaded_images[i] = love.graphics.newImage(tempimagedata)
-                else
-                    --jumpscare_system.loaded_images[i] = love.graphics.newImage(1, 1)
-                    print("Jumpscare image missing: " .. full_path)
+            if #jumpscare_system.loaded_images == 0 then
+                for i = 1, 5 do
+                    local full_path = jumpscare_system.path .. "/customimages/jumpscare_" .. i .. ".png"
+                    if love.filesystem.getInfo(full_path) then
+                        local file_data = love.filesystem.newFileData(full_path)
+                        local tempimagedata = love.image.newImageData(file_data)
+                        jumpscare_system.loaded_images[i] = love.graphics.newImage(tempimagedata)
+                    else
+                        --jumpscare_system.loaded_images[i] = love.graphics.newImage(1, 1)
+                        print("Jumpscare image missing: " .. full_path)
+                    end
                 end
             end
         end
     end
-end
 end

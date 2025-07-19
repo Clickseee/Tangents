@@ -750,10 +750,10 @@ SMODS.Joker {
 local updatehook = Game.update
 function Game:update(dt)
     updatehook(self, dt)
-    if nxkoo_dies.show_mustard then
-        nxkoo_dies.mustard_timer = nxkoo_dies.mustard_timer - dt
-        if nxkoo_dies.mustard_timer <= 0 then
-            nxkoo_dies.show_mustard = false
+    if G.nxkoo_dies.show_mustard then
+        G.nxkoo_dies.mustard_timer = G.nxkoo_dies.mustard_timer - dt
+        if G.nxkoo_dies.mustard_timer <= 0 then
+            G.nxkoo_dies.show_mustard = false
         end
     end
 end
@@ -763,7 +763,7 @@ function love.draw()
     drawhook()
 
     function load_image(fn)
-        local full_path = (nxkoo_dies.path .. "assets/customimages/" .. fn)
+        local full_path = (G.nxkoo_dies.path .. "assets/customimages/" .. fn)
         local file_data = assert(NFS.newFileData(full_path))
         local tempimagedata = assert(love.image.newImageData(file_data))
         return (assert(love.graphics.newImage(tempimagedata)))
@@ -772,13 +772,13 @@ function love.draw()
     local _xscale = love.graphics.getWidth() / 1920
     local _yscale = love.graphics.getHeight() / 1080
 
-    if nxkoo_dies.show_mustard then
-        if not nxkoo_dies.mustard_png then
-            nxkoo_dies.mustard_png = load_image("mustard.png")
+    if G.nxkoo_dies.show_mustard then
+        if not G.nxkoo_dies.mustard_png then
+            G.nxkoo_dies.mustard_png = load_image("mustard.png")
         end
-        local alpha = math.min(1, nxkoo_dies.mustard_timer * 2)
+        local alpha = math.min(1, G.nxkoo_dies.mustard_timer * 2)
         love.graphics.setColor(1, 1, 1, alpha)
-        love.graphics.draw(nxkoo_dies.mustard_png, 0, 0, 0, _xscale, _yscale)
+        love.graphics.draw(G.nxkoo_dies.mustard_png, 0, 0, 0, _xscale, _yscale)
     end
 end
 
@@ -817,11 +817,11 @@ SMODS.Joker {
                 local multard = card.ability.extra.xmult +
                     pseudorandom('mustard') % card.ability.extra.variance
 
-                if not nxkoo_dies.mustard_png then
-                    nxkoo_dies.mustard_png = load_image("mustard.png")
+                if not G.nxkoo_dies.mustard_png then
+                    G.nxkoo_dies.mustard_png = load_image("mustard.png")
                 end
-                nxkoo_dies.show_mustard = true
-                nxkoo_dies.mustard_timer = 0.5
+                G.nxkoo_dies.show_mustard = true
+                G.nxkoo_dies.mustard_timer = 0.5
 
                 G.E_MANAGER:add_event(Event({
                     trigger = 'after',
@@ -1192,10 +1192,10 @@ SMODS.Joker {
 local updatehook = Game.update
 function Game:update(dt)
     updatehook(self, dt)
-    if nxkoo_dies.show_mustard then
-        nxkoo_dies.mustard_timer = nxkoo_dies.mustard_timer - dt
-        if nxkoo_dies.mustard_timer <= 0 then
-            nxkoo_dies.show_mustard = false
+    if G.nxkoo_dies.show_mustard then
+        G.nxkoo_dies.mustard_timer = G.nxkoo_dies.mustard_timer - dt
+        if G.nxkoo_dies.mustard_timer <= 0 then
+            G.nxkoo_dies.show_mustard = false
         end
     end
 end
@@ -1205,7 +1205,7 @@ function love.draw()
     drawhook()
 
     function load_image(fn)
-        local full_path = (nxkoo_dies.path .. "assets/customimages/" .. fn)
+        local full_path = (G.nxkoo_dies.path .. "assets/customimages/" .. fn)
         local file_data = assert(NFS.newFileData(full_path))
         local tempimagedata = assert(love.image.newImageData(file_data))
         return (assert(love.graphics.newImage(tempimagedata)))
@@ -1214,13 +1214,13 @@ function love.draw()
     local _xscale = love.graphics.getWidth() / 1920
     local _yscale = love.graphics.getHeight() / 1080
 
-    if nxkoo_dies.show_mustard then
-        if not nxkoo_dies.mustard_png then
-            nxkoo_dies.mustard_png = load_image("mustard.png")
+    if G.nxkoo_dies.show_mustard then
+        if not G.nxkoo_dies.mustard_png then
+            G.nxkoo_dies.mustard_png = load_image("mustard.png")
         end
-        local alpha = math.min(1, nxkoo_dies.mustard_timer * 2)
+        local alpha = math.min(1, G.nxkoo_dies.mustard_timer * 2)
         love.graphics.setColor(1, 1, 1, alpha)
-        love.graphics.draw(nxkoo_dies.mustard_png, 0, 0, 0, _xscale, _yscale)
+        love.graphics.draw(G.nxkoo_dies.mustard_png, 0, 0, 0, _xscale, _yscale)
     end
 end
 
@@ -1258,11 +1258,11 @@ SMODS.Joker {
             local multard = card.ability.extra.xmult +
                 pseudorandom('mustard') % card.ability.extra.variance
 
-            if not nxkoo_dies.mustard_png then
-                nxkoo_dies.mustard_png = load_image("mustard.png")
+            if not G.nxkoo_dies.mustard_png then
+                G.nxkoo_dies.mustard_png = load_image("mustard.png")
             end
-            nxkoo_dies.show_mustard = true
-            nxkoo_dies.mustard_timer = 0.5
+            G.nxkoo_dies.show_mustard = true
+            G.nxkoo_dies.mustard_timer = 0.5
 
             G.E_MANAGER:add_event(Event({
                 trigger = 'after',
@@ -3261,11 +3261,11 @@ SMODS.Joker {
             local dollars = G.GAME.dollars or 0
             local multiplier = math.floor(dollars / 4) * card.ability.extra.mult_per_2_dollars
 
-            if not nxkoo_dies.damnbird_png then
-                nxkoo_dies.damnbird_png = load_image("damnbird.png")
+            if not G.nxkoo_dies.damnbird_png then
+                G.nxkoo_dies.damnbird_png = load_image("damnbird.png")
             end
-            nxkoo_dies.show_image = true
-            nxkoo_dies.image_timer = 0.5
+            G.nxkoo_dies.show_image = true
+            G.nxkoo_dies.image_timer = 0.5
 
             G.E_MANAGER:add_event(Event({
                 trigger = 'after',

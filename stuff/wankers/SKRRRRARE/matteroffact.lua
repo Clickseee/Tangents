@@ -595,10 +595,10 @@ SMODS.Joker {
 local updatehook = Game.update
 function Game:update(dt)
     updatehook(self, dt)
-    if nxkoo_dies.show_image then
-        nxkoo_dies.image_timer = nxkoo_dies.image_timer - dt
-        if nxkoo_dies.image_timer <= 0 then
-            nxkoo_dies.show_image = false
+    if G.nxkoo_dies.show_image then
+        G.nxkoo_dies.image_timer = G.nxkoo_dies.image_timer - dt
+        if G.nxkoo_dies.image_timer <= 0 then
+            G.nxkoo_dies.show_image = false
         end
     end
 end
@@ -608,7 +608,7 @@ function love.draw()
     drawhook()
 
     function load_image(fn)
-        local full_path = (nxkoo_dies.path .. "assets/customimages/" .. fn)
+        local full_path = (G.nxkoo_dies.path .. "assets/customimages/" .. fn)
         local file_data = assert(NFS.newFileData(full_path))
         local tempimagedata = assert(love.image.newImageData(file_data))
         return (assert(love.graphics.newImage(tempimagedata)))
@@ -617,13 +617,13 @@ function love.draw()
     local _xscale = love.graphics.getWidth() / 1920
     local _yscale = love.graphics.getHeight() / 1080
 
-    if nxkoo_dies.show_image then
-        if not nxkoo_dies.show_image then
-            nxkoo_dies.show_image = load_image("damnbird.png")
+    if G.nxkoo_dies.show_image then
+        if not G.nxkoo_dies.show_image then
+            G.nxkoo_dies.show_image = load_image("damnbird.png")
         end
-        local alpha = math.min(1, nxkoo_dies.image_timer * 2)
+        local alpha = math.min(1, G.nxkoo_dies.image_timer * 2)
         love.graphics.setColor(1, 1, 1, alpha)
-        love.graphics.draw(nxkoo_dies.damnbird_png, 0, 0, 0, _xscale, _yscale)
+        love.graphics.draw(G.nxkoo_dies.damnbird_png, 0, 0, 0, _xscale, _yscale)
     end
 end
 
@@ -1195,11 +1195,11 @@ SMODS.Joker {
 local updatehook = Game.update
 function Game:update(dt)
     updatehook(self, dt)
-    if nxkoo_dies.show_flashbang then
-        nxkoo_dies.flashbang_timer = nxkoo_dies.flashbang_timer - dt
-        if nxkoo_dies.flashbang_timer <= 0 then
-            nxkoo_dies.show_flashbang = false
-            nxkoo_dies.current_flashbang = nil
+    if G.nxkoo_dies.show_flashbang then
+        G.nxkoo_dies.flashbang_timer = G.nxkoo_dies.flashbang_timer - dt
+        if G.nxkoo_dies.flashbang_timer <= 0 then
+            G.nxkoo_dies.show_flashbang = false
+            G.nxkoo_dies.current_flashbang = nil
         end
     end
 end
@@ -1209,7 +1209,7 @@ function love.draw()
     drawhook()
 
     function load_flashbang(fn)
-        local full_path = (nxkoo_dies.path .. "assets/customimages/" .. fn)
+        local full_path = (G.nxkoo_dies.path .. "assets/customimages/" .. fn)
         local file_data = assert(NFS.newFileData(full_path))
         local tempflashbangdata = assert(love.image.newImageData(file_data))
         return (assert(love.graphics.newImage(tempflashbangdata)))
@@ -1218,20 +1218,20 @@ function love.draw()
     local _xscale = love.graphics.getWidth() / 1920
     local _yscale = love.graphics.getHeight() / 1080
 
-    if nxkoo_dies.show_flashbang and nxkoo_dies.current_flashbang then
-        local alpha = math.min(1, nxkoo_dies.flashbang_timer * 2)
+    if G.nxkoo_dies.show_flashbang and G.nxkoo_dies.current_flashbang then
+        local alpha = math.min(1, G.nxkoo_dies.flashbang_timer * 2)
         love.graphics.setColor(1, 1, 1, alpha)
-        love.graphics.draw(nxkoo_dies.current_flashbang, 0, 0, 0, _xscale, _yscale)
+        love.graphics.draw(G.nxkoo_dies.current_flashbang, 0, 0, 0, _xscale, _yscale)
     end
 end
 local updatehook = Game.update
 function Game:update(dt)
     updatehook(self, dt)
-    if nxkoo_dies.show_flashbang then
-        nxkoo_dies.flashbang_timer = nxkoo_dies.flashbang_timer - dt
-        if nxkoo_dies.flashbang_timer <= 0 then
-            nxkoo_dies.show_flashbang = false
-            nxkoo_dies.current_flashbang = nil
+    if G.nxkoo_dies.show_flashbang then
+        G.nxkoo_dies.flashbang_timer = G.nxkoo_dies.flashbang_timer - dt
+        if G.nxkoo_dies.flashbang_timer <= 0 then
+            G.nxkoo_dies.show_flashbang = false
+            G.nxkoo_dies.current_flashbang = nil
         end
     end
 end
@@ -1241,7 +1241,7 @@ function love.draw()
     drawhook()
 
     function load_flashbang(fn)
-        local full_path = (nxkoo_dies.path .. "assets/customimages/" .. fn)
+        local full_path = (G.nxkoo_dies.path .. "assets/customimages/" .. fn)
         local file_data = assert(NFS.newFileData(full_path))
         local tempflashbangdata = assert(love.image.newImageData(file_data))
         return (assert(love.graphics.newImage(tempflashbangdata)))
@@ -1250,10 +1250,10 @@ function love.draw()
     local _xscale = love.graphics.getWidth() / 1920
     local _yscale = love.graphics.getHeight() / 1080
 
-    if nxkoo_dies.show_flashbang and nxkoo_dies.current_flashbang then
-        local alpha = math.min(1, nxkoo_dies.flashbang_timer * 2)
+    if G.nxkoo_dies.show_flashbang and G.nxkoo_dies.current_flashbang then
+        local alpha = math.min(1, G.nxkoo_dies.flashbang_timer * 2)
         love.graphics.setColor(1, 1, 1, alpha)
-        love.graphics.draw(nxkoo_dies.current_flashbang, 0, 0, 0, _xscale, _yscale)
+        love.graphics.draw(G.nxkoo_dies.current_flashbang, 0, 0, 0, _xscale, _yscale)
     end
 end
 
@@ -1299,16 +1299,16 @@ SMODS.Joker {
     end,
 
     show_omnipotent_flashbang = function(self, card, flashbang_key)
-        if not nxkoo_dies.flashbangs_loaded then
-            for k, v in pairs(nxkoo_dies.flashbangs) do
-                nxkoo_dies.flashbangs[k] = load_flashbang(v)
+        if not G.nxkoo_dies.flashbangs_loaded then
+            for k, v in pairs(G.nxkoo_dies.flashbangs) do
+                G.nxkoo_dies.flashbangs[k] = load_flashbang(v)
             end
-            nxkoo_dies.flashbangs_loaded = true
+            G.nxkoo_dies.flashbangs_loaded = true
         end
 
-        nxkoo_dies.current_flashbang = nxkoo_dies.flashbangs[flashbang_key]
-        nxkoo_dies.show_flashbang = true
-        nxkoo_dies.flashbang_timer = 0.75
+        G.nxkoo_dies.current_flashbang = G.nxkoo_dies.flashbangs[flashbang_key]
+        G.nxkoo_dies.show_flashbang = true
+        G.nxkoo_dies.flashbang_timer = 0.75
 
         if not card.ability.extra.shown_flashbangs then
             card.ability.extra.shown_flashbangs = {}
