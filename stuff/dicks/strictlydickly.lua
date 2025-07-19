@@ -1,11 +1,12 @@
 tangentry = SMODS.current_mod
+tangentpath = string.gsub(tangentpath, "\\", "/")
 
 local jumpscare_system = {
     active = false,
     timer = 0,
     enabled = true,
     current_image = 1,
-    path = tangentry.path.."assets",
+    path = tangentpath.."assets",
     loaded_images = {}
 }
 local function load_jumpscare_image(index)
@@ -218,7 +219,7 @@ SMODS.Back {
                 timer = 0,
                 images = {},
                 current_image = 1,
-                path = tangentry.path.."assets"
+                path = tangentpath.."assets"
             }
         end
     end,
