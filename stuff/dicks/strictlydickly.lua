@@ -3,7 +3,7 @@ local jumpscare_system = {
     timer = 0,
     enabled = true,
     current_image = 1,
-    path = nxkoo_dies.current.path.."assets/",
+    path = tangentry.path.."assets/",
     loaded_images = {}
 }
 local function load_jumpscare_image(index)
@@ -216,7 +216,7 @@ SMODS.Back {
                 timer = 0,
                 images = {},
                 current_image = 1,
-                path = nxkoo_dies.current.path
+                path = tangentry.path
             }
         end
     end,

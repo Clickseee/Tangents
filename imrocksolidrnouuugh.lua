@@ -23,6 +23,8 @@ to_number = to_number or function(num)
     return num
 end
 
+tangentry = SMODS.current_mod
+
 nxkoo_dies = {
     show_mustard = false,
     mustard_timer = 0,
@@ -32,7 +34,6 @@ nxkoo_dies = {
     flashbang_timer = 0,
     current_flashbang = nil,
     default_flashbang = string.sub(SMODS.current_mod.path, string.find(SMODS.current_mod.path, "Mods")).."/assets/customimages/jumpscare_2.png",
-    current = SMODS.current_mod,
     path = SMODS.current_mod.path,
     flashbangs = {
         shop = "shop_flashbang.png",
