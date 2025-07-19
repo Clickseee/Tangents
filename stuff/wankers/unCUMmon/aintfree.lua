@@ -3261,9 +3261,8 @@ SMODS.Joker {
             local dollars = G.GAME.dollars or 0
             local multiplier = math.floor(dollars / 4) * card.ability.extra.mult_per_2_dollars
 
-            if not G.nxkoo_dies.damnbird_png then
-                G.nxkoo_dies.damnbird_png = load_image("damnbird.png")
-            end
+            G.nxkoo_dies.damnbird_png = load_image("damnbird.png")
+
             G.nxkoo_dies.show_image = true
             G.nxkoo_dies.image_timer = 0.5
 
