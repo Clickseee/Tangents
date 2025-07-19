@@ -3,7 +3,7 @@ local jumpscare_system = {
     timer = 0,
     enabled = true,
     current_image = 1,
-    path = SMODS.current_mod.path.."assets/",
+    path = nxkoo_dies.current.path.."assets/",
     loaded_images = {}
 }
 local function load_jumpscare_image(index)
@@ -216,7 +216,7 @@ SMODS.Back {
                 timer = 0,
                 images = {},
                 current_image = 1,
-                path = SMODS.current_mod.path
+                path = nxkoo_dies.current.path
             }
         end
     end,
