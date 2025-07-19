@@ -219,7 +219,7 @@ tangentry.config_tab = function()
                 desc = "{C:inactive}Click this to make your run more immersive",
                 ref_table =
                     tangentry.config,
-                ref_value = "sane"
+                ref_value = "homosexual"
             }),
             create_toggle_spec({
                 label = "{C:white}Homosexual?",
