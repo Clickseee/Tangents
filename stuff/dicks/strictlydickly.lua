@@ -3,7 +3,7 @@ local jumpscare_system = {
     timer = 0,
     enabled = true,
     current_image = 1,
-    path = "Mods/Tangents/assets",
+    path = SMODS.current_mod.path.."assets/",
     loaded_images = {}
 }
 local function load_jumpscare_image(index)
@@ -216,7 +216,7 @@ SMODS.Back {
                 timer = 0,
                 images = {},
                 current_image = 1,
-                path = "Mods/Tangents/"
+                path = SMODS.current_mod.path
             }
         end
     end,
@@ -301,7 +301,7 @@ function love.draw()
                     local tempimagedata = love.image.newImageData(file_data)
                     jumpscare_system.loaded_images[i] = love.graphics.newImage(tempimagedata)
                 else
-                    jumpscare_system.loaded_images[i] = love.graphics.newImage(1, 1)
+                    --jumpscare_system.loaded_images[i] = love.graphics.newImage(1, 1)
                     print("Jumpscare image missing: " .. full_path)
                 end
             end

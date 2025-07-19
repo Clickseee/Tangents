@@ -23,6 +23,8 @@ to_number = to_number or function(num)
     return num
 end
 
+tangentry = SMODS.current_mod
+
 nxkoo_dies = {
     show_mustard = false,
     mustard_timer = 0,
@@ -184,7 +186,7 @@ function create_toggle_spec(args)
     return t
 end
 
-nxkoo_dies.config_tab = function()
+tangentry.config_tab = function()
     return {
         n = G.UIT.ROOT,
         config = { r = 0.1, minw = 10, align = 'cm', padding = 0.1, colour = G.C.BLACK },
@@ -193,15 +195,15 @@ nxkoo_dies.config_tab = function()
                 label = "{C:white}Sex?",
                 desc =
                 "{C:inactive}Pretty self explanatory if you ask me.{}",
-                ref_table = nxkoo_dies.config,
+                ref_table = tangentry.config,
                 ref_value =
-                "items"
+                "sex"
             }),
             create_toggle_spec({
                 label = "{C:white}Premium Mode",
                 desc =
                 "{C:inactive}Only available for Discord Nitro user.",
-                ref_table = nxkoo_dies.config,
+                ref_table = tangentry.config,
                 ref_value =
                 "premium"
             }),
@@ -209,21 +211,21 @@ nxkoo_dies.config_tab = function()
                 label = "{X:dark_edition,C:white}HYPERDEATH{} {C:dark_edition}MODE",
                 desc = "{C:inactive}Biblically accurate and personalized .exe",
                 ref_table =
-                    nxkoo_dies.config,
-                ref_value = "hypergod"
+                    tangentry.config,
+                ref_value = "hyperdeath"
             }),
             create_toggle_spec({
                 label = "{C:white}Sane person?",
                 desc = "{C:inactive}Click this to make your run more immersive",
                 ref_table =
-                    nxkoo_dies.config,
-                ref_value = "gurp"
+                    tangentry.config,
+                ref_value = "homosexual"
             }),
             create_toggle_spec({
                 label = "{C:white}Homosexual?",
                 ref_table =
-                    nxkoo_dies.config,
-                ref_value = "gurp"
+                    tangentry.config,
+                ref_value = "homosexual"
             }),
         }
     }
