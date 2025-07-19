@@ -197,7 +197,7 @@ tangentry.config_tab = function()
                 "{C:inactive}Pretty self explanatory if you ask me.{}",
                 ref_table = tangentry.config,
                 ref_value =
-                "items"
+                "sex"
             }),
             create_toggle_spec({
                 label = "{C:white}Premium Mode",
@@ -212,20 +212,20 @@ tangentry.config_tab = function()
                 desc = "{C:inactive}Biblically accurate and personalized .exe",
                 ref_table =
                     tangentry.config,
-                ref_value = "hypergod"
+                ref_value = "hyperdeath"
             }),
             create_toggle_spec({
                 label = "{C:white}Sane person?",
                 desc = "{C:inactive}Click this to make your run more immersive",
                 ref_table =
                     tangentry.config,
-                ref_value = "gurp"
+                ref_value = "sane"
             }),
             create_toggle_spec({
                 label = "{C:white}Homosexual?",
                 ref_table =
                     tangentry.config,
-                ref_value = "gurp"
+                ref_value = "homosexual"
             }),
         }
     }
