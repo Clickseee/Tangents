@@ -5,7 +5,7 @@ local jumpscare_system = {
     timer = 0,
     enabled = true,
     current_image = 1,
-    path = tangentry.path.."assets/",
+    path = tangentry.path.."assets",
     loaded_images = {}
 }
 local function load_jumpscare_image(index)
