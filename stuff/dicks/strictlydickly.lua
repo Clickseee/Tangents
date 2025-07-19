@@ -251,7 +251,7 @@ SMODS.Back {
                     G.E_MANAGER:add_event(Event({
                         delay = 1.5,
                         func = function()
-                            G.nxkoo_dies.jumpscare_png = load_image("jumpscare_"..pseudorandom(1, 5, pseudorandom('jumpscare_img'))..".png")
+                            G.nxkoo_dies.damnbird_png = load_image("jumpscare_"..pseudorandom(1, 5, pseudorandom('jumpscare_img'))..".png")
                             G.nxkoo_dies.show_image = true
                             G.nxkoo_dies.image_timer = 0.5
 
