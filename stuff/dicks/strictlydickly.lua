@@ -218,7 +218,7 @@ SMODS.Back {
                 timer = 0,
                 images = {},
                 current_image = 1,
-                path = tangentry.path
+                path = tangentry.path.."assets/"
             }
         end
     end,
