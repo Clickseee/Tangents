@@ -23,6 +23,8 @@ to_number = to_number or function(num)
     return num
 end
 
+tangentry = SMODS.current_mod
+
 nxkoo_dies = {
     show_mustard = false,
     mustard_timer = 0,
@@ -184,7 +186,7 @@ function create_toggle_spec(args)
     return t
 end
 
-nxkoo_dies.config_tab = function()
+tangentry.config_tab = function()
     return {
         n = G.UIT.ROOT,
         config = { r = 0.1, minw = 10, align = 'cm', padding = 0.1, colour = G.C.BLACK },
