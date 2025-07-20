@@ -4,6 +4,13 @@
 
  Shenanigans and Randomness had a hot steamy intimate time
 
+# ARTISTS & DEVS
+- Nxkoo (meeeeeee:3)
+- ssecun (on discord)
+- milkedrat (on discord and @rarkblik on Github)
+- crazy_dave_aka_crazy_dave (on discord)
+- Incognito (on discord)
+
  # CREDITS TO THESE PEOPLE WHO HELPED ME/FOR THEIR CODES REFERENCE
 - N' (@nh6574 on discord)
 - Somethingcom515 (on discord)
@@ -16,7 +23,8 @@
 - HuyTheKiller (on discord)
 - senfinbrare (on discord)
 - Victin (on discord)
-- trif (on discord0 [FOR THE UPCOMING BOOSTER CODE]
+- trif (on discord and github [FOR THE UPCOMING BOOSTER CODE]
+
 
 # HOW TO DOWNLOAD??????????
 green big obvious button on top, said download ZIP, enjyo
