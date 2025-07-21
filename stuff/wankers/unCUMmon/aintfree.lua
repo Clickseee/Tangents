@@ -3159,6 +3159,7 @@ SMODS.Joker {
                     highest_rank = rank
                 end
             end
+            
             if highest_rank >= 11 and highest_rank <= 14 then
                 retriggers = 10
             elseif highest_rank <= 10 then
