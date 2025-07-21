@@ -558,9 +558,9 @@ SMODS.Sound {
     key = "music_tvtime",
     path = "tvtime.ogg",
     vol = 0.6,
-    pitch = 0.7,
+    pitch = 1,
     select_music_track = function()
-        return (G.GAME and G.GAME.blind and 10 or false)
+        return (G.GAME and G.GAME.blind) and 10 or false
     end,
 }
 
