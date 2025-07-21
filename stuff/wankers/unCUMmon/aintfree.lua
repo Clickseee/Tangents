@@ -3149,7 +3149,7 @@ SMODS.Joker {
         return { vars = { "High Card", "50%" } }
     end,
     calculate = function(self, card, context)
-        if context.repetition then
+        if context.repetition and context.scoring_name == "High Card" then
             local retriggers = 0
             local highest_rank = 0
 
@@ -3159,14 +3159,12 @@ SMODS.Joker {
                     highest_rank = rank
                 end
             end
-            print(rank)
             if highest_rank >= 11 and highest_rank <= 14 then
                 retriggers = 10
             elseif highest_rank <= 10 then
                 retriggers = highest_rank
             end
 
-            print(retriggers)
             if retriggers > 0 then
                 return {
                     repetitions = retriggers,
