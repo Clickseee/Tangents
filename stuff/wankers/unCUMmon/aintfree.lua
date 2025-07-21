@@ -1609,7 +1609,7 @@ SMODS.Joker {
                 card:juice_up(0.8, 0.8)
                 play_sound('chips1', 1.4)
                 return {
-                    message = localize { type = 'variable', key = 'a_joker_slots', vars = { card.ability.extra.slots_to_add } },
+                    message = tostring(card.ability.extra.slots_to_add),
                     colour = G.C.BLUE
                 }
             else
