@@ -3151,7 +3151,6 @@ SMODS.Joker {
     calculate = function(self, card, context)
         if context.repetition then
             if context.scoring_name ~= "High Card" then
-                print(context.scoring_name)
                 return
             end
             local retriggers = 0
