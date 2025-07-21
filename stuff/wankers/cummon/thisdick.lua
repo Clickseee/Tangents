@@ -361,7 +361,7 @@ SMODS.Joker {
     loc_txt = {
         name = "Hello {C:attention}everybody{}, my name is {X:mult,C:white}Mult{}{C:red}iplier.{}",
         text = {
-            "{C:red}+#1#{} Mult, {C:green}otherwise{} {X:mult,C:white}X#3#{} Mult."
+            "{C:red}+#1#{} Mult, {C:green}otherwise{} {X:mult,C:white}X#2#{} Mult."
         }
     },
     rarity = 1,
