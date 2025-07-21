@@ -97,8 +97,10 @@ SMODS.Back {
     loc_txt = {
         name = "Gangsta Deck",
         text = {
-            "Start with {C:money}$50{} and go straight to {C:attention}shop{}",
-            "and a {C:dark_edition}Negative{} {C:red}Eternal{} {C:attention,f:tngt_DETERMINATION}DealMaker{}",
+            "Start with {C:money}$50{} and",
+            "go straight to {C:attention}shop{}",
+            "Also start with a",
+            "{C:dark_edition}Negative{} {C:red}Eternal{} {C:attention,f:tngt_DETERMINATION}DealMaker{}",
             "{C:money}$2{} per remaining {C:red}discards{} and {C:blue}hands{}"
         }
     },
