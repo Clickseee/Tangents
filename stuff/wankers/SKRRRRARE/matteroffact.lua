@@ -168,7 +168,7 @@ SMODS.Joker {
         end
         if context.setting_blind and not context.blueprint then
             local fee = card.ability.extra.fee
-            if to_big(G.GAME.dollars) <= to_big(card.ability.extra.fee) then
+            if to_big(G.GAME.dollars) >= to_big(card.ability.extra.fee) then
                 G.GAME.dollars = G.GAME.dollars - fee
                 return {
                     ease_dollars(fee)
