@@ -42,8 +42,8 @@ SMODS.Joker {
     end,
     calculate = function(self, card, context)
         if context.joker_main then
+            play_sound("tngt_fromyourhouse")
             return {
-                sound = "tngt_fromyourhouse",
                 message = "CUMMING STRAIGHT FROM YOUR HOUSE.",
                 x_mult = card.ability.extra.ILOVETV * card.ability.extra.tenna_mult
             }
