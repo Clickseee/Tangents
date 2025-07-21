@@ -555,7 +555,7 @@ SMODS.Rarity({
 })
 
 SMODS.Sound {
-    key = "tngt_tvtime",
+    key = "music_tvtime",
     path = "tvtime.ogg",
     vol = 0.6,
     pitch = 0.7,
