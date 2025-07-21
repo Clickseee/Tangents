@@ -111,12 +111,12 @@ SMODS.Back {
         return { vars = { self.config.extra_hand_bonus, self.config.extra_discard_bonus } }
     end,
     apply = function(self)
+        G.STATE = G.STATES.SHOP
+        G.STATE_COMPLETE = false
         G.E_MANAGER:add_event(Event({
             trigger = 'immediate',
             delay = 0.1,
             func = function()
-                G.STATE = G.STATES.SHOP
-                G.STATE_COMPLETE = false
                 SMODS.add_card({
                     key = "j_tngt_dealmaker",
                     edition = "e_negative",
@@ -253,7 +253,8 @@ SMODS.Back {
                     G.E_MANAGER:add_event(Event({
                         delay = 1.5,
                         func = function()
-                            G.nxkoo_dies.damnbird_png = load_image("jumpscare_"..pseudorandom(1, 5, pseudorandom('jumpscare_img'))..".png")
+                            G.nxkoo_dies.damnbird_png = load_image("jumpscare_" ..
+                            pseudorandom(1, 5, pseudorandom('jumpscare_img')) .. ".png")
                             G.nxkoo_dies.show_image = true
                             G.nxkoo_dies.image_timer = 0.5
 
