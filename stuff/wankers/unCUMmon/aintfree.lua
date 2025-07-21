@@ -1,4 +1,3 @@
-
 SMODS.Joker {
     key = 'cope',
     loc_txt = {
@@ -190,7 +189,8 @@ SMODS.Joker {
 local oldsetcost = Card.set_cost
 function Card:set_cost()
     local g = oldsetcost(self)
-    if next(SMODS.find_card("j_tngt_dealmaker")) then self.cost = pseudorandom('dealmaker_cost_'..self.sort_id, 0.001, 100) end
+    if next(SMODS.find_card("j_tngt_dealmaker")) then self.cost = pseudorandom('dealmaker_cost_' .. self.sort_id, 0.001,
+            100) end
     return g
 end
 
@@ -200,9 +200,9 @@ function Game:update(dt)
     local g = oldgameupdate(self, dt)
     if G.shop and G.jokers and next(SMODS.find_card("j_tngt_dealmaker")) then
         cost_dt = cost_dt + dt
-        if cost_dt > 0.2 then 
+        if cost_dt > 0.2 then
             cost_dt = cost_dt - 0.2
-            for i, v in ipairs({G.shop_jokers, G.shop_vouchers, G.shop_booster}) do
+            for i, v in ipairs({ G.shop_jokers, G.shop_vouchers, G.shop_booster }) do
                 for ii, vv in ipairs(v.cards) do
                     vv:set_cost()
                 end
@@ -241,7 +241,7 @@ SMODS.Joker {
                 colour = G.C.YELLOW
             }
         end
-        
+
         if context.individual and context.cardarea == G.play and context.other_card:is_face() then
             local amount = pseudorandom('BIGSHOT', 1, 8)
             G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + amount
@@ -1609,7 +1609,7 @@ SMODS.Joker {
                 card:juice_up(0.8, 0.8)
                 play_sound('chips1', 1.4)
                 return {
-                    message = localize { type = 'variable', key = 'a_joker_slots', vars = { card.ability.extra.slots_to_add } },
+                    message = tostring(card.ability.extra.slots_to_add),
                     colour = G.C.BLUE
                 }
             else
@@ -2350,11 +2350,11 @@ SMODS.Joker {
     cost = 5,
     unlocked = true,
     discovered = true,
-    config = {extra = {multiplier = 2}},
+    config = { extra = { multiplier = 2 } },
     loc_vars = function(self, info_queue, card)
-        return {vars = {card.ability.extra.multiplier}}
+        return { vars = { card.ability.extra.multiplier } }
     end,
-    
+
     calculate = function(self, card, context)
         if (context.buying_card or context.open_booster) and card.ability.active then
             card.ability.active = false
@@ -2374,7 +2374,7 @@ SMODS.Joker {
             G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + current_dollars * (card.ability.extra.multiplier - 1)
             return {
                 dollars = current_dollars * (card.ability.extra.multiplier - 1),
-                
+
                 message = "LOCK THE FUCK IN!",
                 colour = G.C.MONEY,
                 message_card = card,
@@ -2389,7 +2389,7 @@ SMODS.Joker {
             }
         end
     end,
-    
+
     add_to_deck = function(self, card, from_debuff)
         card.ability.active = true
     end
@@ -3104,10 +3104,10 @@ SMODS.Joker {
         }
     end,
     calculate = function(self, card, context)
-        if context.mod_probability and context.trigger_obj and 
-           (context.trigger_obj.config.center.pools or {}).Food then
+        if context.mod_probability and context.trigger_obj and
+            (context.trigger_obj.config.center.pools or {}).Food then
             local negative_effect = SMODS.pseudorandom_probability(card, 'food_critic', 1, card.ability.extra.chance)
-            
+
             if negative_effect then
                 return {
                     message = "SOMEBODY TOUCHA MY SPAGHET",
@@ -3149,7 +3149,10 @@ SMODS.Joker {
         return { vars = { "High Card", "50%" } }
     end,
     calculate = function(self, card, context)
-        if context.joker_main and context.repetition and next(context.poker_hands['High Card']) then
+        if context.repetition then
+            if context.scoring_name ~= "High Card" then
+                return
+            end
             local retriggers = 0
             local highest_rank = 0
 
@@ -3165,10 +3168,11 @@ SMODS.Joker {
             elseif highest_rank <= 10 then
                 retriggers = highest_rank
             end
+
             if retriggers > 0 then
                 return {
                     repetitions = retriggers,
-                    message = localize { type = 'variable', key = 'a_repetitions', vars = { retriggers } },
+                    message = tostring(retriggers),
                     card = card
                 }
             end
@@ -3397,102 +3401,100 @@ SMODS.Joker {
 ]]
 
 SMODS.Joker {
-	key = 'waddle',
-	loc_txt = {
-		name = "Do you got any {C:blue}Venus?{}",
-		text = {
-			"{s:1.5}And he said 'No, we only have {C:blue,s:1.5}#1#{}'",
-			"{C:inactive}-----------------------------------------{}",
-			"This Duck {C:red,E:2}self destructs{} and gives {C:gold}$30{} if you {C:attention}use{} {C:blue}#1#{}",
-			"{C:inactive}And he waddled away, waddle waddle.."
-		}
-	},
-	blueprint_compat = true,
-	perishable_compat = false,
-	eternal_compat = true,
-	rarity = 2,
-	cost = 6,
-	unlocked = true,
-	discovered = true,
-	atlas = 'ModdedVanilla7',
-	pos = { x = 5, y = 0 },	
-		config = { extra = { desired_planet = "c_mercury" } },
-		loc_vars = function(self, info_queue, card)
-			local planet_name = card.ability.extra.desired_planet
-			return { vars = { localize{ type = "name_text", set = "Planet", key = card.ability.extra.desired_planet } } }
-		end,
-		calculate = function(self, card, context)
-			if context.using_consumeable and context.consumeable.ability.set == 'Planet' then
-				if context.consumeable.config.center.key == card.ability.extra.desired_planet then
-					G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + 30
+    key = 'waddle',
+    loc_txt = {
+        name = "Do you got any {C:blue}Venus?{}",
+        text = {
+            "{s:1.5}And he said 'No, we only have {C:blue,s:1.5}#1#{}'",
+            "{C:inactive}-----------------------------------------{}",
+            "This Duck {C:red,E:2}self destructs{} and gives {C:gold}$30{} if you {C:attention}use{} {C:blue}#1#{}",
+            "{C:inactive}And he waddled away, waddle waddle.."
+        }
+    },
+    blueprint_compat = true,
+    perishable_compat = false,
+    eternal_compat = true,
+    rarity = 2,
+    cost = 6,
+    unlocked = true,
+    discovered = true,
+    atlas = 'ModdedVanilla7',
+    pos = { x = 5, y = 0 },
+    config = { extra = { desired_planet = "c_mercury" } },
+    loc_vars = function(self, info_queue, card)
+        local planet_name = card.ability.extra.desired_planet
+        return { vars = { localize { type = "name_text", set = "Planet", key = card.ability.extra.desired_planet } } }
+    end,
+    calculate = function(self, card, context)
+        if context.using_consumeable and context.consumeable.ability.set == 'Planet' then
+            if context.consumeable.config.center.key == card.ability.extra.desired_planet then
+                G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + 30
 
-					G.E_MANAGER:add_event(Event({
-						func = function()
-							play_sound('tngt_neverforget')
-							card.T.r = -0.2
-							card:juice_up(0.3, 0.4)
-							card.states.drag.is = true
-							card.children.center.pinch.x = true
-							G.E_MANAGER:add_event(Event({
-								trigger = 'after',
-								delay = 0.3,
-								blockable = false,
-								func = function()
-									card:remove()
-									return true
-								end
-							}))
-							return true
-						end
-					}))
-					
-					return {
-						dollars = 30,
-						message = "And he waddle away, waddle waddle!",
-						colour = G.C.MONEY,
-						func = function()
-							G.E_MANAGER:add_event(Event({
-								func = function()
-									G.GAME.dollar_buffer = 0
-									return true
-								end
-							}))
-						end
-					}
-				end
-			end
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        play_sound('tngt_neverforget')
+                        card.T.r = -0.2
+                        card:juice_up(0.3, 0.4)
+                        card.states.drag.is = true
+                        card.children.center.pinch.x = true
+                        G.E_MANAGER:add_event(Event({
+                            trigger = 'after',
+                            delay = 0.3,
+                            blockable = false,
+                            func = function()
+                                card:remove()
+                                return true
+                            end
+                        }))
+                        return true
+                    end
+                }))
 
-			if context.setting_blind and not context.blueprint then
-				local planet_keys = {}
-				for k, _ in pairs(G.P_CENTER_POOLS.Planet) do
-					if string.match(k, "^c_") then
-						table.insert(planet_keys, k)
-					end
-				end
+                return {
+                    dollars = 30,
+                    message = "And he waddle away, waddle waddle!",
+                    colour = G.C.MONEY,
+                    func = function()
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                G.GAME.dollar_buffer = 0
+                                return true
+                            end
+                        }))
+                    end
+                }
+            end
+        end
 
-				local new_planet = card.ability.extra.desired_planet
-				while new_planet == card.ability.extra.desired_planet and #planet_keys > 1 do
-					new_planet = pseudorandom_element(planet_keys, pseudoseed('andhewaddleaway'..G.GAME.round_resets.ante))
-				end
-				
-				card.ability.extra.desired_planet = new_planet
-				return {
-					message = localize('k_reset'),
-					colour = G.C.BLUE
-				}
-			end
-		end,
-		add_to_deck = function(self, card, from_debuff)
-			if not card.ability.extra.desired_planet then
-				local planet_keys = {}
-				for k, _ in pairs(G.P_CENTER_POOLS.Planet) do
-					if string.match(k, "^c_") then
-						table.insert(planet_keys, k)
-					end
-				end
-				card.ability.extra.desired_planet = pseudorandom_element(planet_keys, pseudoseed('andhewaddleaway'))
-			end
-		end
-	}
+        if context.setting_blind and not context.blueprint then
+            local planet_keys = {}
+            for k, _ in pairs(G.P_CENTER_POOLS.Planet) do
+                if string.match(k, "^c_") then
+                    table.insert(planet_keys, k)
+                end
+            end
 
+            local new_planet = card.ability.extra.desired_planet
+            while new_planet == card.ability.extra.desired_planet and #planet_keys > 1 do
+                new_planet = pseudorandom_element(planet_keys, pseudoseed('andhewaddleaway' .. G.GAME.round_resets.ante))
+            end
 
+            card.ability.extra.desired_planet = new_planet
+            return {
+                message = localize('k_reset'),
+                colour = G.C.BLUE
+            }
+        end
+    end,
+    add_to_deck = function(self, card, from_debuff)
+        if not card.ability.extra.desired_planet then
+            local planet_keys = {}
+            for k, _ in pairs(G.P_CENTER_POOLS.Planet) do
+                if string.match(k, "^c_") then
+                    table.insert(planet_keys, k)
+                end
+            end
+            card.ability.extra.desired_planet = pseudorandom_element(planet_keys, pseudoseed('andhewaddleaway'))
+        end
+    end
+}

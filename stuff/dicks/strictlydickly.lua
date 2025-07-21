@@ -97,8 +97,10 @@ SMODS.Back {
     loc_txt = {
         name = "Gangsta Deck",
         text = {
-            "Start with {C:money}$50{}",
-            "and a {C:dark_edition}Negative{} {C:red}Eternal{} {C:attention,f:tngt_DETERMINATION}DealMaker{}",
+            "Start with {C:money}$50{} and",
+            "go straight to {C:attention}shop{}",
+            "Also start with a",
+            "{C:dark_edition}Negative{} {C:red}Eternal{} {C:attention,f:tngt_DETERMINATION}DealMaker{}",
             "{C:money}$2{} per remaining {C:red}discards{} and {C:blue}hands{}"
         }
     },
@@ -111,6 +113,8 @@ SMODS.Back {
         return { vars = { self.config.extra_hand_bonus, self.config.extra_discard_bonus } }
     end,
     apply = function(self)
+        G.STATE = G.STATES.SHOP
+        G.STATE_COMPLETE = false
         G.E_MANAGER:add_event(Event({
             trigger = 'immediate',
             delay = 0.1,
@@ -251,7 +255,8 @@ SMODS.Back {
                     G.E_MANAGER:add_event(Event({
                         delay = 1.5,
                         func = function()
-                            G.nxkoo_dies.damnbird_png = load_image("jumpscare_"..pseudorandom(1, 5, pseudorandom('jumpscare_img'))..".png")
+                            G.nxkoo_dies.damnbird_png = load_image("jumpscare_" ..
+                            pseudorandom(1, 5, pseudorandom('jumpscare_img')) .. ".png")
                             G.nxkoo_dies.show_image = true
                             G.nxkoo_dies.image_timer = 0.5
 
