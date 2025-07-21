@@ -560,7 +560,9 @@ SMODS.Sound {
     vol = 0.6,
     pitch = 1,
     select_music_track = function()
-        return (G.GAME and G.GAME.blind and G.GAME.blind.in_blind and next(SMODS.find_card('tngt_tenna'))) and 10 or false
+        if (G.GAME and G.GAME.blind and G.GAME.blind.in_blind and next(SMODS.find_card('tngt_tenna'))) then
+            return 10
+        end
     end,
 }
 
