@@ -555,6 +555,16 @@ SMODS.Rarity({
 })
 
 SMODS.Sound {
+    key = "tngt_tvtime",
+    path = "tvtime.ogg",
+    vol = 0.6,
+    pitch = 0.7,
+    select_music_track = function()
+        return (G.GAME and G.GAME.blind and 10 or false)
+    end,
+}
+
+SMODS.Sound {
     key = "tngt_canigetsomeicecream",
     path = "canigetsomeicecream.ogg"
 }
