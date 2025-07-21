@@ -116,6 +116,7 @@ SMODS.Back {
             delay = 0.1,
             func = function()
                 G.STATE = G.STATES.SHOP
+                G.STATE_COMPLETE = false
                 SMODS.add_card({
                     key = "j_tngt_dealmaker",
                     edition = "e_negative",
