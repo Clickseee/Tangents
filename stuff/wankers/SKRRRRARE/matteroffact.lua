@@ -1475,7 +1475,7 @@ SMODS.Joker {
             local sound = "tngt_birdthatihate"
             return {
                 focus = context.other_card,
-                xmult_mod = card.ability.extra.xmult,
+                xmult = card.ability.extra.xmult,
                 message = localize{type='variable',key='a_mult',vars={card.ability.extra.xmult}},
                 sound = sound,
                 extra = { 
