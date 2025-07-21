@@ -97,7 +97,7 @@ SMODS.Back {
     loc_txt = {
         name = "Gangsta Deck",
         text = {
-            "Start with {C:money}$50{}",
+            "Start with {C:money}$50{} and go straight to {C:attention}shop{}",
             "and a {C:dark_edition}Negative{} {C:red}Eternal{} {C:attention,f:tngt_DETERMINATION}DealMaker{}",
             "{C:money}$2{} per remaining {C:red}discards{} and {C:blue}hands{}"
         }
@@ -115,6 +115,7 @@ SMODS.Back {
             trigger = 'immediate',
             delay = 0.1,
             func = function()
+                G.STATE = G.STATES.SHOP
                 SMODS.add_card({
                     key = "j_tngt_dealmaker",
                     edition = "e_negative",
