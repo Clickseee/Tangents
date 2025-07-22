@@ -11,7 +11,7 @@ SMODS.Joker {
         name = "{f:tngt_DETERMINATION}Mr. (Ant) Tenna{}",
         text = {
             "{X:mult,C:white,f:tngt_DETERMINATION}X#1#{} {f:tngt_DETERMINATION}Mult for each time",
-            "{f:tngt_DETERMINATION}the words {C:attention}{f:tngt_DETERMINATION}\"I LOVE TV\"{}",
+            "{f:tngt_DETERMINATION}the words {C:attention, f:tngt_DETERMINATION}\"I LOVE TV\"{}",
             "{f:tngt_DETERMINATION}have been said in the {C:attention,f:tngt_DETERMINATION}Balatro Discord Server{}",
             "{C:inactive,f:tngt_DETERMINATION}(Currently {X:mult,C:white,f:tngt_DETERMINATION}X#2#{C:inactive,f:tngt_DETERMINATION} Mult)",
             "{C:blue,s:0.7,f:tngt_DETERMINATION}https://discord.gg/balatro{}",
