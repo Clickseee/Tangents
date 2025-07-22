@@ -47,6 +47,7 @@ SMODS.Joker {
                     play_sound("tngt_fromyourhouse")
                 end,
                 message = "CUMMING STRAIGHT FROM YOUR HOUSE.",
+                colour = G.C.mult,
                 x_mult = card.ability.extra.ILOVETV * card.ability.extra.tenna_mult
             }
         end
