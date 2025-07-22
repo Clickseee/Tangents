@@ -1028,5 +1028,3 @@ SMODS.load_file("stuff/wankers/unCUMmon/aintfree.lua")()
 SMODS.load_file("stuff/wankers/SKRRRRARE/matteroffact.lua")()
 SMODS.load_file("stuff/wankers/TheLegend27/its9inches.lua")()
 SMODS.load_file("stuff/dicks/strictlydickly.lua")()
-
-print(http_derive("tenna"))
