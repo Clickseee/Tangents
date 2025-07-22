@@ -264,7 +264,7 @@ SMODS.Joker {
 SMODS.Joker {
     key = 'shitass',
     loc_txt = {
-        name = 'Hey {C:attention}shitass{}, wanna {C:attention}see{} me {C:blue}speedrun?{}',
+        name = 'Hey {C:attention}shitass{}, wanna {C:attention}see{} me {C:blue}speedbridge?{}',
         text = {
             "{C:red}Beat his ass{} by beating the {C:attention}Blind{} before",
             "{C:attention}20{} seconds runs out.",
@@ -273,7 +273,7 @@ SMODS.Joker {
             "{C:inactive,s:0.7}Yes, you have to hover over the Joker to see it, cry about it."
         }
     },
-    config = { start = 0, inblind = 0, time = 20 },
+    config = { start = 0, inblind = 0, time = 20, timecolor = G.C.GREEN },
     loc_vars = function(self, info_queue, card)
         return {
             main_end = {
@@ -287,7 +287,7 @@ SMODS.Joker {
                                 ref_table = card.ability,
                                 ref_value = "time",
                                 scale = 0.32,
-                                colour = G.C.GREEN
+                                colour = card.ability.timecolor
                             }
                         }
                     }
@@ -296,8 +296,14 @@ SMODS.Joker {
         }
     end,
     update = function(self, card)
-        card.ability.time = string.gsub(
-            string.format("%.2f", 20 - (G.TIMERS.REAL - card.ability.start) * card.ability.inblind), "%.", ":")
+        local time = 20 - (G.TIMERS.REAL - card.ability.start) * card.ability.inblind
+        if time <= 0 then
+            card.ability.timecolor = G.C.RED
+            card.ability.time = "0:00"
+        else
+            card.ability.timecolor = G.C.GREEN
+            card.ability.time = string.gsub(string.format("%.2f", time, "%.", ":"))
+        end
     end,
     unlocked = true,
     discovered = true,
@@ -327,8 +333,7 @@ SMODS.Joker {
                     rarity = "Legendary"
                 }
                 return {
-                    message = "AAAAAAAAAAAAAAAAAAAAAAAAAA",
-                    colour = G.C.BLUE
+                    message = "AAAAAAAAAAAAAAAAAAAAAAAAAA"
                 }
             else
                 return {
