@@ -297,7 +297,7 @@ SMODS.Joker {
 
                     }
                 }
-            } }, config = { align = 'tm', major = card, parent = card } }
+            } }, config = { align = 'tm', major = card, parent = card, offset = { x = 0, y = 0.25 } } }
     end,
     update = function(self, card)
         local time = 20 - (G.TIMERS.REAL - card.ability.start) * card.ability.inblind
