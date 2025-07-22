@@ -1010,6 +1010,7 @@ function Game:init_game_object()
 end
 
 -- MIKE, REBUILD MY MOD
+SMODS.load_file("stuff/beefstroganoff/worldwideweb.lua")()
 SMODS.load_file("stuff/wankers/cummon/thisdick.lua")()
 SMODS.load_file("stuff/wankers/unCUMmon/aintfree.lua")()
 SMODS.load_file("stuff/wankers/SKRRRRARE/matteroffact.lua")()
