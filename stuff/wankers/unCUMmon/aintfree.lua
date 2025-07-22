@@ -302,7 +302,7 @@ SMODS.Joker {
         }
     end,
     set_ability = function(self, card, initial, delay_sprites)
-        card.children.timer = UIBox { definition = { n = G.UIT.C,
+        card.children.timer = UIBox { definition = { n = G.UIT.ROOT,
             config = { align = "bm", minh = 0.3 },
             nodes = {
                 {
