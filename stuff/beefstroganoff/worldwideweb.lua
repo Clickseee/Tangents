@@ -1,3 +1,4 @@
+--[[
 local https = require "SMODS.https"
 local derivesource = "https://raw.githubusercontent.com/rarkbilk/Tangents/refs/heads/main/httpglobals/"
 local path = G.nxkoo_dies.path
@@ -17,3 +18,4 @@ function http_derive(keyname)
         return value
     end
 end
+]]
