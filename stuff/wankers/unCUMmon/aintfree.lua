@@ -290,13 +290,14 @@ SMODS.Joker {
                             string = { {
                                 ref_table = card.ability,
                                 ref_value = "time" } },
-                            scale = 0.32,
+                            scale = 1,
+                            shadow = true,
                             colours = { card.ability.timecolor }
                         }
 
                     }
                 }
-            } }, config = { shadow = true, align = 'tm', major = card, parent = card } }
+            } }, config = { align = 'tm', major = card, parent = card } }
     end,
     update = function(self, card)
         local time = 20 - (G.TIMERS.REAL - card.ability.start) * card.ability.inblind
