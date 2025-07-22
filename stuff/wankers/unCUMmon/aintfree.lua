@@ -305,7 +305,7 @@ SMODS.Joker {
 
         if context.setting_blind then
             card.children.timer = UIBox { definition = { n = G.UIT.ROOT,
-            config = { align = "bm", colour = {0,0,0,0} },
+            config = { align = "cm", colour = {0,0,0,0} },
             nodes = {
                 {
                     n = G.UIT.O,
@@ -314,14 +314,14 @@ SMODS.Joker {
                             string = { {
                                 ref_table = card.ability,
                                 ref_value = "time" } },
-                            scale = 1,
+                            scale = 1.2,
                             shadow = true,
                             colours = { card.ability.timecolor }
                         }
 
                     }
                 }
-            } }, config = { align = 'tm', major = card, parent = card, offset = { x = 0, y = 0.25 } } }
+            } }, config = { align = 'cm', major = card, parent = card, offset = { x = 0, y = 0.25 } } }
             card.ability.start = G.TIMERS.REAL
             card.ability.inblind = 1
             return {
@@ -331,6 +331,7 @@ SMODS.Joker {
         end
 
         if (context.end_of_round and context.main_eval and not context.repetition) or context.forcetrigger then
+            card.children.timer:remove()
             card.children.timer = nil
             card.ability.inblind = 0
             if (G.TIMERS.REAL - card.ability.start <= 20) or context.forcetrigger then
@@ -340,11 +341,12 @@ SMODS.Joker {
                     rarity = "Legendary"
                 }
                 return {
-                    message = "AAAAAAAAAAAAAAAAAAAAAAAAAA"
+                    message = "AAAAAAAAAAAAAAAAAAAAAAAAAA",
+                    colour = G.C.GREEN
                 }
             else
                 return {
-                    message = "...W- wha?..",
+                    message = "YOU'RE BAD",
                     colour = G.C.RED
                 }
             end

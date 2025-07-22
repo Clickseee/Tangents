@@ -44,7 +44,13 @@ SMODS.Joker {
         if context.joker_main then
             return {
                 func = function()
-                    play_sound("tngt_fromyourhouse")
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'immediate',
+                        func = function()
+                            play_sound("tngt_fromyourhouse")
+                            return true
+                        end
+                    }))
                 end,
                 message = "CUMMING STRAIGHT FROM YOUR HOUSE.",
                 colour = G.C.mult,
