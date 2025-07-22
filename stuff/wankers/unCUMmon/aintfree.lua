@@ -189,8 +189,10 @@ SMODS.Joker {
 local oldsetcost = Card.set_cost
 function Card:set_cost()
     local g = oldsetcost(self)
-    if next(SMODS.find_card("j_tngt_dealmaker")) then self.cost = pseudorandom('dealmaker_cost_' .. self.sort_id, 0.001,
-            100) end
+    if next(SMODS.find_card("j_tngt_dealmaker")) then
+        self.cost = pseudorandom('dealmaker_cost_' .. self.sort_id, 0.001,
+            100)
+    end
     return g
 end
 
@@ -282,12 +284,15 @@ SMODS.Joker {
                     config = { align = "bm", minh = 0.3 },
                     nodes = {
                         {
-                            n = G.UIT.T,
+                            n = G.UIT.O,
                             config = {
-                                ref_table = card.ability,
-                                ref_value = "time",
-                                scale = 0.32,
-                                colour = card.ability.timecolor
+                                object = DynaText {
+                                    ref_table = card.ability,
+                                    ref_value = "time",
+                                    scale = 0.32,
+                                    colours = { card.ability.timecolor }
+                                }
+
                             }
                         }
                     }
@@ -296,13 +301,12 @@ SMODS.Joker {
         }
     end,
     update = function(self, card)
-        card.config.h_popup:recalculate()
         local time = 20 - (G.TIMERS.REAL - card.ability.start) * card.ability.inblind
         if time <= 0 then
             card.ability.timecolor = G.C.RED
             card.ability.time = "0:00"
         else
-            card.ability.timecolor = G.C.GREEN  
+            card.ability.timecolor = G.C.GREEN
             card.ability.time = string.gsub(string.format("%.2f", time), "%.", ":")
         end
     end,
