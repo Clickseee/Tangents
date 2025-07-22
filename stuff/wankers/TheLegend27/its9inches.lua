@@ -19,7 +19,7 @@ SMODS.Joker {
     },
     config = {
         extra = {
-            ILOVETV = http_derive("tenna")
+            ILOVETV = http_derive("tenna"),
             tenna_mult = 1
         }
     },
