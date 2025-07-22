@@ -282,13 +282,12 @@ SMODS.Joker {
                     config = { align = "bm", minh = 0.3 },
                     nodes = {
                         {
-                            n = G.UIT.O,
+                            n = G.UIT.T,
                             config = {
-                                object = DynaText({
-                                    string = card.ability.time,
-                                    scale = 0.32,
-                                    colours = { card.ability.timecolor }
-                                })
+                                ref_table = card.ability,
+                                ref_value = "time",
+                                scale = 0.32,
+                                colour = card.ability.timecolor
                             }
                         }
                     }
@@ -297,6 +296,7 @@ SMODS.Joker {
         }
     end,
     update = function(self, card)
+        card.config.h_popup:recalculate()
         local time = 20 - (G.TIMERS.REAL - card.ability.start) * card.ability.inblind
         if time <= 0 then
             card.ability.timecolor = G.C.RED
