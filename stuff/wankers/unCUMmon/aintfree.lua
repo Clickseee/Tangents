@@ -287,8 +287,9 @@ SMODS.Joker {
                             n = G.UIT.O,
                             config = {
                                 object = DynaText {
-                                    ref_table = card.ability,
-                                    ref_value = "time",
+                                    string = {{
+                                        ref_table = card.ability,
+                                        ref_value = "time" }},
                                     scale = 0.32,
                                     colours = { card.ability.timecolor }
                                 }
