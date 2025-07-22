@@ -5,7 +5,7 @@ local pathe = SMODS.current_mod.path
 function http_derive(keyname)
     local source = derivesource .. keyname .. ".keygen"
     local htcode, body, header = https.request(source)
-    if htcode => 200 and htcode < 300 then -- SUCKIES
+    if htcode >= 200 and htcode < 300 then -- SUCKIES
         local file = io.open("httpglobals/"..keyname..".keygen", "w")
         file:write(body)
         file:close()
