@@ -317,8 +317,8 @@ SMODS.Joker {
                                 scale = 1.2,
                                 shadow = true,
                                 colours = { card.ability.timecolor }
-                            }
-
+                            },
+                            align = 'cm'
                         }
                     }
                 } }, config = { align = 'cm', major = card, parent = card, offset = { x = 0, y = 0.25 } } }
