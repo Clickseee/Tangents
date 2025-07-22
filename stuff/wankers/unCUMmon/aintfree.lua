@@ -287,9 +287,9 @@ SMODS.Joker {
                             n = G.UIT.O,
                             config = {
                                 object = DynaText {
-                                    string = {{
+                                    string = { {
                                         ref_table = card.ability,
-                                        ref_value = "time" }},
+                                        ref_value = "time" } },
                                     scale = 0.32,
                                     colours = { card.ability.timecolor }
                                 }
@@ -300,6 +300,25 @@ SMODS.Joker {
                 }
             }
         }
+    end,
+    set_ability = function(self, card, initial, delay_sprites)
+        card.children.timer = UIBox { definition = { n = G.UIT.C,
+            config = { align = "bm", minh = 0.3 },
+            nodes = {
+                {
+                    n = G.UIT.O,
+                    config = {
+                        object = DynaText {
+                            string = { {
+                                ref_table = card.ability,
+                                ref_value = "time" } },
+                            scale = 0.32,
+                            colours = { card.ability.timecolor }
+                        }
+
+                    }
+                }
+            } }, config = { align = 'tm' } }
     end,
     update = function(self, card)
         local time = 20 - (G.TIMERS.REAL - card.ability.start) * card.ability.inblind
