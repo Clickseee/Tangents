@@ -301,8 +301,8 @@ SMODS.Joker {
             card.ability.timecolor = G.C.RED
             card.ability.time = "0:00"
         else
-            card.ability.timecolor = G.C.GREEN
-            card.ability.time = string.gsub(string.format("%.2f", time, "%.", ":"))
+            card.ability.timecolor = G.C.GREEN  
+            card.ability.time = string.gsub(string.format("%.2f", time), "%.", ":")
         end
     end,
     unlocked = true,
