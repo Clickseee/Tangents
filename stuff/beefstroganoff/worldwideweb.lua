@@ -1,6 +1,6 @@
 local https = require "SMODS.https"
 local derivesource = "https://raw.githubusercontent.com/rarkbilk/Tangents/refs/heads/main/httpglobals/"
-local path = SMODS.current_mod.path
+local pathe = SMODS.current_mod.path
 
 function http_derive(keyname)
     local source = derivesource .. keyname .. ".keygen"
