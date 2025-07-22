@@ -275,7 +275,7 @@ SMODS.Joker {
             "{C:inactive,s:0.7}Yes, you have to hover over the Joker to see it, cry about it."
         }
     },
-    config = { start = 0, inblind = 0, time = 20, timecolor = G.C.GREEN },
+    config = { start = 0, inblind = 0, time = 20, timecolor = copy_table(G.C.GREEN) },
     loc_vars = function(self, info_queue, card)
         return {
             main_end = {
@@ -304,10 +304,10 @@ SMODS.Joker {
     update = function(self, card)
         local time = 20 - (G.TIMERS.REAL - card.ability.start) * card.ability.inblind
         if time <= 0 then
-            card.ability.timecolor = G.C.RED
+            card.ability.timecolor[1] = G.C.RED[1]
             card.ability.time = "0:00"
         else
-            card.ability.timecolor = G.C.GREEN
+            card.ability.timecolor[1] = G.C.GREEN[1]
             card.ability.time = string.gsub(string.format("%.2f", time), "%.", ":")
         end
     end,
