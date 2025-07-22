@@ -305,9 +305,13 @@ SMODS.Joker {
         local time = 20 - (G.TIMERS.REAL - card.ability.start) * card.ability.inblind
         if time <= 0 then
             card.ability.timecolor[1] = G.C.RED[1]
+            card.ability.timecolor[2] = G.C.RED[2]
+            card.ability.timecolor[3] = G.C.RED[3]
             card.ability.time = "0:00"
         else
             card.ability.timecolor[1] = G.C.GREEN[1]
+            card.ability.timecolor[2] = G.C.GREEN[2]
+            card.ability.timecolor[3] = G.C.GREEN[3]
             card.ability.time = string.gsub(string.format("%.2f", time), "%.", ":")
         end
     end,
