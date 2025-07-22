@@ -277,33 +277,11 @@ SMODS.Joker {
     },
     config = { start = 0, inblind = 0, time = 20, timecolor = copy_table(G.C.GREEN) },
     loc_vars = function(self, info_queue, card)
-        return {
-            main_end = {
-                {
-                    n = G.UIT.C,
-                    config = { align = "bm", minh = 0.3 },
-                    nodes = {
-                        {
-                            n = G.UIT.O,
-                            config = {
-                                object = DynaText {
-                                    string = { {
-                                        ref_table = card.ability,
-                                        ref_value = "time" } },
-                                    scale = 0.32,
-                                    colours = { card.ability.timecolor }
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        
     end,
     set_ability = function(self, card, initial, delay_sprites)
         card.children.timer = UIBox { definition = { n = G.UIT.ROOT,
-            config = { align = "bm", minh = 0.3 },
+            config = { align = "bm", colour = {0,0,0,0} },
             nodes = {
                 {
                     n = G.UIT.O,
