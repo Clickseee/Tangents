@@ -282,12 +282,13 @@ SMODS.Joker {
                     config = { align = "bm", minh = 0.3 },
                     nodes = {
                         {
-                            n = G.UIT.T,
+                            n = G.UIT.O,
                             config = {
-                                ref_table = card.ability,
-                                ref_value = "time",
-                                scale = 0.32,
-                                colour = card.ability.timecolor
+                                object = DynaText({
+                                    string = card.ability.time,
+                                    scale = 0.32,
+                                    colours = { card.ability.timecolor }
+                                })
                             }
                         }
                     }
