@@ -567,6 +567,18 @@ SMODS.Sound {
 }
 
 SMODS.Sound {
+    key = "music_greenroom",
+    path = "greenroom.ogg",
+    vol = 0.6,
+    pitch = 1,
+    select_music_track = function()
+        if (next(SMODS.find_card('j_tngt_tenna'))) then
+            return 9
+        end
+    end,
+}
+
+SMODS.Sound {
     key = "tngt_canigetsomeicecream",
     path = "canigetsomeicecream.ogg"
 }
