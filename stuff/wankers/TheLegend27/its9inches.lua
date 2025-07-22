@@ -6,7 +6,7 @@ SMODS.Joker {
     frames = 93,
     frame_delay = 0.01,
     atlas = "tennas",
-    display_size = { w = 71 * 0.6, h = 95 * 0.6 },
+    display_size = { w = 71 * 2.0, h = 95 * 1.1 },
     loc_txt = {
         name = "{f:tngt_DETERMINATION}Mr. (Ant) Tenna{}",
         text = {
