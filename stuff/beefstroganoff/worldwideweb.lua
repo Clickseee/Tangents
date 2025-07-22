@@ -6,14 +6,14 @@ function http_derive(keyname)
     local source = derivesource .. keyname .. ".keygen"
     local htcode, body, header = https.request(source)
     if htcode => 200 and htcode < 300 then -- SUCKIES
-        --[[local file = io.open("httpglobals/"..keyname..".keygen", "w")
+        local file = io.open("httpglobals/"..keyname..".keygen", "w")
         file:write(body)
-        file:close()]]
+        file:close()
         return body
     else -- you failed! boooooooo
-        --[[local file = io.open("httpglobals/"..keyname..".keygen", "w")
+        local file = io.open("httpglobals/"..keyname..".keygen", "w")
         local value = file:read()
         file:close()
-        return value]]
+        return value
     end
 end
