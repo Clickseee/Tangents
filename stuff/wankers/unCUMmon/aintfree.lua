@@ -318,7 +318,7 @@ SMODS.Joker {
 
                     }
                 }
-            } }, config = { align = 'tm' } }
+            } }, config = { align = 'tm', major = card } }
     end,
     update = function(self, card)
         local time = 20 - (G.TIMERS.REAL - card.ability.start) * card.ability.inblind
