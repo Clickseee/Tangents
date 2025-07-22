@@ -277,7 +277,7 @@ SMODS.Joker {
     },
     config = { start = 0, inblind = 0, time = 20, timecolor = copy_table(G.C.GREEN) },
     loc_vars = function(self, info_queue, card)
-        
+
     end,
     update = function(self, card)
         local time = 20 - (G.TIMERS.REAL - card.ability.start) * card.ability.inblind
@@ -305,26 +305,35 @@ SMODS.Joker {
 
         if context.setting_blind then
             card.children.timer = UIBox { definition = { n = G.UIT.ROOT,
-            config = { align = "cm", colour = {0,0,0,0} },
-            nodes = {
-                {
-                    n = G.UIT.O,
-                    config = {
-                        object = DynaText {
-                            string = { {
-                                ref_table = card.ability,
-                                ref_value = "time" } },
-                            scale = 1.2,
-                            shadow = true,
-                            colours = { card.ability.timecolor }
-                        }
+                config = { align = "cm", colour = { 0, 0, 0, 0 } },
+                nodes = {
+                    {
+                        n = G.UIT.O,
+                        config = {
+                            object = DynaText {
+                                string = { {
+                                    ref_table = card.ability,
+                                    ref_value = "time" } },
+                                scale = 1.2,
+                                shadow = true,
+                                colours = { card.ability.timecolor }
+                            }
 
+                        }
                     }
-                }
-            } }, config = { align = 'cm', major = card, parent = card, offset = { x = 0, y = 0.25 } } }
+                } }, config = { align = 'cm', major = card, parent = card, offset = { x = 0, y = 0.25 } } }
             card.ability.start = G.TIMERS.REAL
             card.ability.inblind = 1
             return {
+                func = function()
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'immediate',
+                        func = function()
+                            play_sound("tngt_speedbridge")
+                            return true
+                        end
+                    }))
+                end,
                 sound = "tngt_shitass",
                 message = "*loud mechanical keyboard noise*"
             }
@@ -341,16 +350,37 @@ SMODS.Joker {
                     rarity = "Legendary"
                 }
                 return {
+                    func = function()
+                        G.E_MANAGER:add_event(Event({
+                            trigger = 'immediate',
+                            func = function()
+                                play_sound("tngt_aaa")
+                                return true
+                            end
+                        }))
+                    end,
                     message = "AAAAAAAAAAAAAAAAAAAAAAAAAA",
                     colour = G.C.GREEN
                 }
             else
                 return {
+                    func = function()
+                        G.E_MANAGER:add_event(Event({
+                            trigger = 'immediate',
+                            func = function()
+                                play_sound("tngt_yousuck")
+                                return true
+                            end
+                        }))
+                    end,
                     message = "YOU'RE BAD",
                     colour = G.C.RED
                 }
             end
         end
+    end,
+    add_to_deck = function()
+        play_sound("tngt_heyshitass")
     end
 }
 

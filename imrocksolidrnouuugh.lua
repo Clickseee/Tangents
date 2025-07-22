@@ -723,6 +723,26 @@ SMODS.Sound {
     path = "jumpscare5.ogg"
 }
 
+SMODS.Sound {
+    key = "tngt_yousuck",
+    path = "yousuck.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_aaa",
+    path = "AAAAHHH.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_speedbridge",
+    path = "speedbridge.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_heyshitass",
+    path = "heyshitass.ogg"
+}
+
 SMODS.Atlas {
     key = "modicon",
     path = "modicon.png",
