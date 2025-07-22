@@ -279,26 +279,6 @@ SMODS.Joker {
     loc_vars = function(self, info_queue, card)
         
     end,
-    set_ability = function(self, card, initial, delay_sprites)
-        card.children.timer = UIBox { definition = { n = G.UIT.ROOT,
-            config = { align = "bm", colour = {0,0,0,0} },
-            nodes = {
-                {
-                    n = G.UIT.O,
-                    config = {
-                        object = DynaText {
-                            string = { {
-                                ref_table = card.ability,
-                                ref_value = "time" } },
-                            scale = 1,
-                            shadow = true,
-                            colours = { card.ability.timecolor }
-                        }
-
-                    }
-                }
-            } }, config = { align = 'tm', major = card, parent = card, offset = { x = 0, y = 0.25 } } }
-    end,
     update = function(self, card)
         local time = 20 - (G.TIMERS.REAL - card.ability.start) * card.ability.inblind
         if time <= 0 then
@@ -324,6 +304,24 @@ SMODS.Joker {
         if context.blueprint then return end
 
         if context.setting_blind then
+            card.children.timer = UIBox { definition = { n = G.UIT.ROOT,
+            config = { align = "bm", colour = {0,0,0,0} },
+            nodes = {
+                {
+                    n = G.UIT.O,
+                    config = {
+                        object = DynaText {
+                            string = { {
+                                ref_table = card.ability,
+                                ref_value = "time" } },
+                            scale = 1,
+                            shadow = true,
+                            colours = { card.ability.timecolor }
+                        }
+
+                    }
+                }
+            } }, config = { align = 'tm', major = card, parent = card, offset = { x = 0, y = 0.25 } } }
             card.ability.start = G.TIMERS.REAL
             card.ability.inblind = 1
             return {
@@ -333,6 +331,7 @@ SMODS.Joker {
         end
 
         if (context.end_of_round and context.main_eval and not context.repetition) or context.forcetrigger then
+            card.children.timer = nil
             card.ability.inblind = 0
             if (G.TIMERS.REAL - card.ability.start <= 20) or context.forcetrigger then
                 card:start_dissolve()
