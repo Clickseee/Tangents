@@ -548,12 +548,12 @@ SMODS.Joker {
         card.ability.extra.mult = math.floor(_factor * 100) / 100
         card.ability.extra.is_fucked = is_fullscreen
 
-        if is_fullscreen and not card.ability.warned then
-            card.ability.warned = true
+        if is_fullscreen and not card.ability.extra.is_fucked then
+            card.ability.extra.is_fucked = true
             card:juice_up(0.5, 0.5)
             play_sound('tngt_neverforget')
         elseif not is_fullscreen then
-            card.ability.warned = false
+            card.ability.extra.is_fucked = false
         end
     end,
 
@@ -576,19 +576,21 @@ SMODS.Joker {
     end,
 
     calculate = function(self, card, context)
-        local effective_mult = card.ability.extra.mult or 1.0
+        if context.joker_main then
+            local effective_mult = card.ability.extra.mult or 1.0
 
-        if card.ability.extra.is_fucked then
-            effective_mult = effective_mult * card.ability.extra.fullscreen_penalty
+            if card.ability.extra.is_fucked then
+                effective_mult = effective_mult * card.ability.extra.fullscreen_penalty
+            end
+
+            return {
+                Xmult = effective_mult,
+                message = card.ability.extra.is_fucked and
+                    "FULLSCREEN PENALTY! X" .. effective_mult or
+                    "Window Scaling: X" .. effective_mult,
+                colour = card.ability.extra.is_fucked and G.C.RED or G.C.MULT
+            }
         end
-
-        return {
-            Xmult = effective_mult,
-            message = card.ability.extra.is_fucked and
-                "FULLSCREEN PENALTY! X" .. effective_mult or
-                "Window Scaling: X" .. effective_mult,
-            colour = card.ability.extra.is_fucked and G.C.RED or G.C.MULT
-        }
     end
 }
 
@@ -1224,6 +1226,7 @@ function love.draw()
         love.graphics.draw(G.nxkoo_dies.current_flashbang, 0, 0, 0, _xscale, _yscale)
     end
 end
+
 local updatehook = Game.update
 function Game:update(dt)
     updatehook(self, dt)
@@ -1476,11 +1479,11 @@ SMODS.Joker {
             return {
                 focus = context.other_card,
                 xmult = card.ability.extra.xmult,
-                message = localize{type='variable',key='a_mult',vars={card.ability.extra.xmult}},
+                message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.xmult } },
                 sound = sound,
-                extra = { 
-                            sound = is_last_card and "tngt_thatFUCKINbirdthatihate" or "tngt_birdthatihate",
-                            message = is_last_card and "T H A T  F U C K I N '  B I R D  T H A T  I  H A T E." or nil
+                extra = {
+                    sound = is_last_card and "tngt_thatFUCKINbirdthatihate" or "tngt_birdthatihate",
+                    message = is_last_card and "T H A T  F U C K I N '  B I R D  T H A T  I  H A T E." or nil
                 },
                 colour = G.C.RED
             }
