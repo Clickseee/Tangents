@@ -3,9 +3,6 @@ local derivesource = "https://raw.githubusercontent.com/rarkbilk/Tangents/refs/h
 
 function http_derive(keyname)
     local source = derivesource .. keyname .. ".keygen"
-    local value = 44
-    https.asyncRequest(source, function(code, body, headers)
-        value = body
-    end)
-    return value
+    local code, body, header = https.request(source)
+    return body
 end
