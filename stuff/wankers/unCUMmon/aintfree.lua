@@ -321,7 +321,7 @@ SMODS.Joker {
                             align = 'cm'
                         }
                     }
-                } }, config = { align = 'cm', major = card, parent = card, offset = { x = 0, y = 0.25 } } }
+                } }, config = { align = 'cm', major = card, parent = card } }
             card.ability.start = G.TIMERS.REAL
             card.ability.inblind = 1
             return {
