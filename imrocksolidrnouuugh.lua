@@ -226,115 +226,6 @@ tangentry.config_tab = function()
     }
 end
 
-SMODS.current_mod.extra_tabs = function() -- CREDITS
-    local scale = 0.5
-    return {
-        label = "Convicts",
-        tab_definition_function = function()
-        return {
-            n = G.UIT.ROOT,
-            config = {
-            align = "cm",
-            padding = 0.05,
-            colour = G.C.CLEAR,
-            },
-            nodes = {
-            {
-                n = G.UIT.R,
-                config = {
-                padding = 0,
-                align = "cm"
-                },
-                nodes = {
-                {
-                    n = G.UIT.T,
-                    config = {
-                    text = "Main Culprit: Nxkoo",
-                    shadow = false,
-                    scale = scale,
-                    colour = G.C.RARITY.Legendary
-                    }
-                }
-                }
-            },
-            {
-                n = G.UIT.R,
-                config = {
-                padding = 0,
-                align = "cm"
-                },
-                nodes = {
-                {
-                    n = G.UIT.T,
-                    config = {
-                    text = "Artists: ssecun, Incognito, crazy_dave_aka_crazy_dave",
-                    shadow = false,
-                    scale = scale,
-                    colour = G.C.MONEY
-                    }
-                },
-                }
-            },
-            {
-                n = G.UIT.R,
-                config = {
-                padding = 0,
-                align = "cm"
-                },
-                nodes = {
-                {
-                    n = G.UIT.T,
-                    config = {
-                    text = "Side bitch: milkedrat, Incognito",
-                    shadow = false,
-                    scale = scale,
-                    colour = G.C.GREEN
-                    }
-                }
-                },
-            },
-            {
-                n = G.UIT.R,
-                config = {
-                padding = 0,
-                align = "cm"
-                },
-                nodes = {
-                {
-                    n = G.UIT.T,
-                    config = {
-                    text = "HUGE thanks to: Astro, superbread, toma, N', Somethingcom525,",
-                    shadow = false,
-                    scale = scale,
-                    colour = G.C.BLUE
-                    }
-                }
-                } 
-            },
-                        {
-                n = G.UIT.R,
-                config = {
-                padding = 0,
-                align = "cm"
-                },
-                nodes = {
-                {
-                    n = G.UIT.T,
-                    config = {
-                    text = "and everyone who helped me through hard times <3",
-                    shadow = false,
-                    scale = scale,
-                    colour = G.C.EDITION
-                    }
-                }
-                } 
-            }
-            }
-        }
-        end
-    }
-end
-
 --Thank you PERKOLATED and HPR
 function Card:resize(mod, force_save)
     self:hard_set_T(self.T.x, self.T.y, self.T.w * mod, self.T.h * mod)
@@ -1213,13 +1104,12 @@ function tngt_emplace_card_to_area(key, area, atlas, pos, size) --Creating fake 
 end
 
 tangent_credit_cards = {
-    --[[
-    {card_key = "j_joker", credit = "BepisFever", credit_key = "tngt_bepisfever"},
-
-    - card_key: The card's key. This is mandatory.
-    - credit: If you don't want to use localization, use this.
-    - credit_key: If you want it to use localization, use this.
-    ]]
+    {card_key = "j_tngt_nxkoo", credit = "ssecun"},
+    {card_key = "j_tngt_ssecun", credit = "ssecun"},
+    {card_key = "j_tngt_incognito", credit = "Incognito"},
+    {card_key = "j_tngt_crazydave", credit = "crazy_dave"},
+    {card_key = "j_tngt_bepis", credit = "BepisFever"},
+    {card_key = "j_tngt_bread", credit = "superbread"},
 }
 tangent_credit_card_per_row = 4
 tangent_credit_card_row = 2

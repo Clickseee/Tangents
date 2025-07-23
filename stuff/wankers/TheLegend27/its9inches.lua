@@ -927,7 +927,7 @@ SMODS.Joker {
             local suits_in_hand = {}
             for _, card in ipairs(context.scoring_hand) do
                 if not card.debuff then
-                    suits_in_hand[card:get_suit()] = true
+                    suits_in_hand[card:is_suit()] = true
                 end
             end
             if suits_in_hand['Spades'] and

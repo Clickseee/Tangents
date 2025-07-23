@@ -11,8 +11,10 @@ return {
             tngt_credit1 = {
                 text = {
                     "{C:dark_edition,E:2}Thank you everyone who helped me with this mod!{}",
-                    "{C:attention}BepisFever{}{C:inactive} (@bepisfever){}, {C:attention}N'{}{C:inactive} (@nh6574){},...",
-                    "{C:inactive}(add people in here nxkoo)",
+                    "{C:attention}BepisFever{}{C:inactive} (@bepisfever){}, {C:attention}N'{}{C:inactive} (@nh6574){},",
+                    "{C:attention}Somethingcom525{}{C:inactive} (@somethingcom525){}, {C:attention}milkedrat{}{C:inactive} (@milkedrat){}",
+                    "{C:attention}SDM_0{}{C:inactive} (@sdm_0){}, {C:attention}toma:tose{}{C:inactive} (@beetday){}",
+                    "{C:dark_edition,E:2}and everyone who bailed me out of jail with ko-fi! <3{}"
                 }
             },
             tngt_credit_name = {
@@ -22,7 +24,7 @@ return {
             },
             tngt_credit_desc = {
                 text = {
-                    "Contains proper credits of other people"
+                    "HUGE shoutouts to these convicts"
                 }
             },
         },
