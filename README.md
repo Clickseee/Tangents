@@ -27,4 +27,4 @@
 
 
 # HOW TO DOWNLOAD??????????
-green big obvious button on top, said download ZIP, enjyo
+download the latest release on the far right, in green
