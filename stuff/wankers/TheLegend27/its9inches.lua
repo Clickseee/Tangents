@@ -1,16 +1,15 @@
-
 SMODS.Joker {
     key = "tenna",
-    display_size = { w = 64, h = 64 },
     pos = { x = 0, y = 0 },
     frames = 93,
     frame_delay = 0.01,
     atlas = "tennas",
+    display_size = { w = 64 * 1.1, h = 64 * 1.1 },
     loc_txt = {
         name = "{f:tngt_DETERMINATION}Mr. (Ant) Tenna{}",
         text = {
             "{X:mult,C:white,f:tngt_DETERMINATION}X#1#{} {f:tngt_DETERMINATION}Mult for each time",
-            "{f:tngt_DETERMINATION}the words {C:attention}{f:tngt_DETERMINATION}\"I LOVE TV\"{}",
+            "{f:tngt_DETERMINATION}the words {C:attention, f:tngt_DETERMINATION}\"I LOVE TV\"{}",
             "{f:tngt_DETERMINATION}have been said in the {C:attention,f:tngt_DETERMINATION}Balatro Discord Server{}",
             "{C:inactive,f:tngt_DETERMINATION}(Currently {X:mult,C:white,f:tngt_DETERMINATION}X#2#{C:inactive,f:tngt_DETERMINATION} Mult)",
             "{C:blue,s:0.7,f:tngt_DETERMINATION}https://discord.gg/balatro{}",
@@ -18,7 +17,7 @@ SMODS.Joker {
     },
     config = {
         extra = {
-            ILOVETV = 76,
+            ILOVETV = http_derive("tenna"),
             tenna_mult = 1
         }
     },
@@ -43,8 +42,17 @@ SMODS.Joker {
     calculate = function(self, card, context)
         if context.joker_main then
             return {
-                sound = "tngt_fromyourhouse",
+                func = function()
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'immediate',
+                        func = function()
+                            play_sound("tngt_fromyourhouse")
+                            return true
+                        end
+                    }))
+                end,
                 message = "CUMMING STRAIGHT FROM YOUR HOUSE.",
+                colour = G.C.mult,
                 x_mult = card.ability.extra.ILOVETV * card.ability.extra.tenna_mult
             }
         end
@@ -270,7 +278,6 @@ SMODS.Joker {
             "{C:inactive}(Jarvis, inspect this guy's balls.)"
         }
     },
-    config = { extra = {} },
     rarity = 4,
     atlas = 'ModdedVanilla6',
     pos = { x = 0, y = 1 },
@@ -403,7 +410,6 @@ SMODS.Joker {
             "{C:inactive}(Spoiler it bro, it just came out yesterday..){}"
         }
     },
-    config = { extra = {} },
     rarity = 4,
     atlas = 'ModdedVanilla7',
     pos = { x = 0, y = 1 },

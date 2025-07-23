@@ -555,6 +555,30 @@ SMODS.Rarity({
 })
 
 SMODS.Sound {
+    key = "music_tvtime",
+    path = "tvtime.ogg",
+    vol = 0.6,
+    pitch = 1,
+    select_music_track = function()
+        if (G.GAME and G.GAME.blind and G.GAME.blind.in_blind and next(SMODS.find_card('j_tngt_tenna'))) then
+            return 10
+        end
+    end,
+}
+
+SMODS.Sound {
+    key = "music_greenroom",
+    path = "greenroom.ogg",
+    vol = 0.6,
+    pitch = 1,
+    select_music_track = function()
+        if (next(SMODS.find_card('j_tngt_tenna'))) then
+            return 9
+        end
+    end,
+}
+
+SMODS.Sound {
     key = "tngt_canigetsomeicecream",
     path = "canigetsomeicecream.ogg"
 }
@@ -697,6 +721,26 @@ SMODS.Sound {
 SMODS.Sound {
     key = "tngt_jumpscare5",
     path = "jumpscare5.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_yousuck",
+    path = "yousuck.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_aaa",
+    path = "AAAAHHH.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_speedbridge",
+    path = "speedbridge.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_heyshitass",
+    path = "heyshitass.ogg"
 }
 
 SMODS.Atlas {
@@ -998,6 +1042,7 @@ function Game:init_game_object()
 end
 
 -- MIKE, REBUILD MY MOD
+SMODS.load_file("stuff/beefstroganoff/worldwideweb.lua")()
 SMODS.load_file("stuff/wankers/cummon/thisdick.lua")()
 SMODS.load_file("stuff/wankers/unCUMmon/aintfree.lua")()
 SMODS.load_file("stuff/wankers/SKRRRRARE/matteroffact.lua")()
