@@ -1,0 +1,28 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/loader.lua"]'
+pattern = '''
+G.FUNCS["openModUI_" .. modInfo.id] = function(e)
+'''
+position = "at"
+payload = '''
+G.FUNCS["openModUI_" .. modInfo.id] = function(e, page)
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = '=[SMODS _ "src/loader.lua"]'
+pattern = '''
+SMODS.LAST_SELECTED_MOD_TAB = e.config.page or "mod_desc"
+'''
+position = "at"
+payload = '''
+SMODS.LAST_SELECTED_MOD_TAB = page or e.config.page or "mod_desc"
+'''
+match_indent = true

@@ -986,103 +986,25 @@ SMODS.Atlas {
     py = 95
 }
 
-SMODS.Atlas {
-    key = "ModdedVanilla",
-    path = "ModdedVanilla.png",
-    px = 71,
-    py = 95
-}
+--[[
+dear nxkoo,
 
-SMODS.Atlas {
-    key = "ModdedVanilla2",
-    path = "ModdedVanilla2.png",
-    px = 71,
-    py = 95
-}
+increase atlasAmount by 1 when you are adding a new atlas.
+having more lines doesn't make you cool
 
-SMODS.Atlas {
-    key = "ModdedVanilla3",
-    path = "ModdedVanilla3.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla4",
-    path = "ModdedVanilla4.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla5",
-    path = "ModdedVanilla5.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla6",
-    path = "ModdedVanilla6.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla7",
-    path = "ModdedVanilla7.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla8",
-    path = "ModdedVanilla8.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla9",
-    path = "ModdedVanilla9.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla10",
-    path = "ModdedVanilla10.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla11",
-    path = "ModdedVanilla11.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla12",
-    path = "ModdedVanilla12.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla13",
-    path = "ModdedVanilla13.png",
-    px = 71,
-    py = 95
-}
-
-SMODS.Atlas {
-    key = "ModdedVanilla14",
-    path = "ModdedVanilla14.png",
-    px = 71,
-    py = 95
-}
+from yours truly,
+bepis
+]]
+local atlasAmount = 14
+for i = 1, atlasAmount do
+    if i == 1 then i = "" end
+    SMODS.Atlas {
+        key = "ModdedVanilla"..i,
+        path = "ModdedVanilla"..i..".png",
+        px = 71,
+        py = 95
+    }
+end
 
 SMODS.Atlas {
     key = "tennas",
@@ -1243,6 +1165,192 @@ function Game:init_game_object()
     local ret = igo(self)
     ret.current_round.castle2_card = { suit = 'Spades' }
     return ret
+end
+
+function tngt_desc_from_rows(desc_nodes, empty, align, maxw) --Taken from JoyousSpring's code like... a year ago? I don't remember :sob:
+    local t = {}
+    for k, v in ipairs(desc_nodes) do
+        t[#t+1] = {n=G.UIT.R, config={align = align or "cl", maxw = maxw}, nodes=v}
+    end
+    return {n=G.UIT.R, config={align = "cm", colour = empty and G.C.CLEAR or G.C.UI.BACKGROUND_WHITE, r = 0.1, padding = 0.04, minw = 2, minh = 0.25, emboss = not empty and 0.05 or nil, filler = true}, nodes={
+        {n=G.UIT.R, config={align = align or "cl", padding = 0.03}, nodes=t}
+    }}
+end
+
+function tngt_create_text_box(key) --Clean text box :3
+    local desc_node = {}
+    localize {type = 'descriptions', key = key, set = 'dictionary', nodes = desc_node, scale = 1, text_colour = G.C.WHITE} 
+    desc_node = tngt_desc_from_rows(desc_node,true,"cm")
+    desc_node.config.align = "cm"
+
+    return {n = G.UIT.R, config = {align = "tm", colour = G.C.BLACK, r = 0.2, padding = 0.1}, nodes = {
+        {n = G.UIT.C, config = {align = "tm"}, nodes = {
+            desc_node
+        }},
+    }}
+end
+
+function tngt_emplace_card_to_area(key, area, atlas, pos, size) --Creating fake cards and add them to the area.
+    local keys = {}
+    if type(key) == "table" then
+        keys = key
+    else
+        keys[#keys+1] = key
+    end
+    for _,c_key in ipairs(keys) do
+        local card = Card(area.T.x + area.T.w / 2, area.T.y,
+        G.CARD_W, G.CARD_H, G.P_CARDS.empty,
+        G.P_CENTERS[c_key])
+        card.children.back = Sprite(card.T.x, card.T.y, card.T.w, card.T.h, G.ASSET_ATLAS[(G.P_CENTERS[c_key] and G.P_CENTERS[c_key].atlas) or atlas or "tngt_VanillaRemade"], (G.P_CENTERS[c_key] and G.P_CENTERS[c_key].pos) or {x = 0, y = 0})
+        card.children.back.states.hover = card.states.hover
+        card.children.back.states.click = card.states.click
+        card.children.back.states.drag = card.states.drag
+        card.children.back.states.collide.can = false
+        card.children.back:set_role({major = card, role_type = 'Glued', draw_major = card})
+        if size then card:resize(size) end
+        area:emplace(card)
+    end
+end
+
+tangent_credit_cards = {
+    --[[
+    {card_key = "j_joker", credit = "BepisFever", credit_key = "tngt_bepisfever"},
+
+    - card_key: The card's key. This is mandatory.
+    - credit: If you don't want to use localization, use this.
+    - credit_key: If you want it to use localization, use this.
+    ]]
+}
+tangent_credit_card_per_row = 4
+tangent_credit_card_row = 2
+tangent_credit_pages = math.max(math.ceil(#tangent_credit_cards/(tangent_credit_card_per_row*tangent_credit_card_row)),1)
+tangent_current_credit_page = 1
+tangent_credit_config = {
+    reverse = true
+}
+
+function G.FUNCS.tngt_next_credit_page(e)
+    if tangent_credit_config.reverse and tangent_current_credit_page >= tangent_credit_pages then
+        tangent_current_credit_page = 1
+    else
+        tangent_current_credit_page = math.min(tangent_current_credit_page + 1, tangent_credit_pages)
+    end
+    G.FUNCS["openModUI_tangent"](e, SMODS.LAST_SELECTED_MOD_TAB) 
+end
+
+function G.FUNCS.tngt_previous_credit_page(e)
+    if tangent_credit_config.reverse and tangent_current_credit_page <= 1 then
+        tangent_current_credit_page = tangent_credit_pages
+    else  
+        tangent_current_credit_page = math.max(math.min(tangent_current_credit_page - 1, tangent_credit_pages), 1)
+    end
+    G.FUNCS["openModUI_tangent"](e, SMODS.LAST_SELECTED_MOD_TAB) 
+end
+
+--Extra Tabs
+tangentry.extra_tabs = function()
+    return{
+        {
+            label = "Credits",
+            tab_definition_function = function()
+                local root_nodes = {
+                    tngt_create_text_box("tngt_credit1")
+                }
+                local name_node = {}
+                localize {type = 'descriptions', key = "tngt_credit_name", set = 'dictionary', nodes = name_node, scale = 2, text_colour = G.C.WHITE, shadow = true} 
+                name_node = tngt_desc_from_rows(name_node,true,"cm") --Reorganizes the text in the node properly (?).
+                name_node.config.align = "cm"
+
+                local desc_node = {}
+                localize {type = 'descriptions', key = "tngt_credit_desc", set = 'dictionary', nodes = desc_node, scale = 1, text_colour = G.C.WHITE} 
+                desc_node = tngt_desc_from_rows(desc_node,true,"cm")
+                desc_node.config.align = "cm"
+
+                local function add_credit_card(page, row)
+                    local order = (((page - 1) * tangent_credit_card_per_row * tangent_credit_card_row) + ((row - 1) * tangent_credit_card_per_row) + 1)
+                    local cardareas = {}
+                    if G["tngt_registered_config_cardareas"..row] and G["tngt_registered_config_cardareas"..row].area then
+                        for _,v in ipairs(G["tngt_registered_config_cardareas"..row].area) do
+                            v:remove()
+                            v = nil
+                        end
+                        G["tngt_registered_config_cardareas"..row] = nil
+                    end
+                    for i = order, order + (tangent_credit_card_per_row - 1) do
+                        if tangent_credit_cards[i] then
+                            G["tngt_credit_cardarea"..order] = CardArea(
+                                G.ROOM.T.x + 0.1 * G.ROOM.T.w / 2, G.ROOM.T.h,
+                                0.82 * G.CARD_W,
+                                0.82 * G.CARD_H,
+                                { card_limit = 1, type = 'title', highlight_limit = 0, collection = true }
+                            )
+                            local area = G["tngt_credit_cardarea"..order]
+                            local config_card = tangent_credit_cards[i]
+                            if config_card then
+                                tngt_emplace_card_to_area(config_card.card_key, area, nil, nil, 0.8)
+                            end
+                            cardareas[#cardareas+1] = {area = area, c_info = config_card}
+                        end
+                    end
+                    G["tngt_registered_config_cardareas"..row] = cardareas
+                    return cardareas
+                end
+
+                for i = 1,tangent_credit_card_row do
+                    local cardarea_nodes = {}
+                    for _,v in ipairs(add_credit_card(tangent_current_credit_page, i)) do
+                        cardarea_nodes[#cardarea_nodes + 1] = {n = G.UIT.C, config = {align = "cm", colour = G.C.BLACK, r = 0.2, padding = 0.02}, nodes = {
+                            {n = G.UIT.R, config = {align = "cm"}, nodes = {
+                                {n = G.UIT.O, config = {object = v.area}},
+                            }},
+                            {n = G.UIT.R, config = {align = "cm", padding = 0.1}, nodes = {
+                                {n = G.UIT.T, config = {text = localize("tngt_made_by").." "..((v.c_info.credit_key and localize(v.c_info.credit_key)) or v.c_info.credit or "?"), colour = G.C.UI.TEXT_LIGHT, scale = 0.3, shadow = true}}, 
+                            }},
+                        }}
+                    end
+                    cardarea_nodes = {{n = G.UIT.R, config = {align = "cm", padding = 0.02}, nodes =
+                        cardarea_nodes
+                    }}
+                    root_nodes[#root_nodes+1] = {n = G.UIT.R, config = {align = "cm", padding = 0.02}, nodes = {
+                        {n = G.UIT.C, config = {align = "cm", padding = 0.02}, nodes =
+                            cardarea_nodes
+                        },
+                    }}
+                end
+
+                table.insert(root_nodes, 1, {n = G.UIT.R, config = {align = "tm", colour = G.C.CLEAR}, nodes = {
+                    {n = G.UIT.C, config = {align = "tm", colour = G.C.CLEAR}, nodes = {
+                        name_node,
+                        desc_node
+                    }},
+                }})
+
+                root_nodes[#root_nodes+1] = {n = G.UIT.R, config = {align = "cm", padding = 0.02}, nodes = { --Page turning stuff. This is always added to root_nodes.
+                    {n = G.UIT.C, config = {align = "cm", minw = 0.5, minh = 0.5, padding = 0.1, r = 0.1, hover = true, colour = G.C.BLACK, shadow = true, button = "tngt_previous_credit_page"}, nodes = {
+                        {n = G.UIT.R, config = {align = "cm", padding = 0.05}, nodes = {
+                            {n = G.UIT.T, config = {text = "<", scale = 0.4, colour = G.C.UI.TEXT_LIGHT}}
+                        }}
+                    }},
+                    {n = G.UIT.C, config = {align = "cm", minw = 0.5, minh = 0.5, padding = 0.1, r = 0.1, hover = true, colour = G.C.BLACK, shadow = true}, nodes = {
+                        {n = G.UIT.R, config = {align = "cm", padding = 0.05}, nodes = {
+                            {n = G.UIT.T, config = {text = localize("tngt_page").." "..tangent_current_credit_page.."/"..tangent_credit_pages, scale = 0.4, colour = G.C.UI.TEXT_LIGHT}}
+                        }}
+                    }}, 
+                    {n = G.UIT.C, config = {align = "cm", minw = 0.5, minh = 0.5, padding = 0.1, r = 0.1, hover = true, colour = G.C.BLACK, shadow = true, button = "tngt_next_credit_page"}, nodes = {
+                        {n = G.UIT.R, config = {align = "cm", padding = 0.05}, nodes = {
+                            {n = G.UIT.T, config = {text = ">", scale = 0.4, colour = G.C.UI.TEXT_LIGHT}}
+                        }}
+                    }},
+                }}
+
+                return {n = G.UIT.ROOT, config = {r = 0.1, minw = 5, align = "cm", padding = 0.2, colour = G.C.BLACK}, nodes = {
+                    {n = G.UIT.C, config = {r = 0.1, minw = 5, minh = 3, align = "tm", colour = G.C.L_BLACK, padding = 0.05}, nodes = --We are using G.UIT.C here so that configs are aligned vertically.
+                        root_nodes
+                    },
+                }}
+            end
+        }
+    }
 end
 
 -- MIKE, REBUILD MY MOD

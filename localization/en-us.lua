@@ -2,9 +2,30 @@ return {
     misc = {
         dictionary = {
             ph_improve_run = "I'm not calling you a good boy, that run was shit",
+	    tngt_page = "Page",
+            tngt_made_by = "Made by",
         }
     },
     descriptions = {
+	dictionary = {
+            tngt_credit1 = {
+                text = {
+                    "{C:dark_edition,E:2}Thank you everyone who helped me with this mod!{}",
+                    "{C:attention}BepisFever{}{C:inactive} (@bepisfever){}, {C:attention}N'{}{C:inactive} (@nh6574){},...",
+                    "{C:inactive}(add people in here nxkoo)",
+                }
+            },
+            tngt_credit_name = {
+                text = {
+                    "Credits"
+                }
+            },
+            tngt_credit_desc = {
+                text = {
+                    "Contains proper credits of other people"
+                }
+            },
+        },
         Joker = {
             j_tngt_nxkoo = {
                 text = {
@@ -189,5 +210,5 @@ return {
                 }
             },
         }
-    }
+    },
 }
