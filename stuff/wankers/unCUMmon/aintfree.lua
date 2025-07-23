@@ -1046,7 +1046,6 @@ SMODS.Joker {
             "{C:inactive}Seriously, who made this meme big, it sucks."
         }
     },
-    config = { extra = { repetitions = 1 } },
     rarity = 2,
     atlas = 'ModdedVanilla2',
     pos = { x = 4, y = 0 },
@@ -1093,7 +1092,6 @@ SMODS.Joker {
 
 SMODS.Joker {
     key = 'johncena',
-    config = { extra = { repetitions = 1 } },
     rarity = 2,
     atlas = 'ModdedVanilla3',
     pos = { x = 4, y = 0 },

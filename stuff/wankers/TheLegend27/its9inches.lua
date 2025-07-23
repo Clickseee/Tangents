@@ -1,11 +1,10 @@
 SMODS.Joker {
     key = "tenna",
-    display_size = { w = 64, h = 64 },
     pos = { x = 0, y = 0 },
     frames = 93,
     frame_delay = 0.01,
     atlas = "tennas",
-    display_size = { w = 71 * 1.1, h = 95 * 1.1 },
+    display_size = { w = 64 * 1.1, h = 64 * 1.1 },
     loc_txt = {
         name = "{f:tngt_DETERMINATION}Mr. (Ant) Tenna{}",
         text = {
@@ -279,7 +278,6 @@ SMODS.Joker {
             "{C:inactive}(Jarvis, inspect this guy's balls.)"
         }
     },
-    config = { extra = {} },
     rarity = 4,
     atlas = 'ModdedVanilla6',
     pos = { x = 0, y = 1 },
@@ -412,7 +410,6 @@ SMODS.Joker {
             "{C:inactive}(Spoiler it bro, it just came out yesterday..){}"
         }
     },
-    config = { extra = {} },
     rarity = 4,
     atlas = 'ModdedVanilla7',
     pos = { x = 0, y = 1 },
