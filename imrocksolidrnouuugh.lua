@@ -1177,7 +1177,7 @@ tangentry.extra_tabs = function()
                                 G.ROOM.T.x + 0.1 * G.ROOM.T.w / 2, G.ROOM.T.h,
                                 0.82 * G.CARD_W,
                                 0.82 * G.CARD_H,
-                                { card_limit = 1, type = 'title', highlight_limit = 0, collection = true }
+                                { card_limit = 5, type = 'title', highlight_limit = 0, collection = true }
                             )
                             local area = G["tngt_credit_cardarea"..order]
                             local config_card = tangent_credit_cards[i]
