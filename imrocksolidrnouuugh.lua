@@ -226,6 +226,115 @@ tangentry.config_tab = function()
     }
 end
 
+SMODS.current_mod.extra_tabs = function() -- CREDITS
+    local scale = 0.5
+    return {
+        label = "Convicts",
+        tab_definition_function = function()
+        return {
+            n = G.UIT.ROOT,
+            config = {
+            align = "cm",
+            padding = 0.05,
+            colour = G.C.CLEAR,
+            },
+            nodes = {
+            {
+                n = G.UIT.R,
+                config = {
+                padding = 0,
+                align = "cm"
+                },
+                nodes = {
+                {
+                    n = G.UIT.T,
+                    config = {
+                    text = "Main Culprit: Nxkoo",
+                    shadow = false,
+                    scale = scale,
+                    colour = G.C.RARITY.Legendary
+                    }
+                }
+                }
+            },
+            {
+                n = G.UIT.R,
+                config = {
+                padding = 0,
+                align = "cm"
+                },
+                nodes = {
+                {
+                    n = G.UIT.T,
+                    config = {
+                    text = "Artists: ssecun, Incognito, crazy_dave_aka_crazy_dave",
+                    shadow = false,
+                    scale = scale,
+                    colour = G.C.MONEY
+                    }
+                },
+                }
+            },
+            {
+                n = G.UIT.R,
+                config = {
+                padding = 0,
+                align = "cm"
+                },
+                nodes = {
+                {
+                    n = G.UIT.T,
+                    config = {
+                    text = "Side bitch: milkedrat, Incognito",
+                    shadow = false,
+                    scale = scale,
+                    colour = G.C.GREEN
+                    }
+                }
+                },
+            },
+            {
+                n = G.UIT.R,
+                config = {
+                padding = 0,
+                align = "cm"
+                },
+                nodes = {
+                {
+                    n = G.UIT.T,
+                    config = {
+                    text = "HUGE thanks to: Astro, superbread, toma, N', Somethingcom525,",
+                    shadow = false,
+                    scale = scale,
+                    colour = G.C.BLUE
+                    }
+                }
+                } 
+            },
+                        {
+                n = G.UIT.R,
+                config = {
+                padding = 0,
+                align = "cm"
+                },
+                nodes = {
+                {
+                    n = G.UIT.T,
+                    config = {
+                    text = "and everyone who helped me through hard times <3",
+                    shadow = false,
+                    scale = scale,
+                    colour = G.C.EDITION
+                    }
+                }
+                } 
+            }
+            }
+        }
+        end
+    }
+end
+
 --Thank you PERKOLATED and HPR
 function Card:resize(mod, force_save)
     self:hard_set_T(self.T.x, self.T.y, self.T.w * mod, self.T.h * mod)
@@ -539,7 +648,32 @@ local fourthwall_gradient = SMODS.Gradient({
     cycle = 1
 })
 
+--[[
 SMODS.current_mod.badge_colour = fourthwall_gradient
+]]
+
+local fourwall_gradient = SMODS.Gradient({
+    key = "fourwall",
+    colours = {
+        HEX("00bfff"),
+        HEX("0080ff"),
+        HEX("4b0082"),
+    },
+    cycle = 5
+})
+
+SMODS.Rarity({
+    key = "fourwall",
+    loc_txt = {
+        name = "Fourth Wall"
+    },
+    badge_colour = fourwall_gradient,
+    default_weight = 0.005,
+    pools = { ["Joker"] = true },
+    get_weight = function(self, weight, object_type)
+        return weight
+    end
+})
 
 SMODS.Rarity({
     key = "4TH WALL",
@@ -699,11 +833,28 @@ SMODS.Sound {
     path = "jumpscare5.ogg"
 }
 
+SMODS.Sound {
+    key = "tngt_boss",
+    path = "eyboss.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_hawk",
+    path = "hawk.ogg"
+}
+
+SMODS.Sound {
+    key = "tngt_tuah",
+    path = "tuah.ogg"
+}
+
 SMODS.Atlas {
     key = "modicon",
     path = "modicon.png",
     px = 34,
-    py = 34
+    py = 34,
+    frames = 23,
+    atlas_table = 'ANIMATION_ATLAS'
 }
 
 SMODS.Atlas {
@@ -748,6 +899,45 @@ SMODS.Atlas {
 SMODS.Atlas {
     key = "boosters",
     path = "booster.png",
+    px = 71,
+    py = 95
+}
+
+SMODS.Atlas{
+    key = "shop_sign",
+    path = "slop.png",
+    px=113,
+    py=57,
+    atlas_table = 'ANIMATION_ATLAS',
+    raw_key = true,
+	frames = 4,
+    prefix_config = {key = false}
+}
+
+SMODS.Atlas{
+    key = "tvtime",
+    path = "itstvtime.png",
+    px = 478,
+    py = 120
+}
+
+SMODS.Atlas{
+    key = "goddamnit",
+    path = "goddamnit.png",
+    px = 600,
+    py = 174
+}
+
+SMODS.Atlas {
+    key = "DEVS",
+    path = "DEVS.png",
+    px = 71,
+    py = 95
+}
+
+SMODS.Atlas {
+    key = "CUM",
+    path = "cum.png",
     px = 71,
     py = 95
 }
@@ -832,6 +1022,20 @@ SMODS.Atlas {
 SMODS.Atlas {
     key = "ModdedVanilla12",
     path = "ModdedVanilla12.png",
+    px = 71,
+    py = 95
+}
+
+SMODS.Atlas {
+    key = "ModdedVanilla13",
+    path = "ModdedVanilla13.png",
+    px = 71,
+    py = 95
+}
+
+SMODS.Atlas {
+    key = "ModdedVanilla14",
+    path = "ModdedVanilla14.png",
     px = 71,
     py = 95
 }
@@ -1002,4 +1206,6 @@ SMODS.load_file("stuff/wankers/cummon/thisdick.lua")()
 SMODS.load_file("stuff/wankers/unCUMmon/aintfree.lua")()
 SMODS.load_file("stuff/wankers/SKRRRRARE/matteroffact.lua")()
 SMODS.load_file("stuff/wankers/TheLegend27/its9inches.lua")()
+SMODS.load_file("stuff/wankers/DONOTOPEN/classified.lua")()
 SMODS.load_file("stuff/dicks/strictlydickly.lua")()
+SMODS.load_file("stuff/cumchalice/concumables.lua")()

@@ -1,0 +1,20 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+# Sprite in description
+[[patches]]
+[patches.pattern]
+target = "functions/misc_functions.lua"
+pattern = "elseif part.control.E then"
+position = "before"
+payload = '''
+elseif part.control.tngt_S then
+        final_line[#final_line + 1] = {
+            n = G.UIT.O,
+            config = {
+                object = Sprite(0, 0, 7, 3, G.ASSET_ATLAS["tngt_goddamnit"], {x = 0, y = 0}), align = "cm"
+            }
+        }
+'''
+match_indent = true

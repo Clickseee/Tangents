@@ -4,8 +4,8 @@ SMODS.Joker {
     loc_txt = {
         name = 'A waterballoon?',
         text = {
-            "This kid will give you {X:mult,C:white}X10000000{} Mult, {X:blue,C:white}X10000000{} Chips",
-            "{C:gold}$100000000{}, and Infinite {C:blue}Hands{}",
+            "This kid will give you {X:mult,C:white}X1e308{} Mult, {X:blue,C:white}X1e308{} Chips",
+            "{C:gold}$1e308{}, and Infinite {C:blue}Hands{}",
             "{C:inactive}(Only works if you hit the Game Over screen.)"
         }
     },
@@ -24,6 +24,124 @@ SMODS.Joker {
     end
 }
 
+--[[
+local ranks = {}
+for k, v in pairs(G.playing_cards) do
+    ranks[v:get_id()] = (ranks[v:get_id()] or 0) + v.base.times_played
+end
+table.sort(ranks, function(a, b) return a > b end)
+local mostplayed = ranks[1]
+
+SMODS.Joker {
+    key = 'hoodirony',
+    loc_txt = {
+        name = 'Hood irony {f:tngt_emoji}😂🚶‍➡️',
+        text = {
+            'Gains {X:mult,C:white}X0.8{} Mult',
+            'per consecutive hand containing your',
+            'most played rank(s): {C:attention}#3#{}',
+            '{s:0.8}Resets when none are played',
+            '{C:inactive}(Current: {X:mult,C:white}X#1#{} {C:inactive}Mult)'
+        }
+    },
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    rarity = 1,
+    atlas = 'ModdedVanilla11',
+    pos = { x = 0, y = 0 },
+    cost = 1,
+    config = { 
+        extra = { 
+            xmult = 1, 
+            streak = 0,
+            current_rank = nil
+        } 
+    },
+    loc_vars = function(self, info_queue, card)
+        -- Get most played ranks
+        local ranks = {}
+        for k, v in pairs(G.playing_cards) do
+            if not SMODS.has_no_rank(v) then
+                local id = v:get_id()
+                ranks[id] = (ranks[id] or 0) + (v.base.times_played or 0)
+            end
+        end
+        
+        -- Convert to sortable table
+        local sortable = {}
+        for id, count in pairs(ranks) do
+            table.insert(sortable, {id = id, count = count})
+        end
+        table.sort(sortable, function(a, b) return a.count > b.count end)
+        
+        -- Display current tracking info
+        return {
+            vars = {
+                card.ability.extra.xmult,
+                card.ability.extra.streak,
+                card.ability.extra.current_rank and localize(G.P_RANKS[card.ability.extra.current_rank], 'ranks') or "None"
+            }
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.end_of_round and not context.blueprint then
+            -- Get most played ranks at start of round
+            local ranks = {}
+            for k, v in pairs(G.playing_cards) do
+                if not SMODS.has_no_rank(v) then
+                    local id = v:get_id()
+                    ranks[id] = (ranks[id] or 0) + (v.base.times_played or 0)
+                end
+            end
+            
+            -- Convert to sortable table
+            local sortable = {}
+            for id, count in pairs(ranks) do
+                table.insert(sortable, {id = id, count = count})
+            end
+            table.sort(sortable, function(a, b) return a.count > b.count end)
+            
+            -- Check if current hand contains any of the most played ranks
+            local contains_rank = false
+            if #sortable > 0 then
+                local most_played_rank = sortable[1].id
+                card.ability.extra.current_rank = most_played_rank
+                
+                if context.full_hand then
+                    for _, c in ipairs(context.full_hand) do
+                        if not SMODS.has_no_rank(c) and c:get_id() == most_played_rank then
+                            contains_rank = true
+                            break
+                        end
+                    end
+                end
+                
+                if contains_rank then
+                    card.ability.extra.streak = card.ability.extra.streak + 1
+                    card.ability.extra.xmult = card.ability.extra.xmult + 1
+                    return {
+                        message = localize{type = 'variable', key = 'a_xmult', vars = {card.ability.extra.xmult}},
+                        colour = G.C.MULT
+                    }
+                else
+                    card.ability.extra.streak = 0
+                    return {
+                        message = localize('k_reset'),
+                        colour = G.C.RED
+                    }
+                end
+            end
+        end
+        
+        if context.joker_main then
+            return {
+                xmult = card.ability.extra.xmult
+            }
+        end
+    end
+}
+]]
 
 SMODS.Joker {
     key = 'pingas',
@@ -101,7 +219,7 @@ SMODS.Joker {
     loc_txt = {
         name = 'You know what that mean? :D',
         text = {
-            "Gains {C:blue}+15{} Chips for each played cards.",
+            "{C:attention}Played{} cards gives {C:blue}+#1#{} Chips",
             "{C:inactive}--------------------------------",
             "{C:attention,s:3}fish.{}"
         }
@@ -189,7 +307,7 @@ SMODS.Joker {
     loc_txt = {
         name = "Melvin {C:red}Mult{}",
         text = {
-            "{C:red}+#1#{} Mult for each {C:attention}Joker{} in this run."
+            "{C:red}+#1#{} Mult for each {C:attention}Joker{} card"
         }
     },
     rarity = 1,
@@ -361,7 +479,7 @@ SMODS.Joker {
     loc_txt = {
         name = "Hello {C:attention}everybody{}, my name is {X:mult,C:white}Mult{}{C:red}iplier.{}",
         text = {
-            "{C:red}+#1#{} Mult, {C:green}otherwise{} {X:mult,C:white}X#3#{} Mult."
+            "{C:red}+#1#{} Mult, {C:green}otherwise{} {X:mult,C:white}X#2#{} Mult."
         }
     },
     rarity = 1,
@@ -598,4 +716,69 @@ SMODS.Joker {
             }
         end
     end
+}
+
+SMODS.Joker {
+    key = 'barcode',
+    loc_txt = {
+        name = "[||||  ||| || | | | |||]",
+        text = {
+            "If played hand contains an {C:attention}Ace{} or a {C:attention}10{},",
+            "gives either {C:red}+10{} or {C:red}+11{} Mult."
+        }
+    },
+    rarity = 1,
+    atlas = 'ModdedVanilla12',
+    pos = { x = 4, y = 0 },
+    cost = 3,
+    unlocked = true,
+    discovered = true,
+    config = { extra = { 
+        base_mult = 10,
+        bonus_mult = 11,
+        ace_id = 14,
+        ten_id = 10    
+    }},
+    loc_vars = function(self, info_queue, card)
+        return { 
+            vars = { 
+                card.ability.extra.base_mult,
+                card.ability.extra.bonus_mult
+            },
+            colours = { G.C.MULT, G.C.MULT, G.C.FILTER, G.C.FILTER }
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local has_ace = false
+            local has_ten = false
+            
+            for _, playing_card in ipairs(context.scoring_hand) do
+                local card_id = playing_card:get_id()
+                if card_id == card.ability.extra.ace_id then
+                    has_ace = true
+                elseif card_id == card.ability.extra.ten_id then
+                    has_ten = true
+                end
+                
+                if has_ace and has_ten then break end
+            end
+
+            if has_ace or has_ten then
+                local mult = pseudorandom('ace_ten_joker_'..G.GAME.round_resets.ante) > 0.5 and 
+                    card.ability.extra.bonus_mult or card.ability.extra.base_mult
+                
+                return {
+                    mult = mult,
+                    card = card,
+                    extra = (mult == card.ability.extra.bonus_mult) and {
+                        message = localize{type='variable', key='a_mult', vars={mult}},
+                        colour = G.C.MULT,
+                        sound = 'chips1',
+                        delay = 0.4
+                    } or nil
+                }
+            end
+        end
+    end,
 }

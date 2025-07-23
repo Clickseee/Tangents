@@ -1,3 +1,35 @@
+SMODS.Joker {
+    key = "ihadtodoittoem",
+    loc_txt = {
+        name = "I had to do it to em.",
+        text = {
+            "{X:dark_edition,C:white}^1.25{} Mult"
+        }
+    },
+    rarity = 4,
+    atlas = 'ModdedVanilla14',
+    pos = { x = 1, y = 1 },
+    cost = 20,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    config = { extra = { exponent = 1.25 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.exponent } }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+        return {
+          Xmult_mod = mult ^ (mult ^ 0.25 - 1),
+          message = "^1.25 Mult",
+          sound = "tngt_neverforget",
+          colour = G.C.DARK_EDITION
+        }
+    end
+end
+}
 
 SMODS.Joker {
     key = "tenna",
@@ -6,19 +38,9 @@ SMODS.Joker {
     frames = 93,
     frame_delay = 0.01,
     atlas = "tennas",
-    loc_txt = {
-        name = "{f:tngt_DETERMINATION}Mr. (Ant) Tenna{}",
-        text = {
-            "{X:mult,C:white,f:tngt_DETERMINATION}X#1#{} {f:tngt_DETERMINATION}Mult for each time",
-            "{f:tngt_DETERMINATION}the words {C:attention}{f:tngt_DETERMINATION}\"I LOVE TV\"{}",
-            "{f:tngt_DETERMINATION}have been said in the {C:attention,f:tngt_DETERMINATION}Balatro Discord Server{}",
-            "{C:inactive,f:tngt_DETERMINATION}(Currently {X:mult,C:white,f:tngt_DETERMINATION}X#2#{C:inactive,f:tngt_DETERMINATION} Mult)",
-            "{C:blue,s:0.7,f:tngt_DETERMINATION}https://discord.gg/balatro{}",
-        }
-    },
     config = {
         extra = {
-            ILOVETV = 76,
+            ILOVETV = 96,
             tenna_mult = 1
         }
     },
@@ -100,27 +122,27 @@ SMODS.Joker {
     end
 }
 
---[[
+
 SMODS.Joker {
-	key = 'sybau',
-	loc_txt = {
-		name = '{f:tngt_times}SYBAU{}{f:tngt_emoji}💔{}',
-		text = {
-			"Every {C:attention}played cards{} are retriggered {C:attention}twice{},",
-			"but {C:dark_edition}shut yo bitch ass up.{}"
-		}
-	},
-	rarity = 4,
-	atlas = 'ModdedVanilla2',
-	pos = { x = 0, y = 1 },
-	soul_pos = { x = 4, y = 1 },
-	cost = 20,
-	unlocked = true,
-	discovered = true,
-	config = { extra = {
-        stored_volumes = {music = 0, sounds = 0, master = 0},
+    key = 'sybau',
+    loc_txt = {
+        name = '{f:tngt_times}SYBAU{}{f:tngt_emoji}💔{}',
+        text = {
+            "Every {C:attention}played cards{} are retriggered {C:attention}twice{},",
+            "but {C:dark_edition}shut yo bitch ass up.{}"
+        }
+    },
+    rarity = 4,
+    atlas = 'ModdedVanilla2',
+    pos = { x = 0, y = 1 },
+    soul_pos = { x = 4, y = 1 },
+    cost = 20,
+    unlocked = true,
+    discovered = true,
+    config = { extra = {
+        stored_volumes = { music = 0, sounds = 0, master = 0 },
         mute_duration = 0.5
-    }},
+    } },
 
     loc_vars = function(self, info_queue, card)
         return { vars = { "2×" }, retriggers = 2 }
@@ -179,43 +201,6 @@ SMODS.Joker {
     end
 }
 
-
-SMODS.Joker {
-	key = 'you',
-	loc_txt = {
-		name = '{f:tngt_DETERMINATION}You{}',
-		text = {
-			"{f:tngt_DETERMINATION,}* Despite everything, it's still you.{}"
-		}
-	},
-	config = { extra = {} },
-	rarity = "tngt_4TH WALL",
-	atlas = 'ModdedVanilla3',
-	pos = { x = 0, y = 1 },
-	soul_pos = { x = 4, y = 1 },
-	cost = 20,
-	unlocked = true,
-	discovered = true,
-	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
-	end,
-	calculate = function(self, card, context)
-		if context.ending_shop then
-			G.E_MANAGER:add_event(Event({
-				func = function()
-					local card = copy_card(pseudorandom_element(G.consumeables.cards, pseudoseed('perkeo2')), nil)
-					card:set_edition('e_negative', true)
-					card:add_to_deck()
-					G.consumeables:emplace(card)
-					return true
-				end
-			}))
-			card_eval_status_text(context.blueprint_card or card, 'extra', nil, nil, nil,
-				{ message = localize('k_duplicated_ex') })
-		end
-	end
-}
-]]
 
 SMODS.Joker {
     key = 'flamingo',
@@ -452,27 +437,27 @@ SMODS.Joker {
     end
 }
 
---[[
+
 SMODS.Joker {
-	key = 'flightreacts',
-	loc_txt = {
-			name = "There's no {C:dark_edition}limit{} in {C:attention}glazing{}",
-		text = {
+    key = 'flightreacts',
+    loc_txt = {
+        name = "There's no {C:dark_edition}limit{} in {C:attention}glazing{}",
+        text = {
             "If you reach next {C:attention}Ante{}",
             "in {C:attention}#2#{} rounds or less,",
             "create a {C:dark_edition}negative{} copy of",
             "a random {C:uncommon}Uncommon Joker{}",
             "{C:inactive}(Current round: {C:attention}#3#{C:inactive})"
-		}
-	},
-	rarity = 4,
-	atlas = 'ModdedVanilla8',
-	pos = { x = 0, y = 1 },
-	soul_pos = { x = 4, y = 1 },
-	cost = 20,
-	unlocked = true,
-	discovered = true,
-	blueprint_compat = false,
+        }
+    },
+    rarity = 4,
+    atlas = 'ModdedVanilla8',
+    pos = { x = 0, y = 1 },
+    soul_pos = { x = 4, y = 1 },
+    cost = 20,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
     eternal_compat = true,
     config = {
         extra = {
@@ -481,7 +466,7 @@ SMODS.Joker {
             activated = false
         }
     },
-	loc_vars = function(self, info_queue, card)
+    loc_vars = function(self, info_queue, card)
         return {
             vars = {
                 card.ability.extra.ante_target,
@@ -494,7 +479,7 @@ SMODS.Joker {
     calculate = function(self, card, context)
         if context.end_of_round and not context.blueprint and not card.ability.extra.activated then
             if G.GAME.round_resets.ante >= card.ability.extra.ante_target and
-               G.GAME.round <= card.ability.extra.max_rounds then
+                G.GAME.round <= card.ability.extra.max_rounds then
                 card.ability.extra.activated = true
 
                 local uncommon_jokers = {}
@@ -521,7 +506,7 @@ SMODS.Joker {
                     }))
 
                     return {
-                        message = localize('k_plus_joker').." ("..localize('k_negative_edition')..")",
+                        message = localize('k_plus_joker') .. " (" .. localize('k_negative_edition') .. ")",
                         colour = G.C.PURPLE
                     }
                 end
@@ -535,7 +520,7 @@ SMODS.Joker {
         end
     end
 }
-]]
+
 
 SMODS.Joker {
     key = 'whuh',
@@ -631,12 +616,143 @@ SMODS.Joker {
     loc_txt = {
         name = "{f:tngt_DETERMINATION,s:2}GOD FUCKING DAMNIT {C:blue,f:tngt_DETERMINATION,s:2}KRIS{}",
         text = {
-            "{f:tngt_DETERMINATION,X:mult,C:white}X2.75{} {f:tngt_DETERMINATION}Mult If played hand has exactly",
-            "{f:tngt_DETERMINATION,C:attention}4{} {f:tngt_DETERMINATION} cards of the same suit."
+            "{f:tngt_DETERMINATION}GOD FUCKING DAMNIT KRIS, WHERE THE HELL ARE WE?!{}"
         }
     },
     rarity = 4,
     atlas = 'ModdedVanilla10',
+    pos = { x = 0, y = 1 },
+    soul_pos = { x = 4, y = 1 },
+    cost = 20,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    config = {
+        extra = {
+            xmult = 2.75
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = { box_colours = {HEX('000000')},
+                card.ability.extra.xmult
+            },
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local suits_in_hand = {}
+
+            for _, playing_card in ipairs(context.scoring_hand) do
+                if not playing_card.debuff then
+                    for suit, _ in pairs(G.C.SUITS) do
+                        if playing_card:is_suit(suit) then
+                            suits_in_hand[suit] = true
+                        end
+                    end
+                end
+            end
+
+            local suit_count = 0
+            for _ in pairs(suits_in_hand) do
+                suit_count = suit_count + 1
+            end
+
+            if suit_count == 2 then
+                return {
+                    xmult = card.ability.extra.xmult,
+                    message = localize('k_two_suits'),
+                    colour = G.C.MULT
+                }
+            end
+        end
+    end
+}
+
+local nicmodpress = love.keypressed -- Keypress
+function love.keypressed(key)
+    if key == "space" then
+        if G and G.jokers and G.jokers.cards and not G.SETTINGS.paused then
+            SMODS.calculate_context({ key_press_space = true })
+        end
+    end
+    if key == "f1" then
+        if G and G.jokers and G.jokers.cards and not G.SETTINGS.paused then
+            SMODS.calculate_context({ key_press_f1 = true })
+        end
+    end
+    return (nicmodpress(key))
+end
+
+SMODS.Joker {
+    key = 'f1forhelp',
+    loc_txt = {
+        name = "{f:tngt_DETERMINATION,s:2,C:attention}PRESS {f:tngt_DETERMINATION,s:2}[[{C:attention,f:tngt_DETERMINATION,s:2}F1{}{f:tngt_DETERMINATION,s:2}]] FOR [[{C:green,f:tngt_DETERMINATION,s:2}Help{}{f:tngt_DETERMINATION,s:2}]]",
+        text = {
+            "If you're in a {X:green,C:white,E:2}pickle{} or in the verge of {C:red}losing{} this run",
+            "{f:tngt_DETERMINATION,s:1.5,C:attention}PRESS{} {f:tngt_DETERMINATION,s:1.5}[[{C:attention,f:tngt_DETERMINATION,s:1.5}F1{}{f:tngt_DETERMINATION,s:1.5}]] FOR [[{C:green,f:tngt_DETERMINATION,s:1.5}Help{}{f:tngt_DETERMINATION,s:1.5}]]"
+        }
+    },
+    rarity = 4,
+    atlas = 'ModdedVanilla11',
+    pos = {x = 0, y = 1 },
+    soul_pos = { x = 4, y = 1 },
+    pixel_size = { h = 71 },
+    cost = 20,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    eternal_compat = true,
+    config = {
+        extra = {
+            uses_remaining = 0,
+            hands = 2,
+            discards = 2
+        }
+    },
+
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.uses_remaining } }
+    end,
+
+    calculate = function(self, card, context)
+        if context.setting_blind then
+            card.ability.extra.uses_remaining = 1
+        end
+
+        if context.key_press_f1 or key_press_space then
+            if card.ability.extra.uses_remaining == 1 then
+                card.ability.extra.uses_remaining = 0
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        play_sound("tngt_recruit", 1, 1)
+                        card:juice_up(2, 2)
+                        ease_discard(card.ability.extra.discards)
+                        ease_hands_played(card.ability.extra.hands)
+                        SMODS.calculate_effect(
+                            { message = localize { type = 'variable', key = 'a_hands', vars = { card.ability.extra.hands } } },
+                            { message = localize { type = 'variable', key = 'a_discards', vars = { card.ability.extra.discards } } },
+                            context.blueprint_card or card)
+                        return true
+                    end
+                }))
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = 'grief',
+    loc_txt = {
+        name = "Pl- w- wait, where's the Joker?",
+        text = {
+            "Due to sudden raise of {C:attention}Joker's{} robbery, this {C:attention}Joker{} has been robbed by {C:purple}someone{},",
+            "in return, we'll {C:attention}compensate{} you by giving in total of {C:money}$100{}"
+        }
+    },
+    rarity = 4,
+    atlas = 'ModdedVanilla12',
     pos = { x = 0, y = 1 },
     soul_pos = { x = 4, y = 1 },
     cost = 20,
@@ -661,7 +777,7 @@ SMODS.Joker {
             local suits_in_hand = {}
 
             for _, playing_card in ipairs(context.scoring_hand) do
-                if not playing_card.debuff then -- Ignore debuffed cards
+                if not playing_card.debuff then
                     for suit, _ in pairs(G.C.SUITS) do
                         if playing_card:is_suit(suit) then
                             suits_in_hand[suit] = true
@@ -687,76 +803,132 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-    key = 'f1forhelp',
+    key = 'datboi',
     loc_txt = {
-        name = "{f:tngt_DETERMINATION,s:2,C:attention}PRESS {f:tngt_DETERMINATION,s:2}[[{C:attention,f:tngt_DETERMINATION,s:2}F1{}{f:tngt_DETERMINATION,s:2}]] FOR [[{C:green,f:tngt_DETERMINATION,s:2}Help{}{f:tngt_DETERMINATION,s:2}]]",
+        name = "{f:tngt_sans,E:2}here comes dat boi",
         text = {
-            "If you're in a {X:green,C:white,E:2}pickle{} or in the verge of {C:red}losing{} this run",
-            "{f:tngt_DETERMINATION,s:1.5,C:attention}PRESS{} {f:tngt_DETERMINATION,s:1.5}[[{C:attention,f:tngt_DETERMINATION,s:1.5}F1{}{f:tngt_DETERMINATION,s:1.5}]] FOR [[{C:green,f:tngt_DETERMINATION,s:1.5}Help{}{f:tngt_DETERMINATION,s:1.5}]]"
+            "{f:tngt_sans,s:1.2}Gains {f:tngt_sans,X:mult,C:white,s:1.2}X#2#{}{f:tngt_sans,s:1.2} Mult for each unscored {C:attention,f:tngt_sans,s:1.2}#3#{}",
+            "{f:tngt_sans,s:1.2,C:inactive}(Currently {f:tngt_sans,X:mult,C:white,s:1.2}X#1#{}{f:tngt_sans,s:1.2,C:inactive} Mult)",
+            "{f:tngt_sans,s:1.2,C:inactive}(Suit changes every rounds)"
         }
     },
     rarity = 4,
-    atlas = 'ModdedVanilla11',
+    atlas = 'ModdedVanilla13',
     pos = { x = 0, y = 1 },
     soul_pos = { x = 4, y = 1 },
     cost = 20,
     unlocked = true,
     discovered = true,
-    blueprint_compat = false,
+    blueprint_compat = true,
     eternal_compat = true,
-    config = {
-        extra = {
-            uses_remaining = 2,
-            hands_given = 2,
-            discards_given = 2,
-            key_cooldown = 0 -- spam
-        }
+    config = { 
+        extra = { 
+            base_xmult = 1,       
+            xmult_per_card = 0.5
+        } 
     },
-
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.uses_remaining } }
+        local picked_card = G.GAME.current_round.card_picker_selection or { rank = 'Ace', suit = 'Spade' }
+        return {
+            vars = {
+                card.ability.extra.base_xmult,
+                card.ability.extra.xmult_per_card,
+                localize(picked_card.suit, 'suits_singular')
+            },
+            colours = { G.C.SUITS[picked_card.suit] }
+        }
     end,
-
     calculate = function(self, card, context)
-        if context.setting_blind and not context.blueprint then
-            card.ability.extra.uses_remaining = 2
+    if context.individual and context.cardarea == "unscored" and
+        G.GAME.current_round.card_picker_selection then
+        if context.other_card:get_id() == G.GAME.current_round.card_picker_selection.id and
+            context.other_card:is_suit(G.GAME.current_round.card_picker_selection.suit) then
             return {
-                message = localize('k_reset'),
-                colour = G.C.BLUE
+                xmult = card.ability.extra.xmult
             }
-        end
-        if G.STATE == G.STATES.PLAY_TAROT and
-            card.ability.extra.uses_remaining > 0 and
-            love.keyboard.isDown("f1") and
-            card.ability.extra.key_cooldown <= 0 then
-            card.ability.extra.key_cooldown = 10
-            card.ability.extra.uses_remaining = card.ability.extra.uses_remaining - 1
-            ease_hands_played(card.ability.extra.hands_given)
-            ease_discard(card.ability.extra.discards_given)
-            card:juice_up(0.5, 0.5)
-            play_sound('chips2', 1.1, 0.8)
-            G.E_MANAGER:add_event(Event({
-                trigger = 'immediate',
-                func = function()
-                    card_eval_status_text(card, 'extra', nil, nil, nil, {
-                        message = string.format("+%d Hands\n+%d Discards",
-                            card.ability.extra.hands_given,
-                            card.ability.extra.discards_given),
-                        colour = G.C.BLUE,
-                        delay = 0.4
-                    })
-                    return true
-                end
-            }))
-
-            return {
-                sound = "tngt_recruit",
-                message = ":3",
-                colour = G.C.BLUE
-            }
-        end
-        if card.ability.extra.key_cooldown > 0 then
-            card.ability.extra.key_cooldown = card.ability.extra.key_cooldown - 1
         end
     end
+    if context.after and context.main_eval and not context.blueprint then
+        local unscored_count = 0
+        for _, playing_card in ipairs(context.full_hand) do
+            if playing_card.area == G.play and not playing_card.scored and 
+               not SMODS.has_no_suit(playing_card) then
+                unscored_count = unscored_count + 1
+            end
+        end
+        
+        if unscored_count > 0 then
+            card.ability.extra.xmult = card.ability.extra.xmult + 
+                                      (card.ability.extra.xmult_per_card * unscored_count)
+            return {
+                message = localize{type='variable', key='a_xmult', vars={card.ability.extra.xmult_per_card * unscored_count}},
+                colour = G.C.MULT,
+                card = card
+            }
+        end
+    end
+    
+    -- Apply the current XMult during scoring
+    if context.joker_main then
+        return {
+            xmult = card.ability.extra.xmult
+        }
+    end
+end
+}
+
+SMODS.Joker {
+    key = 'nyancat',
+    loc_txt = {
+        name = "Nyan Cat!~~",
+        text = {
+            "This cat gains {X:mult,C:white}X#2#{} for each played and scored hands",
+            "that contains exactly {C:attention}four{} {C:spades}S{}{C:hearts}u{}{C:clubs}i{}{C:diamonds}t{}s.",
+            "{C:inactive}(Currently {X:mult,C:white}X#1#{}{C:inactive} Mult)"
+        }
+    },
+    rarity = 4,
+    atlas = 'ModdedVanilla14',
+    pos = { x = 0, y = 1 },
+    soul_pos = { x = 4, y = 1 },
+    cost = 20,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    config = { extra = { xmult = 1, xmult_gain = 0.25 } },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.xmult,
+                card.ability.extra.xmult_gain or 0
+            }
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local suits_in_hand = {}
+            for _, card in ipairs(context.scoring_hand) do
+                if not card.debuff then
+                    suits_in_hand[card:get_suit()] = true
+                end
+            end
+            if suits_in_hand['Spades'] and
+                suits_in_hand['Hearts'] and
+                suits_in_hand['Clubs'] and
+                suits_in_hand['Diamonds'] then
+                if card.ability.extra.xmult_gain then
+                    card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
+                end
+                card:juice_up(card.ability.extra.juice_power, card.ability.extra.juice_power)
+                play_sound('chips1', math.random() * 0.1 + 0.8)
+                return {
+                    xmult = card.ability.extra.xmult,
+                    message = localize('k_xmult_x', 'xmult'),
+                    colour = G.C.MULT,
+                    card = card
+                }
+            end
+        end
+    end,
 }

@@ -1,0 +1,98 @@
+--- @class balatro.Game
+--- @field consumeables? balatro.CardArea
+--- @field deck? balatro.CardArea
+--- @field discard? balatro.CardArea
+--- @field hand? balatro.CardArea
+--- @field jokers? balatro.CardArea
+--- @field play? balatro.CardArea
+--- @field playing_cards? balatro.CardArea
+--- @field shop_vouchers? balatro.CardArea
+--- @field shop_booster? balatro.CardArea
+--- @field shop_jokers? balatro.CardArea
+--- @field pack_cards? balatro.CardArea
+---
+--- @field ACC number
+--- @field ACC_state balatro.Game.StateEnum
+--- @field CANVAS love.Canvas
+--- @field CANV_SCALE number
+--- @field CURR_VIBRATION number
+--- @field DISCOVER_TALLIES balatro.Game.DiscoverTallies
+--- @field E_SWITCH_POINT number
+--- @field FILE_HANDLER balatro.Game.FileHandler
+--- @field FRAMES { DRAW: number, MOVE: number }
+--- @field ID number
+--- @field JUDDLE_VIBRATION number
+--- @field MAJORS number
+--- @field MINORS number
+--- @field PREV_GARB number
+--- @field PROFILE_BUTTON balatro.UIBox
+--- @field RESET_JIGGLES boolean
+--- @field ROOM balatro.Node
+--- @field ROOM_ATTACH balatro.Moveable
+--- @field ROOM_ORIG Position | { r: number }
+--- @field SPLASH_BACK balatro.Sprite
+--- @field SPLASH_VOL number
+--- @field VERSION string
+--- @field VIBRATION number
+--- @field WINDOWTRANS PositionAndSize | { real_window_w: number, real_window_h: number }
+--- @field blind_prompt_box balatro.UIBox
+--- @field blind_select_opts { big: balatro.UIBox, boss: balatro.UIBox, small: balatro.UIBox }
+--- @field exp_times table
+--- @field hand_text_area balatro.Game.HandTextArea
+--- @field handlist PokerHand[]
+--- @field last_materializes number
+--- @field localization balatro.Game.Localization
+--- @field new_frame boolean
+--- @field playing_card number
+--- @field prev_boss_state BlindState
+--- @field prev_large_state BlindState
+--- @field prev_small_state BlindState
+--- @field real_dt number
+--- @field screenwipe_amt number
+--- @field setup_seed number
+--- @field sort_id number
+--- @field sticker_card balatro.Card
+--- @field sticker_map string[]
+--- @field tagid number
+--- @field under_overlay boolean
+--- @field viewed_stake boolean
+--- @field vortex_time boolean
+--- @field window_prev WidthHeight | { orig_ratio: number, orig_scale: number }
+--- @field screenwipe? balatro.UIBox
+--- @field DEADZONE? number
+--- @field BRUTE_OVERLAY? ColorHex
+--- @field OVERLAY_TUTORIAL? balatro.UIBox
+--- @field NO_MOD_CURSOR_STACK? boolean
+--- @field jimboed? boolean
+
+--- @class balatro.Game.DiscoverTallies: { [string]: balatro.Tally }
+--- @field backs balatro.Tally
+--- @field blinds balatro.Tally
+--- @field boosters balatro.Tally
+--- @field consumeables balatro.Tally
+--- @field editions balatro.Tally
+--- @field jokers balatro.Tally
+--- @field planets balatro.Tally
+--- @field spectrals balatro.Tally
+--- @field tags balatro.Tally
+--- @field tarots balatro.Tally
+--- @field total balatro.Tally
+--- @field vouchers balatro.Tally
+
+--- @class balatro.Game.FileHandler
+--- @field force boolean
+--- @field last_sent_pause balatro.Moveable.AlignmentArg
+--- @field last_sent_stage number
+--- @field last_sent_time number
+--- @field update_queued boolean
+
+--- @class balatro.Game.HandTextArea: { [string]: balatro.UIElement }
+--- @field ante balatro.UIElement
+--- @field blind_chips balatro.UIElement
+--- @field chip_total balatro.UIElement
+--- @field chips balatro.UIElement
+--- @field game_chips balatro.UIElement
+--- @field hand_level balatro.UIElement
+--- @field handname balatro.UIElement
+--- @field mult balatro.UIElement
+--- @field round balatro.UIElement

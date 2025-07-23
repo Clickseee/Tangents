@@ -1,0 +1,97 @@
+--- @class balatro.Game
+--- @field C balatro.Colors
+--- @field BADGE_COL balatro.Game.BadgeColor
+
+--- @class balatro.Colors: { [string]: ColorHex }
+--- @field MULT ColorHex
+--- @field CHIPS ColorHex
+--- @field MONEY ColorHex
+--- @field XMULT ColorHex
+--- @field FILTER ColorHex
+--- @field BLUE ColorHex
+--- @field RED ColorHex
+--- @field GREEN ColorHex
+--- @field PALE_GREEN ColorHex
+--- @field ORANGE ColorHex
+--- @field IMPORTANT ColorHex
+--- @field GOLD ColorHex
+--- @field YELLOW ColorHex
+--- @field CLEAR ColorHex
+--- @field WHITE ColorHex
+--- @field PURPLE ColorHex
+--- @field BLACK ColorHex
+--- @field L_BLACK ColorHex
+--- @field GREY ColorHex
+--- @field CHANCE ColorHex
+--- @field JOKER_GREY ColorHex
+--- @field VOUCHER ColorHex
+--- @field BOOSTER ColorHex
+--- @field EDITION ColorHex
+--- @field DARK_EDITION ColorHex
+--- @field ETERNAL ColorHex
+--- @field PERISHABLE ColorHex
+--- @field RENTAL ColorHex
+--- @field DYN_UI balatro.Colors.DYN_UI
+--- @field SO_1 CardSuit<ColorHex>
+--- @field SO_2 CardSuit<ColorHex>
+--- @field SUITS CardSuit<ColorHex>
+--- @field UI balatro.Colors.UI
+--- @field SET balatro.Colors.SET
+--- @field SECONDARY_SET balatro.Colors.SET | {Edition: ColorHex}
+--- @field RARITY ColorHex[]
+--- @field BLIND { Small: ColorHex, Big: ColorHex, Boss: ColorHex, won: ColorHex }
+--- @field HAND_LEVELS ColorHex[]
+--- @field BACKGROUND balatro.Colors.BACKGROUND
+--- @field UI_CHIPS ColorHex
+--- @field UI_MULT ColorHex
+
+--- @class balatro.Colors.BACKGROUND: { [string]: ColorHex }
+--- @field L ColorHex
+--- @field D ColorHex
+--- @field C ColorHex
+--- @field contrast number
+
+--- @class balatro.Colors.DYN_UI: { [string]: ColorHex }
+--- @field MAIN ColorHex
+--- @field DARK ColorHex
+--- @field BOSS_MAIN ColorHex
+--- @field BOSS_DARK ColorHex
+--- @field BOSS_PALE ColorHex
+
+--- @class balatro.Colors.SET: { [string]: ColorHex }
+--- @field Default ColorHex
+--- @field Enhanced ColorHex
+--- @field Joker ColorHex
+--- @field Tarot ColorHex
+--- @field Planet ColorHex
+--- @field Spectral ColorHex
+--- @field Voucher ColorHex
+
+--- @class balatro.Colors.UI: { [string]: ColorHex }
+--- @field TEXT_LIGHT ColorHex
+--- @field TEXT_DARK ColorHex
+--- @field TEXT_INACTIVE ColorHex
+--- @field BACKGROUND_LIGHT ColorHex
+--- @field BACKGROUND_WHITE ColorHex
+--- @field BACKGROUND_DARK ColorHex
+--- @field BACKGROUND_INACTIVE ColorHex
+--- @field OUTLINE_LIGHT ColorHex
+--- @field OUTLINE_LIGHT_TRANS ColorHex
+--- @field OUTLINE_DARK ColorHex
+--- @field TRANSPARENT_LIGHT ColorHex
+--- @field TRANSPARENT_DARK ColorHex
+--- @field HOVER ColorHex
+
+--- @class balatro.Game.BadgeColor: { [string]:ColorHex }
+--- @field blue_seal ColorHex
+--- @field eternal ColorHex
+--- @field foil ColorHex
+--- @field gold_seal ColorHex
+--- @field holographic ColorHex
+--- @field negative ColorHex
+--- @field perishable ColorHex
+--- @field pinned_left ColorHex
+--- @field polychrome ColorHex
+--- @field purple_seal ColorHex
+--- @field red_seal ColorHex
+--- @field rental ColorHex

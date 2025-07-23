@@ -1,0 +1,55 @@
+--- @class balatro.Game: balatro.GameDefs.InitItemProto
+
+--- Item proto definitions. Available after `Game:init_item_prototypes()`
+--- @class balatro.GameDefs.InitItemProto
+--- @field P_SEALS balatro.ItemList.Seal
+--- @field P_TAGS balatro.ItemList.Tag
+--- @field P_STAKES balatro.ItemList.Stake
+--- @field P_BLINDS balatro.ItemList.Blind
+--- @field P_CARDS balatro.ItemList.Card
+--- @field P_CENTERS balatro.ItemCenters | table
+--- @field P_CENTER_POOLS balatro.CenterPools
+--- @field P_JOKER_RARITY_POOLS balatro.Item.Joker[] Pool based on joker's rarity. Size = 4
+--- @field P_LOCKED any[]
+---
+--- @field tag_undiscovered { name: string, order: number, config: {type: string}, pos: Position }
+--- @field b_undiscovered { name: string, debuff_text: string, pos: Position }
+---
+--- @field j_locked balatro.Item.LockedOrNotDiscovered | { set: 'Joker' }
+--- @field v_locked balatro.Item.LockedOrNotDiscovered | { set: 'Voucher' }
+--- @field c_locked balatro.Item.LockedOrNotDiscovered | { set: 'Tarot' }
+--- @field j_undiscovered balatro.Item.LockedOrNotDiscovered | { set: 'Joker' }
+--- @field t_undiscovered balatro.Item.LockedOrNotDiscovered | { set: 'Tarot' }
+--- @field p_undiscovered balatro.Item.LockedOrNotDiscovered | { set: 'Planet' }
+--- @field s_undiscovered balatro.Item.LockedOrNotDiscovered | { set: 'Spectral' }
+--- @field v_undiscovered balatro.Item.LockedOrNotDiscovered | { set: 'Voucher' }
+--- @field booster_undiscovered balatro.Item.LockedOrNotDiscovered | { set: 'Booster' }
+
+--- @class balatro.Item.LockedOrNotDiscovered
+--- @field unlocked false
+--- @field max number
+--- @field name "Locked"
+--- @field pos Position
+--- @field set string
+--- @field cost_mult number
+--- @field config {}
+
+--- @class balatro.CenterPools
+--- @field Booster balatro.Item.Booster[]
+--- @field Default balatro.Item.Default[]
+--- @field Enhanced balatro.Item.EnhancedCard[]
+--- @field Edition balatro.Item.Edition[]
+--- @field Joker balatro.Item.Joker[]
+--- @field Tarot balatro.Item.Tarot[]
+--- @field Planet balatro.Item.Planet[]
+--- @field Tarot_Planet (balatro.Item.Tarot | balatro.Item.Planet)[]
+--- @field Spectral balatro.Item.Spectral[]
+--- @field Consumeables (balatro.Item.Tarot | balatro.Item.Planet | balatro.Item.Spectral)[]
+--- @field Voucher balatro.Item.Voucher[]
+--- @field Back balatro.Item.Back[]
+--- @field Tag balatro.Item.Tag[]
+--- @field Seal balatro.Item.Seal[]
+--- @field Stake balatro.Item.Stake[]
+--- @field Demo unknown[]
+
+--- @alias balatro.CenterPoolsType 'Booster' | 'Default' | 'Enhanced' | 'Edition' | 'Joker' | 'Tarot' | 'Planet' | 'Tarot_Planet' | 'Spectral' | 'Consumeables' | 'Voucher' | 'Back' | 'Tag' | 'Seal' | 'Stake' | 'Demo'

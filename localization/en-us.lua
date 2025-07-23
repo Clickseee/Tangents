@@ -1,11 +1,51 @@
 return {
+    misc = {
+        dictionary = {
+            ph_improve_run = "I'm not calling you a good boy, that run was shit",
+        }
+    },
     descriptions = {
         Joker = {
+            j_tngt_nxkoo = {
+                text = {
+                {
+                    "{X:mult,C:white}X#1#{} Mult per line of code in {C:attention}Tangents",
+                    "{C:inactive}(Currently {X:mult,C:white}X#3#{}{C:inactive} Mult)",
+                },
+                {
+                    "{X:blue,C:white}X#4#{} Chips per {C:attention}\"Jokers\"{} made in this mod {C:inactive}(Planned : 500)",
+                    "{C:inactive}(Currently {X:blue,C:white}X#6#{}{C:inactive} Chips)",
+                }
+                }
+            },
+            j_tngt_ssecun = {
+                text = {
+                {
+                    "{X:blue,C:white}X#1#{} Chips for every Jokers credited to him",
+                    "{X:mult,C:white}X#4#{} for every idea for this Joker currently written out",
+                    "{C:inactive}(Currently {X:mult,C:white}X#3#{}{C:inactive} Mult)",
+                    "{C:inactive}(Currently {X:blue,C:white}X#6#{}{C:inactive} Chips)",
+                },
+                {
+                    "When i decide  for a real effect this joker will change background -{X:blue,C:white}@ssecun{}"
+                }
+                }
+            },
+            j_tngt_crazydave = {
+                text = {
+                {
+                    "All non-finisher {C:attention}boss blinds{} are {C:attention}The Plant{}"
+                },
+                {
+                    "This Joker gains {X:mult,C:white}X2{} for each time a boss blind is defeated"
+                }
+                }
+            },
             j_tngt_original = {
                 name = "The original {C:attention}starwalker{}",
                 text = {
                     "* I will also   {C:attention}join{}"
-                }
+            }
             },
             j_tngt_johncena = {
                 name = {
@@ -34,12 +74,34 @@ return {
 			        "with a matching ranks {C:inactive}(suits may differ.){} again?"
                 },
             },
+            j_tngt_HATE = {
+                name = {
+                    "I have no mouth and",
+			        "i must cream"
+                },
+            },
+            j_tngt_tenna = {
+                name = "{f:tngt_DETERMINATION}Mr. (Ant) Tenna{}",
+                text = {
+            "{X:mult,C:white,f:tngt_DETERMINATION}X#1#{} {f:tngt_DETERMINATION}Mult for each time",
+            "{f:tngt_DETERMINATION}the words {C:attention}{f:tngt_DETERMINATION}\"I LOVE TV\"{}",
+            "{f:tngt_DETERMINATION}have been said in the {C:attention,f:tngt_DETERMINATION}Balatro Discord Server{}",
+            "{C:inactive,f:tngt_DETERMINATION}(Currently {X:mult,C:white,f:tngt_DETERMINATION}X#2#{C:inactive,f:tngt_DETERMINATION} Mult)",
+            "{C:blue,s:0.7,f:tngt_DETERMINATION}https://discord.gg/balatro{}",
+        }
+            }
         },
         Other = {
             artist = {
                 name = 'Art made by:',
                 text = {
                     "{X:dark_edition,C:white}@ssecun"
+                }
+            },
+            artist2 = {
+                name = 'Art made by:',
+                text = {
+                    "{X:dark_edition,C:white}@crazy_dave_aka_crazy_dave{}"
                 }
             },
             ahead = {
@@ -109,6 +171,12 @@ return {
                 text = {
                     "Played {C:attention}Stone{} cards permanently gains {X:mult,C:white}X#1#{} Mult",
                     "if the operators catches on fire."
+                }
+            },
+            honor = {
+                name = "In honor of:",
+                text = {
+                    "{B:1,C:white}EL{} {B:2,V:1}BALTO{}"
                 }
             },
             jank = {

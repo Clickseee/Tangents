@@ -1,4 +1,47 @@
 SMODS.Joker {
+    key = 'coolerdaniel',
+    loc_txt = {
+        name = 'Cooler Daniel 2',
+        text = {
+            "Every played {C:attention}face{} cards gives",
+            "{X:mult,C:white}X#1#{} Mult when scored"
+        }
+    },
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    rarity = 3,
+    atlas = 'ModdedVanilla13',
+    pos = { x = 3, y = 1 },
+    cost = 8,
+    config = { extra = { xmult_per_face = 2 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.xmult_per_face } }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local face_count = 0
+            for _, played_card in ipairs(context.scoring_hand) do
+                if played_card:is_face() then
+                    face_count = face_count + 1
+                end
+            end
+            if face_count > 0 then
+                local total_xmult = math.pow(card.ability.extra.xmult_per_face, face_count)
+                return {
+                    xmult = total_xmult,
+                    message = localize{
+                        type = 'variable', 
+                        key = 'a_xmult_per_face', 
+                        vars = {face_count, total_xmult}
+                    }
+                }
+            end
+        end
+    end
+}
+
+SMODS.Joker {
     key = 'jojo',
     loc_txt = {
         name = "{C:gold,E:2,s:2}HOLY SHIT",
@@ -57,12 +100,200 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+    key = 'autocorrect',
+    loc_txt = {
+        name = 'Jokerly',
+        text = {
+            "Replace all sorts of {C:red}+Mult{} outcomes to {X:red,C:white}XMult{}",
+            "But, {C:green}corrects{} all of the game's {C:attention}text{} to a {C:dark_edition}better{} one."
+        }
+    },
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    rarity = 3,
+    atlas = 'ModdedVanilla12',
+    pos = { x = 0, y = 0 },
+    cost = 8,
+    config = { {} },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+    calculate = function(self, card, context)
+        return nil
+    end
+}
+
+local original_generate_card_ui = generate_card_ui
+local ref = SMODS.calculate_individual_effect
+
+local autocorrect_map = {
+    ["boss"] = "HR",
+    ["$"] = "mone",
+    ["tags"] = "hashtags",
+    ["value"] = "lore",
+    ["sell"] = "YEET",
+    ["random"] = "RNGesus",
+    ["selected"] = "picked",
+    ["blind"] = "blnd",
+    ["booster"] = "lootbox",
+    ["pack"] = "box",
+    ["destroy"] = "DELETE",
+    ["joker"] = "jokr",
+    ["mult"] = "multplr",
+    ["chips"] = "chps",
+    ["X"] = "XxX",
+    ["create"] = "mk",
+    ["played"] = "used",
+    ["to"] = "2",
+    ["up"] = "^",
+    ["go"] = "->",
+    ["hands"] = "hnds",
+    ["gives"] = "gibs",
+    ["one"] = "1"
+}
+
+function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end, card)
+    local tab = original_generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end, card)
+    if G.jokers and next(SMODS.find_card("j_tngt_autocorrect")) then
+        for i, t in ipairs(tab.main) do
+            for j, k in ipairs(tab.main[i]) do
+                if k.config and k.config.text then
+                    local original_text = k.config.text
+                    local changed = false
+                    local text = original_text
+                    for word, replacement in pairs(autocorrect_map) do
+                        local new_text, count = text:gsub("%f[%a]"..word.."%f[%A]", replacement)
+                        if count > 0 then
+                            text = new_text
+                            changed = true
+                        end
+                        new_text, count = text:gsub("%f[%a]"..word:sub(1,1):upper()..word:sub(2).."%f[%A]", 
+                                      replacement:sub(1,1):upper()..replacement:sub(2))
+                        if count > 0 then
+                            text = new_text
+                            changed = true
+                        end
+                    end
+                    if changed then
+                        k.config.text = text
+                        k.config.colour = G.C.GREEN 
+                        k.config.original_colour = k.config.colour 
+                    end
+                end
+            end
+        end
+    end
+    
+    return tab
+end
+
+function SMODS.calculate_individual_effect(effect, scored_card, key, amount, from_edition)
+  if G.jokers and next(SMODS.find_card("j_tngt_autocorrect")) and (key == "mult" or key == "mult_mod" or key == "h_mult") then
+    if key == "mult_mod" then effect.message = nil end
+    return ref(effect, scored_card, "xmult", amount, from_edition) --Changing key to xmult. If you want to change how much xmult it should give, change amount, I assume.
+  else
+    return ref(effect, scored_card, key, amount, from_edition)
+  end
+end
+
+SMODS.Joker {
+    key = 'SCP',
+    loc_txt = {
+        name = '[REDACTED]',
+        text = {
+            "Replace all sorts of {C:blue}+Chips{} outcomes to {X:blue,C:white}XChips{}",
+            "But, {C:dark_edition}classify{} all of the game's {C:attention}text{}."
+        }
+    },
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    rarity = 3,
+    atlas = 'ModdedVanilla12',
+    pos = { x = 2, y = 1 },
+    cost = 8,
+    config = { {} },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+    calculate = function(self, card, context)
+        return nil
+    end
+}
+
+local original_generate_card_ui = generate_card_ui
+local ref = SMODS.calculate_individual_effect
+
+local hashtag_map = {
+    ["boss"] = "[REDACTED]",
+    ["$"] = "[REDACTED]",
+    ["tags"] = "[REDACTED]",
+    ["value"] = "[REDACTED]",
+    ["sell"] = "[REDACTED]",
+    ["random"] = "[REDACTED]",
+    ["selected"] = "[REDACTED]",
+    ["blind"] = "[REDACTED]",
+    ["booster"] = "[REDACTED]",
+    ["pack"] = "[REDACTED]",
+    ["destroy"] = "[REDACTED]",
+    ["joker"] = "[REDACTED]",
+    ["mult"] = "[REDACTED]",
+    ["chips"] = "[REDACTED]",
+    ["X"] = "[REDACTED]",
+    ["create"] = "[REDACTED]",
+    ["played"] = "[REDACTED]",
+    ["to"] = "[REDACTED]",
+    ["up"] = "[REDACTED]",
+    ["go"] = "[REDACTED]",
+    ["hands"] = "[REDACTED]",
+    ["gives"] = "[REDACTED]",
+    ["one"] = "[REDACTED]"
+}
+
+-- Modified UI generator
+function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end, card)
+    local tab = original_generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end, card)
+    
+    if G.jokers and next(SMODS.find_card("j_tngt_roblox")) then
+        for i, t in ipairs(tab.main) do
+            for j, k in ipairs(tab.main[i]) do
+                if k.config and k.config.text then
+                    local text = k.config.text
+                    for word, replacement in pairs(hashtag_map) do
+                        text = text:gsub(word, replacement)
+                        text = text:gsub(word:sub(1,1):upper()..word:sub(2), 
+                                      replacement:sub(1,1):upper()..replacement:sub(2))
+                    end
+                    
+                    if text ~= k.config.text then
+                        k.config.text = text
+                        k.config.colour = G.C.DARK_EDITION
+                    end
+                end
+            end
+        end
+    end
+    
+    return tab
+end
+
+function SMODS.calculate_individual_effect(effect, scored_card, key, amount, from_edition)
+  if G.jokers and next(SMODS.find_card("j_tngt_roblox")) and (key == "chips" or key == "chip_mod" or key == "h_chips") then
+    if key == "chip_mod" then effect.message = nil end
+    return ref(effect, scored_card, "xchips", amount, from_edition) --Changing key to xmult. If you want to change how much xmult it should give, change amount, I assume.
+  else
+    return ref(effect, scored_card, key, amount, from_edition)
+  end
+end
+
+SMODS.Joker {
     key = 'strike',
     loc_txt = {
         name = 'Dear {C:gold}God{}, please {C:red}strike{} this {C:attention}Joker{} down.',
         text = {
             "After #2# {C:attention}Rounds{}, sell this Cat to",
-            "add {C:dark_edition}Negative.{} to a random Joker",
+            "add {C:dark_edition}Negative{} to a random Joker",
             "{C:inactive}(Currently {C:attention}#1#{}{C:inactive}/{}{C:inactive}#2#{} {C:inactive}Rounds)"
         }
     },
@@ -336,7 +567,7 @@ SMODS.Joker {
     loc_txt = {
         name = 'It comes with {f:tngt_times}eggwah..~{}{f:emoji}👅',
         text = {
-            "Has {C:green}1{} in {C:green}#1#{} chance to give {C:attention}Egg Joker{}",
+            "Has {C:green}1{} in {C:green}#1#{} chance to creates an {C:attention}Egg Joker{}",
             "whenever you {C:attention}buy{} something from the {C:attention}shop{}"
         }
     },
@@ -392,7 +623,7 @@ SMODS.Joker {
     loc_txt = {
         name = 'National Geographic',
         text = {
-            "Played {C:attention}Wild{} cards will gives you either {C:red}+#1#{} Mult,",
+            "Played {C:attention}Wild{} cards will give you either {C:red}+#1#{} Mult,",
             "{X:mult,C:white}X#2#{} Mult, {C:blue}+#3#{} Chips, or {C:gold}$#4#{} Dollars."
         }
     },
@@ -1262,9 +1493,8 @@ SMODS.Joker {
     loc_txt = {
         name = "Think fast, {C:dark_edition}Chucklenuts",
         text = {
-            "Throwing {C:attention}flashbangs{} for ALL interactions",
-            "Gains {C:chips}+#1#{} Chips per unique flashbang",
-            "Gains {X:mult,C:white}X#2#{} Mult when scoring",
+            "Throws a {C:attention}flashbangs{} for ALL interactions",
+            "Gains {C:chips}+#1#{} Chips and {X:mult,C:white}X#2#{} Mult per unique flashbang",
             "{C:inactive}(Currently {C:chips}+#3#{C:inactive} Chips and {X:mult,C:white}X#4#{C:inactive} Mult)"
         }
     },
@@ -1428,6 +1658,11 @@ SMODS.Joker {
         if context.joker_type_destroyed then
             play_sound("tngt_flashbang")
             self:show_omnipotent_flashbang(card, 'blind')
+        end
+
+        if context.post_trigger then
+            play_sound("tngt_flashbang")
+            self:show_omnipotent_flashbang(card, 'joker_trigger')
         end
 
         if context.joker_main then
@@ -1664,32 +1899,76 @@ SMODS.Joker {
     end
 }
 
+
 SMODS.Joker {
-    key = 'crash',
+    key = "gooning",
     loc_txt = {
-        name = '{C:red}Finna Crashout{}',
+        name = "The aggresive Jooner:",
         text = {
-            "{C:red}+#1#{} Mult for each {C:red}Crash Logs{}",
-            "in your {C:attention}Desktop{}",
-            "{C:inactive}(Currently {C:red}+#2#{C:inactive} Mult)"
+            'Gains {C:red}+#2#{} Mult per second',
+            'After {C:attention}60 seconds{C:black}, scales {C:red}+#3#{} per second',
+            '{C:inactive}(Currently {C:red}+#1#{C:inactive} Mult)',
+            '{C:attention}Resets when sold'
         }
     },
     rarity = 3,
-    atlas = 'ModdedVanilla2',
-    pos = { x = 1, y = 1 },
-    cost = 7,
+    atlas = 'ModdedVanilla9',
+    pos = { x = 2, y = 1 },
+    cost = 8,
     unlocked = true,
     discovered = true,
-    config = { extra = { mult = 0.01 } },
+    config = {
+        extra = {
+            base_mult = 0,
+            base_rate = 1,
+            scaled_rate = 0.1,
+            start_time = 0
+        }
+    },
+
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.mult, card.ability.extra.mult * (#NFS.getDirectoryItems(SMODS.MODS_DIR .. "/lovely/log")) } }
+        return {
+            vars = {
+                card.ability.extra.base_mult,
+                card.ability.extra.base_rate,
+                card.ability.extra.scaled_rate
+            }
+        }
     end,
+
+    add_to_deck = function(self, card, from_debuff)
+        card.ability.extra.start_time = love.timer.getTime()
+        card.ability.extra.base_mult = 0
+    end,
+
+    update = function(self, card, dt)
+        if not card.ability.extra.start_time then
+            card.ability.extra.start_time = love.timer.getTime()
+        end
+
+        local elapsed = love.timer.getTime() - card.ability.extra.start_time
+        local base_seconds = math.min(elapsed, 60)
+        local bonus_seconds = math.max(0, elapsed - 60)
+
+        card.ability.extra.base_mult =
+            (base_seconds * card.ability.extra.base_rate) +
+            (bonus_seconds * (card.ability.extra.base_rate + card.ability.extra.scaled_rate))
+    end,
+
     calculate = function(self, card, context)
-        if context.joker_main then
+        if context.joker_main and card.ability.extra.base_mult > 0 then
             return {
-                mult = card.ability.extra.mult * #G.deck.cards
+                message = localize { type = 'variable', key = 'a_mult', vars = { math.floor(card.ability.extra.base_mult) } },
+                mult = math.floor(card.ability.extra.base_mult),
+                colour = G.C.RED,
+                card = card
             }
         end
+    end,
+
+    remove_from_deck = function(self, card, from_debuff)
+        card.ability.extra.base_mult = 0
+        card.ability.extra.start_time = love.timer.getTime()
     end
 }
 
@@ -1883,8 +2162,8 @@ SMODS.Joker {
     loc_txt = {
         name = "{C:inactive}AAAAAAAAAAAAA{}",
         text = {
-            "{C:attention}Destroyed{} cards has {C:green}1{} in {C:green}#3#{} chance to be {C:attention}duplicated{}",
-            "and gains {X:mult,C:white}X#1#{} for each destroyed cards",
+            "{C:attention}Destroyed{} card have a {C:green}1{} in {C:green}#3#{} chance to be {C:attention}duplicated{}",
+            "and gains {X:mult,C:white}X#1#{} for each destroyed card",
             "{C:inactive}(Currently {X:mult,C:white}X#2#{} {C:inactive}Mult)"
         }
     },
@@ -1959,4 +2238,331 @@ SMODS.Joker {
         return false
     end
 
+}
+
+SMODS.Joker {
+    key = 'allegations',
+    loc_txt = {
+        name = "Allegations",
+        text = {
+            "If total chips of {C:attention}scoring{} cards are below {C:attention}18{},",
+            "this {C:attention}Video{} gains {X:mult,C:white}X#3#{} Mult.",
+            "{C:inactive}(Currently {X:mult,C:white}X#2#{}{C:inactive} Mult)"
+        }
+    },
+    rarity = 3,
+    atlas = 'ModdedVanilla12',
+    pos = { x = 1, y = 0 },
+    cost = 4,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    unlocked = true,
+    discovered = true,
+    config = {
+        extra = {
+            threshold = 18,      
+            base_xmult = 1,       
+            xmult_gain = 0.5,     
+            current_xmult = 1     
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+    info_queue[#info_queue + 1] = { key = "artist2", set = "Other" }
+        return {
+            vars = {
+                card.ability.extra.threshold,
+                card.ability.extra.current_xmult,
+                card.ability.extra.xmult_gain
+            }
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local total_chips = 0
+            for _, c in ipairs(context.scoring_hand) do
+                total_chips = total_chips + (c.chips or 0)
+            end
+            if total_chips < card.ability.extra.threshold then
+                card.ability.extra.current_xmult = card.ability.extra.current_xmult + card.ability.extra.xmult_gain
+                
+                return {
+                    message = localize{type='variable', key='a_xmult', vars={card.ability.extra.current_xmult}},
+                    colour = G.C.MULT,
+                    card = card,
+                    xmult = card.ability.extra.current_xmult
+                }
+            else
+                return {
+                    xmult = card.ability.extra.current_xmult
+                }
+            end
+        end
+    end
+}
+
+local function block_input_randomly()
+    if pseudorandom('input_blocker') <= 0.5 then
+        local original_isDown = love.mouse.isDown
+        local original_getPosition = love.mouse.getPosition
+        local original_isVisible = love.mouse.isVisible
+        love.mouse.isDown = function() return false end
+        love.mouse.getPosition = function() return 0, 0 end
+        love.mouse.isVisible = function() return false end
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 1,
+            blockable = false,
+            blocking = true,
+            no_delete = true,
+            timer = 'REAL',
+            func = function()
+                love.mouse.isDown = original_isDown
+                love.mouse.getPosition = original_getPosition
+                love.mouse.isVisible = original_isVisible
+                return true
+            end
+        }))
+        
+        return true
+    end
+    return false
+end
+
+SMODS.Joker {
+    key = 'notliekthis',
+    loc_txt = {
+        name = "NotLikeThis",
+        text = {
+            "{X:mult,C:white}X#1#{} Mult,",
+            "fixed {C:green}50%{} chance to lags",
+            "your mouse inputs for a second"
+        }
+    },
+    rarity = 3,
+    atlas = 'ModdedVanilla14',
+    pos = { x = 1, y = 0 },
+    cost = 7,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    unlocked = true,
+    discovered = true,
+    config = { extra = { xmult = 5 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.xmult } }
+    end,
+    calculate = function(self, card, context)
+        if context.starting_shop and not context.blind then
+            block_input_randomly()
+        end
+
+        if context.ending_shop and not context.blind then
+            block_input_randomly()
+        end
+
+        if context.buying_card then
+            block_input_randomly()
+        end
+
+        if context.selling_card then
+            block_input_randomly()
+        end
+
+        if context.reroll_shop then
+            block_input_randomly()
+        end
+
+        if G.booster_pack and not G.booster_pack.REMOVED and SMODS.OPENED_BOOSTER then
+            block_input_randomly()
+        end
+
+        if context.setting_blind and context.blind then
+            block_input_randomly()
+        end
+
+        if context.skip_blind then
+            block_input_randomly()
+        end
+
+        if G.GAME.blind and G.GAME.blind.boss and context.end_of_round and not context.game_over then
+            block_input_randomly()
+        end
+
+        if context.pre_discard and context.main_eval then
+            block_input_randomly()
+        end
+
+        if context.pseudorandom_result and not context.result then
+            block_input_randomly()
+        end
+
+        if context.pseudorandom_result and context.result then
+            block_input_randomly()
+        end
+
+        if context.initial_scoring_step then
+            block_input_randomly()
+        end
+
+        if context.joker_type_destroyed then
+            block_input_randomly()
+        end
+
+        if context.post_trigger then
+            block_input_randomly()
+        end
+        if context.joker_main then
+            return {
+                xmult = card.ability.extra.xmult
+            }
+        end
+    end
+}
+
+SMODS.Joker {
+    key = "obamaprism",
+    loc_txt = {
+        name = "Let me be clear.",
+        text = {
+            "If first played hand of the round is",
+            "a {C:attention}Three Of A Kind{}, destroy all played cards and creates",
+            "up to {C:attention}2{} {C:spectral}Spectral{} cards"
+        }
+    },
+    rarity = 3,
+    atlas = 'ModdedVanilla13',
+    pos = { x = 1, y = 1 },
+    cost = 4,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    config = {
+        extra = {}
+    },
+    loc_vars = function(self, info_queue, card)
+        return {}
+    end,
+    calculate = function(self, card, context)
+        if context.before and context.main_eval and 
+           G.GAME.current_round.hands_played == 0 and
+           next(context.poker_hands['Three of a Kind']) then
+            local spectral_space = G.consumeables.config.card_limit - (#G.consumeables.cards + G.GAME.consumeable_buffer)
+            local spectral_count = math.min(2, spectral_space)
+            
+            if spectral_count > 0 then
+                for _, played_card in ipairs(context.scoring_hand) do
+                    played_card:start_dissolve()
+                end
+                G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + spectral_count
+                return {
+                    message = localize('k_plus_spectral').." x"..spectral_count,
+                    colour = G.C.SECONDARY_SET.Spectral,
+                    func = function()
+                        G.E_MANAGER:add_event(Event({
+                            func = function()
+                                for _ = 1, spectral_count do
+                                    SMODS.add_card {
+                                        set = 'Spectral',
+                                        key_append = 'three_of_a_kind_spectral'
+                                    }
+                                end
+                                G.GAME.consumeable_buffer = 0
+                                return true
+                            end
+                        }))
+                    end
+                }
+            else
+                return {
+                    message = localize('k_no_room_ex'),
+                    colour = G.C.RED
+                }
+            end
+        end
+    end
+}
+
+local last_purchased_joker = nil
+local original_buy_card = buy_card
+function buy_card(self, card, area, skip_check)
+    local ret = original_buy_card(self, card, area, skip_check)
+    if ret and card and card.ability and card.ability.set == 'Joker' then
+        last_purchased_joker = card.config.center.key
+    end
+    return ret
+end
+
+SMODS.Joker {
+    key = 'bigchungus',
+    loc_txt = {
+        name = "That'll hold em, alwight? hehehehe..",
+        text = {
+            "Copies ability of last purchased {C:attention}Joker{}"
+        }
+    },
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    rarity = 3,
+    atlas = 'ModdedVanilla14',
+    pos = { x = 2, y = 1 },
+    cost = 8,
+    loc_vars = function(self, info_queue, card)
+        local main_end = nil
+        if last_purchased_joker then
+            main_end = {
+                {
+                    n = G.UIT.C,
+                    config = { align = "cm", minh = 0.4, padding = 0.1 },
+                    nodes = {
+                        {
+                            n = G.UIT.C,
+                            config = { align = "cm", minw = 2.5, minh = 0.4, r = 0.1, padding = 0.1, colour = G.C.JOKER_GREY },
+                            nodes = {
+                                { n = G.UIT.T, config = { text = localize(last_purchased_joker, 'jokers'), scale = 0.3, colour = G.C.UI.TEXT_LIGHT } }
+                            }
+                        }
+                    }
+                }
+            }
+        end
+        return { main_end = main_end }
+    end,
+    calculate = function(self, card, context)
+        if not last_purchased_joker then return end
+        local target_joker = nil
+        for _, j in ipairs(G.jokers.cards) do
+            if j.config.center.key == last_purchased_joker and j ~= card then
+                target_joker = j
+                break
+            end
+        end
+        
+        if target_joker then
+            local original_joker = SMODS.find_joker(last_purchased_joker)
+            if original_joker and original_joker.calculate then
+                local original_context = context or {}
+                original_context.echo_source = card
+                local ret = original_joker.calculate(target_joker, original_context)
+                if ret then
+                    ret.colour = ret.colour or G.C.BLUE
+                    ret.message = (ret.message or "") .. " (Echo)"
+                    return ret
+                end
+            end
+        end
+    end,
+    add_to_deck = function(self, card, from_debuff)
+        if not last_purchased_joker then
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] == card and i > 1 then
+                    last_purchased_joker = G.jokers.cards[i-1].config.center.key
+                    break
+                end
+            end
+        end
+    end
 }

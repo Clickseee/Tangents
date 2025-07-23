@@ -1,0 +1,44 @@
+--- @class balatro.Game: balatro.GameDefs.Language
+
+--- Item proto definitions. Available after `Game:set_language()`
+--- @class balatro.GameDefs.Language
+--- @field LANGUAGES balatro.LanguageList
+--- @field FONTS balatro.Font[]
+--- @field LANG balatro.Language
+
+--- @class balatro.LanguageList: { [string]: balatro.Language }
+--- @field de balatro.Language
+--- @field en-us balatro.Language
+--- @field es_419 balatro.Language
+--- @field es_ES balatro.Language
+--- @field fr balatro.Language
+--- @field id balatro.Language
+--- @field it balatro.Language
+--- @field ja balatro.Language
+--- @field ko balatro.Language
+--- @field nl balatro.Language
+--- @field pl balatro.Language
+--- @field pt_BR balatro.Language
+--- @field ru balatro.Language
+--- @field zh_CN balatro.Language
+--- @field zh_TW balatro.Language
+
+--- @class balatro.Language
+--- Note that in the base game font is the index position for FONTS, but later it is indexed then changed to love.Font
+--- @field font balatro.Font
+--- @field label string
+--- @field key string
+--- @field beta boolean
+--- @field button string
+--- @field warning string[]
+--- @field omit boolean? All fonts
+
+--- @class balatro.Font
+--- @field FONT love.Font
+--- @field file string
+--- @field render_scale number
+--- @field TEXT_HEIGHT_SCALE number
+--- @field TEXT_OFFSET Position
+--- @field FONTSCALE number
+--- @field squish number
+--- @field DESCSCALE number
