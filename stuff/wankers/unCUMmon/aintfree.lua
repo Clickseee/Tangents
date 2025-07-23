@@ -189,8 +189,10 @@ SMODS.Joker {
 local oldsetcost = Card.set_cost
 function Card:set_cost()
     local g = oldsetcost(self)
-    if next(SMODS.find_card("j_tngt_dealmaker")) then self.cost = pseudorandom('dealmaker_cost_' .. self.sort_id, 0.001,
-            100) end
+    if next(SMODS.find_card("j_tngt_dealmaker")) then
+        self.cost = pseudorandom('dealmaker_cost_' .. self.sort_id, 0.001,
+            100)
+    end
     return g
 end
 
@@ -264,7 +266,7 @@ SMODS.Joker {
 SMODS.Joker {
     key = 'shitass',
     loc_txt = {
-        name = 'Hey {C:attention}shitass{}, wanna {C:attention}see{} me {C:blue}speedrun?{}',
+        name = 'Hey {C:attention}shitass{}, wanna {C:attention}see{} me {C:blue}speedbridge?{}',
         text = {
             "{C:red}Beat his ass{} by beating the {C:attention}Blind{} before",
             "{C:attention}20{} seconds runs out.",
@@ -273,31 +275,23 @@ SMODS.Joker {
             "{C:inactive,s:0.7}Yes, you have to hover over the Joker to see it, cry about it."
         }
     },
-    config = { start = 0, inblind = 0, time = 20 },
+    config = { start = 0, inblind = 0, time = 20, timecolor = copy_table(G.C.GREEN) },
     loc_vars = function(self, info_queue, card)
-        return {
-            main_end = {
-                {
-                    n = G.UIT.C,
-                    config = { align = "bm", minh = 0.3 },
-                    nodes = {
-                        {
-                            n = G.UIT.T,
-                            config = {
-                                ref_table = card.ability,
-                                ref_value = "time",
-                                scale = 0.32,
-                                colour = G.C.GREEN
-                            }
-                        }
-                    }
-                }
-            }
-        }
+
     end,
     update = function(self, card)
-        card.ability.time = string.gsub(
-            string.format("%.2f", 20 - (G.TIMERS.REAL - card.ability.start) * card.ability.inblind), "%.", ":")
+        local time = 20 - (G.TIMERS.REAL - card.ability.start) * card.ability.inblind
+        if time <= 0 then
+            card.ability.timecolor[1] = G.C.RED[1]
+            card.ability.timecolor[2] = G.C.RED[2]
+            card.ability.timecolor[3] = G.C.RED[3]
+            card.ability.time = "0:00"
+        else
+            card.ability.timecolor[1] = G.C.GREEN[1]
+            card.ability.timecolor[2] = G.C.GREEN[2]
+            card.ability.timecolor[3] = G.C.GREEN[3]
+            card.ability.time = string.gsub(string.format("%.2f", time), "%.", ":")
+        end
     end,
     unlocked = true,
     discovered = true,
@@ -310,15 +304,44 @@ SMODS.Joker {
         if context.blueprint then return end
 
         if context.setting_blind then
+            card.children.timer = UIBox { definition = { n = G.UIT.ROOT,
+                config = { align = "cm", colour = { 0, 0, 0, 0 } },
+                nodes = {
+                    {
+                        n = G.UIT.O,
+                        config = {
+                            object = DynaText {
+                                string = { {
+                                    ref_table = card.ability,
+                                    ref_value = "time" } },
+                                scale = 1.2,
+                                shadow = true,
+                                colours = { card.ability.timecolor }
+                            },
+                            align = 'cm'
+                        }
+                    }
+                } }, config = { align = 'cm', major = card, parent = card } }
             card.ability.start = G.TIMERS.REAL
             card.ability.inblind = 1
             return {
+                func = function()
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'immediate',
+                        func = function()
+                            play_sound("tngt_speedbridge")
+                            return true
+                        end
+                    }))
+                end,
                 sound = "tngt_shitass",
                 message = "*loud mechanical keyboard noise*"
             }
         end
 
         if (context.end_of_round and context.main_eval and not context.repetition) or context.forcetrigger then
+            card.children.timer:remove()
+            card.children.timer = nil
             card.ability.inblind = 0
             if (G.TIMERS.REAL - card.ability.start <= 20) or context.forcetrigger then
                 card:start_dissolve()
@@ -327,16 +350,37 @@ SMODS.Joker {
                     rarity = "Legendary"
                 }
                 return {
+                    func = function()
+                        G.E_MANAGER:add_event(Event({
+                            trigger = 'immediate',
+                            func = function()
+                                play_sound("tngt_aaa")
+                                return true
+                            end
+                        }))
+                    end,
                     message = "AAAAAAAAAAAAAAAAAAAAAAAAAA",
-                    colour = G.C.BLUE
+                    colour = G.C.GREEN
                 }
             else
                 return {
-                    message = "...W- wha?..",
+                    func = function()
+                        G.E_MANAGER:add_event(Event({
+                            trigger = 'immediate',
+                            func = function()
+                                play_sound("tngt_yousuck")
+                                return true
+                            end
+                        }))
+                    end,
+                    message = "YOU'RE BAD",
                     colour = G.C.RED
                 }
             end
         end
+    end,
+    add_to_deck = function()
+        play_sound("tngt_heyshitass")
     end
 }
 
@@ -1130,7 +1174,6 @@ SMODS.Joker {
             "{C:inactive}Seriously, who made this meme big, it sucks."
         }
     },
-    config = { extra = { repetitions = 1 } },
     rarity = 2,
     atlas = 'ModdedVanilla2',
     pos = { x = 4, y = 0 },
@@ -1177,7 +1220,6 @@ SMODS.Joker {
 
 SMODS.Joker {
     key = 'johncena',
-    config = { extra = { repetitions = 1 } },
     rarity = 2,
     atlas = 'ModdedVanilla3',
     pos = { x = 4, y = 0 },
