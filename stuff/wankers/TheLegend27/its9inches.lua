@@ -927,7 +927,7 @@ SMODS.Joker {
             local suits_in_hand = {}
             for _, card in ipairs(context.scoring_hand) do
                 if not card.debuff then
-                    suits_in_hand[card.base.suit()] = true
+                    suits_in_hand[card.base.suit] = true
                 end
             end
             if suits_in_hand['Spades'] and
@@ -938,10 +938,9 @@ SMODS.Joker {
                     card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
                 end
                 card:juice_up(card.ability.extra.juice_power, card.ability.extra.juice_power)
-                play_sound('chips1', math.random() * 0.1 + 0.8)
+                play_sound('tngt_meow', math.random() * 0.1 + 0.8)
                 return {
                     xmult = card.ability.extra.xmult,
-                    message = localize('k_xmult_x', 'xmult'),
                     colour = G.C.MULT,
                     card = card
                 }

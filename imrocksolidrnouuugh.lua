@@ -783,6 +783,11 @@ SMODS.Sound {
     path = "tuah.ogg"
 }
 
+SMODS.Sound {
+    key = "tngt_meow",
+    path = "meow.ogg"
+}
+
 SMODS.Atlas {
     key = "modicon",
     path = "modicon.png",
