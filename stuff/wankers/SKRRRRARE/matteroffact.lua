@@ -1949,7 +1949,6 @@ SMODS.Joker {
             card.ability.extra.start_time = love.timer.getTime()
         end
 
-        local elapsed = love.timer.getTime() - card.ability.extra.start_time
         local base_seconds = math.min(elapsed, 60)
         local bonus_seconds = math.max(0, elapsed - 60)
 
