@@ -18,3 +18,5 @@ elseif part.control.tngt_S then
         }
 '''
 match_indent = true
+
+# Sprite(px, py, width, height)

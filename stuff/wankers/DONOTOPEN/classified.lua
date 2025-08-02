@@ -271,6 +271,51 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+    key = 'astro',
+    loc_txt = {
+        name = 'Astro'
+    },
+    rarity = "tngt_fourwall",
+    atlas = 'DEVS',
+    pos = { x = 7, y = 0 },
+    soul_pos = { x = 7, y = 1 },
+    cost = 20,
+    unlocked = true,
+    discovered = true,
+    config = {
+        extra = {
+            ideas_mult = 1.5,
+            ideas_count = 6,
+            credits_chips = 2,
+            credits_count = 14
+        }
+    },
+    in_pool = function(self, args)
+        return false
+    end,
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.ideas_mult,
+                card.ability.extra.ideas_count,
+                card.ability.extra.ideas_mult * card.ability.extra.ideas_count,
+                card.ability.extra.credits_chips,
+                card.ability.extra.credits_count,
+                card.ability.extra.credits_chips * card.ability.extra.credits_count
+            }
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            return {
+                xmult = card.ability.extra.ideas_mult * card.ability.extra.ideas_count,
+                xchips = card.ability.extra.credits_chips * card.ability.extra.credits_count
+            }
+        end
+    end
+}
+
+SMODS.Joker {
     key = 'you',
     loc_txt = {
         name = '{f:tngt_DETERMINATION}You{}',

@@ -948,3 +948,116 @@ SMODS.Joker {
         end
     end,
 }
+
+SMODS.Joker {
+    key = 'ghetto',
+    loc_txt = {
+        name = "Ghetto Smosh",
+        text = {
+            "This cat gains {X:mult,C:white}X#2#{} for each played and scored hands",
+            "that contains exactly {C:attention}four{} {C:spades}S{}{C:hearts}u{}{C:clubs}i{}{C:diamonds}t{}s.",
+            "{C:inactive}(Currently {X:mult,C:white}X#1#{}{C:inactive} Mult)"
+        }
+    },
+    rarity = 4,
+    atlas = 'ModdedVanilla15',
+    pos = { x = 0, y = 1 },
+    soul_pos = { x = 4, y = 1 },
+    cost = 20,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    config = { extra = { xmult = 1, xmult_gain = 0.25 } },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.xmult,
+                card.ability.extra.xmult_gain or 0
+            }
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local suits_in_hand = {}
+            for _, card in ipairs(context.scoring_hand) do
+                if not card.debuff then
+                    suits_in_hand[card.base.suit] = true
+                end
+            end
+            if suits_in_hand['Spades'] and
+                suits_in_hand['Hearts'] and
+                suits_in_hand['Clubs'] and
+                suits_in_hand['Diamonds'] then
+                if card.ability.extra.xmult_gain then
+                    card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
+                end
+                card:juice_up(card.ability.extra.juice_power, card.ability.extra.juice_power)
+                play_sound('tngt_meow', math.random() * 0.1 + 0.8)
+                return {
+                    xmult = card.ability.extra.xmult,
+                    colour = G.C.MULT,
+                    card = card
+                }
+            end
+        end
+    end,
+}
+
+SMODS.Joker {
+    key = 'rushe',
+    loc_txt = {
+        name = "{X:red,C:white,s:2}E",
+        text = {
+            "{C:attention}Jokers{} that has {X:mult,C:white}E{}",
+            "in their {C:attention}name{} and {C:attention}description{} each",
+            "give {X:mult,C:white}X4{} Mult"
+
+        }
+    },
+    rarity = 4,
+    atlas = 'ModdedVanilla16',
+    pos = { x = 0, y = 1 },
+    soul_pos = { x = 4, y = 1 },
+    cost = 20,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    config = { extra = { base_xmult = 4 } },
+    loc_vars = function(self, info_queue, card)
+        local e_count = 0
+        if G.jokers and G.jokers.cards then
+            for _, j in ipairs(G.jokers.cards) do
+                if j ~= card then
+                    local name = j.config.center.name or ""
+                    local desc = j.config.center.description or ""
+                    if name:lower():find('e') or desc:lower():find('e') then
+                        e_count = e_count + 1
+                    end
+                end
+            end
+        end
+        return { vars = { card.ability.extra.base_xmult, e_count } }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local e_count = 0
+            for _, j in ipairs(G.jokers.cards) do
+                if j ~= card then
+                    local name = j.config.center.name or ""
+                    local desc = j.config.center.description or ""
+                    if name:lower():find('e') or desc:lower():find('e') then
+                        e_count = e_count + 1
+                    end
+                end
+            end
+            
+            if e_count > 0 then
+                return {
+                    xmult = 1 + (card.ability.extra.base_xmult * e_count)
+                }
+            end
+        end
+    end
+}

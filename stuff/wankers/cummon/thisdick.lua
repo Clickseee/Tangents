@@ -1,4 +1,3 @@
-
 SMODS.Joker {
     key = 'watericesalt',
     loc_txt = {
@@ -51,12 +50,12 @@ SMODS.Joker {
     atlas = 'ModdedVanilla11',
     pos = { x = 0, y = 0 },
     cost = 1,
-    config = { 
-        extra = { 
-            xmult = 1, 
+    config = {
+        extra = {
+            xmult = 1,
             streak = 0,
             current_rank = nil
-        } 
+        }
     },
     loc_vars = function(self, info_queue, card)
         -- Get most played ranks
@@ -67,14 +66,14 @@ SMODS.Joker {
                 ranks[id] = (ranks[id] or 0) + (v.base.times_played or 0)
             end
         end
-        
+
         -- Convert to sortable table
         local sortable = {}
         for id, count in pairs(ranks) do
             table.insert(sortable, {id = id, count = count})
         end
         table.sort(sortable, function(a, b) return a.count > b.count end)
-        
+
         -- Display current tracking info
         return {
             vars = {
@@ -94,20 +93,20 @@ SMODS.Joker {
                     ranks[id] = (ranks[id] or 0) + (v.base.times_played or 0)
                 end
             end
-            
+
             -- Convert to sortable table
             local sortable = {}
             for id, count in pairs(ranks) do
                 table.insert(sortable, {id = id, count = count})
             end
             table.sort(sortable, function(a, b) return a.count > b.count end)
-            
+
             -- Check if current hand contains any of the most played ranks
             local contains_rank = false
             if #sortable > 0 then
                 local most_played_rank = sortable[1].id
                 card.ability.extra.current_rank = most_played_rank
-                
+
                 if context.full_hand then
                     for _, c in ipairs(context.full_hand) do
                         if not SMODS.has_no_rank(c) and c:get_id() == most_played_rank then
@@ -116,7 +115,7 @@ SMODS.Joker {
                         end
                     end
                 end
-                
+
                 if contains_rank then
                     card.ability.extra.streak = card.ability.extra.streak + 1
                     card.ability.extra.xmult = card.ability.extra.xmult + 1
@@ -133,7 +132,7 @@ SMODS.Joker {
                 end
             end
         end
-        
+
         if context.joker_main then
             return {
                 xmult = card.ability.extra.xmult
@@ -163,13 +162,13 @@ SMODS.Joker {
         return { vars = { card.ability.extra.mult } }
     end,
     calculate = function(self, card, context)
-        if context.individual and not context.repetition and 
-           not context.end_of_round and context.cardarea == G.play then
+        if context.individual and not context.repetition and
+            not context.end_of_round and context.cardarea == G.play then
             local sound = "tngt_pingas"
             return {
                 focus = context.other_card,
                 mult_mod = card.ability.extra.mult,
-                message = localize{type='variable',key='a_mult',vars={card.ability.extra.mult}},
+                message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult } },
                 sound = sound,
                 colour = G.C.RED
             }
@@ -497,7 +496,7 @@ SMODS.Joker {
             huge_xmult = 87
         }
     },
-    
+
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.xmult_chance, card.ability.extra.huge_xmult } }
     end,
@@ -516,7 +515,7 @@ SMODS.Joker {
                         return true
                     end
                 }))
-                
+
                 return {
                     xmult = card.ability.extra.huge_xmult,
                     card_eval_status = 'jokers'
@@ -564,7 +563,7 @@ SMODS.Joker {
             if card_id >= 2 and card_id <= 5 then
                 card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
                 return {
-                    message = localize{type='variable', key='a_xmult', vars={card.ability.extra.xmult}},
+                    message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.xmult } },
                     colour = G.C.MULT
                 }
             end
@@ -682,9 +681,9 @@ SMODS.Joker {
         if context.joker_main and (G.GAME.consumeable_usage_total and G.GAME.consumeable_usage_total.all or 0) > 0 then
             return {
                 mult = card.ability.extra.mult_gain *
-                (G.GAME.consumeable_usage_total and G.GAME.consumeable_usage_total.all or 0),
+                    (G.GAME.consumeable_usage_total and G.GAME.consumeable_usage_total.all or 0),
                 chips = card.ability.extra.chip_gain *
-                (G.GAME.consumeable_usage_total and G.GAME.consumeable_usage_total.all or 0)
+                    (G.GAME.consumeable_usage_total and G.GAME.consumeable_usage_total.all or 0)
             }
         end
     end
@@ -733,15 +732,15 @@ SMODS.Joker {
     cost = 3,
     unlocked = true,
     discovered = true,
-    config = { extra = { 
+    config = { extra = {
         base_mult = 10,
         bonus_mult = 11,
         ace_id = 14,
-        ten_id = 10    
-    }},
+        ten_id = 10
+    } },
     loc_vars = function(self, info_queue, card)
-        return { 
-            vars = { 
+        return {
+            vars = {
                 card.ability.extra.base_mult,
                 card.ability.extra.bonus_mult
             },
@@ -752,7 +751,7 @@ SMODS.Joker {
         if context.joker_main then
             local has_ace = false
             local has_ten = false
-            
+
             for _, playing_card in ipairs(context.scoring_hand) do
                 local card_id = playing_card:get_id()
                 if card_id == card.ability.extra.ace_id then
@@ -760,19 +759,19 @@ SMODS.Joker {
                 elseif card_id == card.ability.extra.ten_id then
                     has_ten = true
                 end
-                
+
                 if has_ace and has_ten then break end
             end
 
             if has_ace or has_ten then
-                local mult = pseudorandom('ace_ten_joker_'..G.GAME.round_resets.ante) > 0.5 and 
+                local mult = pseudorandom('ace_ten_joker_' .. G.GAME.round_resets.ante) > 0.5 and
                     card.ability.extra.bonus_mult or card.ability.extra.base_mult
-                
+
                 return {
                     mult = mult,
                     card = card,
                     extra = (mult == card.ability.extra.bonus_mult) and {
-                        message = localize{type='variable', key='a_mult', vars={mult}},
+                        message = localize { type = 'variable', key = 'a_mult', vars = { mult } },
                         colour = G.C.MULT,
                         sound = 'chips1',
                         delay = 0.4
@@ -781,4 +780,59 @@ SMODS.Joker {
             end
         end
     end,
+}
+
+SMODS.Joker {
+    key = 'eggman',
+    loc_txt = {
+        name = "I've come to make an announcement",
+        text = {
+            "I've come to make an announcement {f:tngt_emoji,C:gold}📣{f:tngt_emoji}",
+            "Shadow the Hedgehog is a bitch ass motherfucker {f:tngt_emoji,C:blue}🦔{f:tngt_emoji}",
+            "he pissed on my fucking wife {f:tngt_emoji,C:blue}💦{f:tngt_emoji}",
+            "he took his hedgehog fucking quill-y dick out {f:tngt_emoji,C:purple}🍆{f:tngt_emoji}",
+            "and he pissed on my fucking wife {f:tngt_emoji,C:blue}💧{f:tngt_emoji}",
+            "and he said his dick was THIS BIG {f:tngt_emoji}📏{f:tngt_emoji}",
+            "and I said 'That's disgusting.' {f:tngt_emoji,C:green}🤢{f:tngt_emoji}",
+            "so I'm making a call-out post on my Twitter dot com {f:tngt_emoji,C:blue}🐦{f:tngt_emoji}",
+            "Shadow the Hedgehog you got a small dick {f:tngt_emoji}🥜{f:tngt_emoji}",
+            "it's the size of this walnut except way smaller {f:tngt_emoji}🌰{f:tngt_emoji}",
+            "and guess what? Here's what my dong looks like {f:tngt_emoji,C:yellow}😎{f:tngt_emoji}",
+            "That's right baby, all points, no quills, no pillows {f:tngt_emoji}🛏️{f:tngt_emoji}",
+            "look at that it looks like two balls and a bong! {f:tngt_emoji,C:purple}🔮{f:tngt_emoji}",
+            "He fucked my wife {f:tngt_emoji,C:hearts}💔{f:tngt_emoji}",
+            "so guess what? I'm gonna fuck the Earth! {f:tngt_emoji,C:green}🌍{f:tngt_emoji}",
+            "That's right, this is what you get! {f:tngt_emoji,C:yellow}⚠️{f:tngt_emoji}",
+            "My super laser piss! {f:tngt_emoji,C:red}🔫{f:tngt_emoji}",
+            "Except I'm not gonna piss on the Earth {f:tngt_emoji,C:green}🌎{f:tngt_emoji}",
+            "I'm gonna go higher {f:tngt_emoji}🚀{f:tngt_emoji}",
+            "I'm pissing on THE MOON! {f:tngt_emoji,C:yellow}🌕{f:tngt_emoji}",
+            "How do you like that Obama? {f:tngt_emoji,C:blue}🇺🇸{f:tngt_emoji}",
+            "I PISSED ON THE MOON YOU IDIOT! {f:tngt_emoji,C:yellow}🌝{f:tngt_emoji}",
+            "You have 23 hours until the piss droplets hit the fucking Earth {f:tngt_emoji,C:yellow}⏳{f:tngt_emoji}",
+            "now get out of my fucking sight before I piss on you too {f:tngt_emoji,C:yellow}👊{f:tngt_emoji}"
+        }
+
+    },
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    rarity = 1,
+    atlas = 'ModdedVanilla16',
+    pos = { x = 0, y = 0 },
+    cost = 4,
+    config = { extra = { price = 3 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.price } }
+    end,
+    calculate = function(self, card, context)
+        if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
+            card.ability.extra_value = card.ability.extra_value + card.ability.extra.price
+            card:set_cost()
+            return {
+                message = localize('k_val_up'),
+                colour = G.C.MONEY
+            }
+        end
+    end
 }

@@ -1949,6 +1949,8 @@ SMODS.Joker {
             card.ability.extra.start_time = love.timer.getTime()
         end
 
+        local raw_elapsed = love.timer.getTime() - card.ability.extra.start_time
+        local elapsed = math.abs(0, raw_elapsed)
         local base_seconds = math.min(elapsed, 60)
         local bonus_seconds = math.max(0, elapsed - 60)
 
@@ -2565,6 +2567,119 @@ SMODS.Joker {
                     break
                 end
             end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = 'metaverse',
+    loc_txt = {
+        name = "{C:attention}Bought{} {C:green}more{} {C:money}land{} in the {C:dark_edition}Jimbo-verse",
+        text = {
+            "Gain {C:attention}Investment Tag{}",
+            "after every {C:attention}#1#{} purchases",
+            "from the {C:attention}Shop{}"
+        }
+    },
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    rarity = 3,
+    atlas = 'ModdedVanilla15',
+    pos = { x = 2, y = 1 },
+    cost = 8,
+    config = { 
+        extra = { 
+            purchase_counter = 0,  
+            threshold = 5          
+        } 
+    },
+    loc_vars = function(self, info_queue, card)
+        return { 
+            vars = { 
+                card.ability.extra.threshold - card.ability.extra.purchase_counter
+            } 
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.buying_card and not context.blueprint then
+            card.ability.extra.purchase_counter = card.ability.extra.purchase_counter + 1
+            if card.ability.extra.purchase_counter >= card.ability.extra.threshold then
+                card.ability.extra.purchase_counter = 0
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        add_tag(Tag('tag_investment'))
+                        card:juice_up()
+                        play_sound('coin1')
+                        return true
+                    end
+                }))
+                return {
+                    message = "Across the globe.",
+                    colour = G.C.MONEY,
+                    card = card
+                }
+            end
+        end
+        if context.end_shop_round and not context.blueprint then
+            card.ability.extra.purchase_counter = 0
+        end
+    end
+}
+
+SMODS.Joker {
+    key = 'mybad',
+    loc_txt = {
+        name = '{f:tngt_times}My mistake, original gangster..',
+        text = {
+            "If {C:attention}played{} hand triggers",
+            "boss blind's ability, disables it"
+        }
+    },
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    rarity = 3,
+    atlas = 'ModdedVanilla15',
+    pos = { x = 0, y = 0 },
+    cost = 6,
+    config = {
+        extra = {
+            base_xchips = 1,
+            xchip_gain = 0.2,
+            target_count = 15,
+            cards_played = 0
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.base_xchips,
+                card.ability.extra.xchip_gain,
+                card.ability.extra.target_count,
+                card.ability.extra.cards_played
+            }
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.after and context.cardarea == G.play then
+            card.ability.extra.cards_played = card.ability.extra.cards_played + 1
+            if card.ability.extra.cards_played == card.ability.extra.target_count then
+                card.ability.extra.base_xchips = card.ability.extra.base_xchips + card.ability.extra.xchip_gain
+                card:juice_up(0.5, 0.5)
+                return {
+                    message = localize { type = 'variable', key = 'a_xchips', vars = { card.ability.extra.base_xchips } },
+                    colour = G.C.CHIPS
+                }
+            end
+        end
+        if context.end_of_round and not context.blueprint then
+            card.ability.extra.cards_played = 0
+        end
+        if context.joker_main then
+            return {
+                xchips = card.ability.extra.base_xchips
+            }
         end
     end
 }

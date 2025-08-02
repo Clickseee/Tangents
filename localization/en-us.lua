@@ -1,6 +1,7 @@
 return {
     misc = {
         dictionary = {
+            tngt_booster_fridge = "Fridge",
             ph_improve_run = "I'm not calling you a good boy, that run was shit",
 	    tngt_page = "Page",
             tngt_made_by = "Made by",
@@ -14,6 +15,7 @@ return {
                     "{C:attention}BepisFever{}{C:inactive} (@bepisfever){}, {C:attention}N'{}{C:inactive} (@nh6574){},",
                     "{C:attention}Somethingcom525{}{C:inactive} (@somethingcom525){}, {C:attention}milkedrat{}{C:inactive} (@milkedrat){}",
                     "{C:attention}SDM_0{}{C:inactive} (@sdm_0){}, {C:attention}toma:tose{}{C:inactive} (@beetday){}",
+                    "{C:attention}Revo{}{C:inactive} (@revoo_.){}",
                     "{C:dark_edition,E:2}and everyone who bailed me out of jail with ko-fi! <3{}"
                 }
             },

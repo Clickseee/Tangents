@@ -7,8 +7,6 @@
 wankers = 0
 dicks = 0
 
-
-
 --- Talisman compat
 to_big = to_big or function(num)
     return num
@@ -28,7 +26,8 @@ G.nxkoo_dies = {
     show_flashbang = false,
     flashbang_timer = 0,
     current_flashbang = nil,
-    default_flashbang = string.sub(SMODS.current_mod.path, string.find(SMODS.current_mod.path, "Mods")).."/assets/customimages/jumpscare_2.png",
+    default_flashbang = string.sub(SMODS.current_mod.path, string.find(SMODS.current_mod.path, "Mods")) ..
+    "/assets/customimages/jumpscare_2.png",
     path = SMODS.current_mod.path,
     flashbangs = {
         shop = "shop_flashbang.png",
@@ -37,13 +36,161 @@ G.nxkoo_dies = {
         discard = "discard_flashbang.png",
         round_start = "round_flashbang.png",
         joker_trigger = "joker_flashbang.png"
+    },
+    theworldcrispiestfries = {
+        "Are these.. the world's",
+        "crispiest fries? Let's find out.",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",
+        "...",  
     }
 }
 
 tangentry.optional_features = function()
     return {
         quantum_enhancements = true,
-        post_trigger = true
+        post_trigger = true -- for flashbang
     }
 end
 
@@ -221,6 +368,13 @@ tangentry.config_tab = function()
                 ref_table =
                     tangentry.config,
                 ref_value = "homosexual"
+            }),
+            create_toggle_spec({
+                label = "{C:white}GMod",
+                desc = "{C:white}Leave the server?",
+                ref_table =
+                    tangentry.config,
+                ref_value = "background"
             }),
         }
     }
@@ -512,6 +666,16 @@ SMODS.ObjectType({
     end,
 })
 
+SMODS.ObjectType({
+    key = "Beans",
+    default = "j_turtle_bean",
+    cards = {},
+    inject = function(self)
+        SMODS.ObjectType.inject(self)
+        self:inject_card(G.P_CENTERS.j_turtle_bean)
+    end,
+})
+
 local fourthwall_gradient = SMODS.Gradient({
     key = "fourthwall",
     colours = {
@@ -602,6 +766,19 @@ SMODS.Sound {
         end
     end,
 }
+
+local co = Card.open
+function Card:open()
+    co(self)
+    if self.config and self.config.center and self.config.center.kind and self.config.center.kind == "Food" then
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                play_sound('tngt_canigetsomeicecream')
+                return true
+            end
+        }))
+    end
+end
 
 SMODS.Sound {
     key = "tngt_canigetsomeicecream",
@@ -788,6 +965,11 @@ SMODS.Sound {
     path = "meow.ogg"
 }
 
+SMODS.Sound {
+    key = "tngt_fries",
+    path = "theworldmostcrispyfries.ogg"
+}
+
 SMODS.Atlas {
     key = "modicon",
     path = "modicon.png",
@@ -843,25 +1025,25 @@ SMODS.Atlas {
     py = 95
 }
 
-SMODS.Atlas{
+SMODS.Atlas {
     key = "shop_sign",
     path = "slop.png",
-    px=113,
-    py=57,
+    px = 113,
+    py = 57,
     atlas_table = 'ANIMATION_ATLAS',
     raw_key = true,
-	frames = 4,
-    prefix_config = {key = false}
+    frames = 4,
+    prefix_config = { key = false }
 }
 
-SMODS.Atlas{
+SMODS.Atlas {
     key = "tvtime",
     path = "itstvtime.png",
     px = 478,
     py = 120
 }
 
-SMODS.Atlas{
+SMODS.Atlas {
     key = "goddamnit",
     path = "goddamnit.png",
     px = 600,
@@ -891,12 +1073,12 @@ having more lines doesn't make you cool
 from yours truly,
 bepis
 ]]
-local atlasAmount = 14
+local atlasAmount = 16
 for i = 1, atlasAmount do
     if i == 1 then i = "" end
     SMODS.Atlas {
-        key = "ModdedVanilla"..i,
-        path = "ModdedVanilla"..i..".png",
+        key = "ModdedVanilla" .. i,
+        path = "ModdedVanilla" .. i .. ".png",
         px = 71,
         py = 95
     }
@@ -955,6 +1137,17 @@ SMODS.Atlas {
     path = "dicks.png",
     px = 71,
     py = 95
+}
+
+SMODS.Font {
+    key = "DDLC",
+    path = "Hashtag.ttf",
+    render_scale = 200,
+    TEXT_HEIGHT_SCALE = 0.75,
+    TEXT_OFFSET = { x = 10, y = -17 },
+    FONTSCALE = 0.075,
+    squish = 1,
+    DESCSCALE = 1
 }
 
 SMODS.Font {
@@ -1066,24 +1259,36 @@ end
 function tngt_desc_from_rows(desc_nodes, empty, align, maxw) --Taken from JoyousSpring's code like... a year ago? I don't remember :sob:
     local t = {}
     for k, v in ipairs(desc_nodes) do
-        t[#t+1] = {n=G.UIT.R, config={align = align or "cl", maxw = maxw}, nodes=v}
+        t[#t + 1] = { n = G.UIT.R, config = { align = align or "cl", maxw = maxw }, nodes = v }
     end
-    return {n=G.UIT.R, config={align = "cm", colour = empty and G.C.CLEAR or G.C.UI.BACKGROUND_WHITE, r = 0.1, padding = 0.04, minw = 2, minh = 0.25, emboss = not empty and 0.05 or nil, filler = true}, nodes={
-        {n=G.UIT.R, config={align = align or "cl", padding = 0.03}, nodes=t}
-    }}
+    return {
+        n = G.UIT.R,
+        config = { align = "cm", colour = empty and G.C.CLEAR or G.C.UI.BACKGROUND_WHITE, r = 0.1, padding = 0.04, minw = 2, minh = 0.25, emboss = not empty and 0.05 or nil, filler = true },
+        nodes = {
+            { n = G.UIT.R, config = { align = align or "cl", padding = 0.03 }, nodes = t }
+        }
+    }
 end
 
 function tngt_create_text_box(key) --Clean text box :3
     local desc_node = {}
-    localize {type = 'descriptions', key = key, set = 'dictionary', nodes = desc_node, scale = 1, text_colour = G.C.WHITE} 
-    desc_node = tngt_desc_from_rows(desc_node,true,"cm")
+    localize { type = 'descriptions', key = key, set = 'dictionary', nodes = desc_node, scale = 1, text_colour = G.C.WHITE }
+    desc_node = tngt_desc_from_rows(desc_node, true, "cm")
     desc_node.config.align = "cm"
 
-    return {n = G.UIT.R, config = {align = "tm", colour = G.C.BLACK, r = 0.2, padding = 0.1}, nodes = {
-        {n = G.UIT.C, config = {align = "tm"}, nodes = {
-            desc_node
-        }},
-    }}
+    return {
+        n = G.UIT.R,
+        config = { align = "tm", colour = G.C.BLACK, r = 0.2, padding = 0.1 },
+        nodes = {
+            {
+                n = G.UIT.C,
+                config = { align = "tm" },
+                nodes = {
+                    desc_node
+                }
+            },
+        }
+    }
 end
 
 function tngt_emplace_card_to_area(key, area, atlas, pos, size) --Creating fake cards and add them to the area.
@@ -1091,34 +1296,38 @@ function tngt_emplace_card_to_area(key, area, atlas, pos, size) --Creating fake 
     if type(key) == "table" then
         keys = key
     else
-        keys[#keys+1] = key
+        keys[#keys + 1] = key
     end
-    for _,c_key in ipairs(keys) do
+    for _, c_key in ipairs(keys) do
         local card = Card(area.T.x + area.T.w / 2, area.T.y,
-        G.CARD_W, G.CARD_H, G.P_CARDS.empty,
-        G.P_CENTERS[c_key])
-        card.children.back = Sprite(card.T.x, card.T.y, card.T.w, card.T.h, G.ASSET_ATLAS[(G.P_CENTERS[c_key] and G.P_CENTERS[c_key].atlas) or atlas or "tngt_VanillaRemade"], (G.P_CENTERS[c_key] and G.P_CENTERS[c_key].pos) or {x = 0, y = 0})
+            G.CARD_W, G.CARD_H, G.P_CARDS.empty,
+            G.P_CENTERS[c_key])
+        card.children.back = Sprite(card.T.x, card.T.y, card.T.w, card.T.h,
+            G.ASSET_ATLAS[(G.P_CENTERS[c_key] and G.P_CENTERS[c_key].atlas) or atlas or "tngt_VanillaRemade"],
+            (G.P_CENTERS[c_key] and G.P_CENTERS[c_key].pos) or { x = 0, y = 0 })
         card.children.back.states.hover = card.states.hover
         card.children.back.states.click = card.states.click
         card.children.back.states.drag = card.states.drag
         card.children.back.states.collide.can = false
-        card.children.back:set_role({major = card, role_type = 'Glued', draw_major = card})
+        card.children.back:set_role({ major = card, role_type = 'Glued', draw_major = card })
         if size then card:resize(size) end
         area:emplace(card)
     end
 end
 
 tangent_credit_cards = {
-    {card_key = "j_tngt_nxkoo", credit = "ssecun"},
-    {card_key = "j_tngt_ssecun", credit = "ssecun"},
-    {card_key = "j_tngt_incognito", credit = "Incognito"},
-    {card_key = "j_tngt_crazydave", credit = "crazy_dave"},
-    {card_key = "j_tngt_bepis", credit = "BepisFever"},
-    {card_key = "j_tngt_bread", credit = "superbread"},
+    { card_key = "j_tngt_nxkoo",     credit = "ssecun" },
+    { card_key = "j_tngt_ssecun",    credit = "ssecun" },
+    { card_key = "j_tngt_incognito", credit = "Incognito" },
+    { card_key = "j_tngt_crazydave", credit = "crazy_dave" },
+    { card_key = "j_tngt_bepis",     credit = "BepisFever" },
+    { card_key = "j_tngt_bread",     credit = "superbread" },
+    { card_key = "j_tngt_astro",     credit = "Astro" },
 }
 tangent_credit_card_per_row = 4
 tangent_credit_card_row = 2
-tangent_credit_pages = math.max(math.ceil(#tangent_credit_cards/(tangent_credit_card_per_row*tangent_credit_card_row)),1)
+tangent_credit_pages = math.max(math.ceil(#tangent_credit_cards / (tangent_credit_card_per_row * tangent_credit_card_row)),
+    1)
 tangent_current_credit_page = 1
 tangent_credit_config = {
     reverse = true
@@ -1130,21 +1339,21 @@ function G.FUNCS.tngt_next_credit_page(e)
     else
         tangent_current_credit_page = math.min(tangent_current_credit_page + 1, tangent_credit_pages)
     end
-    G.FUNCS["openModUI_tangent"](e, SMODS.LAST_SELECTED_MOD_TAB) 
+    G.FUNCS["openModUI_tangent"](e, SMODS.LAST_SELECTED_MOD_TAB)
 end
 
 function G.FUNCS.tngt_previous_credit_page(e)
     if tangent_credit_config.reverse and tangent_current_credit_page <= 1 then
         tangent_current_credit_page = tangent_credit_pages
-    else  
+    else
         tangent_current_credit_page = math.max(math.min(tangent_current_credit_page - 1, tangent_credit_pages), 1)
     end
-    G.FUNCS["openModUI_tangent"](e, SMODS.LAST_SELECTED_MOD_TAB) 
+    G.FUNCS["openModUI_tangent"](e, SMODS.LAST_SELECTED_MOD_TAB)
 end
 
 --Extra Tabs
 tangentry.extra_tabs = function()
-    return{
+    return {
         {
             label = "Credits",
             tab_definition_function = function()
@@ -1152,101 +1361,554 @@ tangentry.extra_tabs = function()
                     tngt_create_text_box("tngt_credit1")
                 }
                 local name_node = {}
-                localize {type = 'descriptions', key = "tngt_credit_name", set = 'dictionary', nodes = name_node, scale = 2, text_colour = G.C.WHITE, shadow = true} 
-                name_node = tngt_desc_from_rows(name_node,true,"cm") --Reorganizes the text in the node properly (?).
+                localize { type = 'descriptions', key = "tngt_credit_name", set = 'dictionary', nodes = name_node, scale = 2, text_colour = G.C.WHITE, shadow = true }
+                name_node = tngt_desc_from_rows(name_node, true, "cm") --Reorganizes the text in the node properly (?).
                 name_node.config.align = "cm"
 
                 local desc_node = {}
-                localize {type = 'descriptions', key = "tngt_credit_desc", set = 'dictionary', nodes = desc_node, scale = 1, text_colour = G.C.WHITE} 
-                desc_node = tngt_desc_from_rows(desc_node,true,"cm")
+                localize { type = 'descriptions', key = "tngt_credit_desc", set = 'dictionary', nodes = desc_node, scale = 1, text_colour = G.C.WHITE }
+                desc_node = tngt_desc_from_rows(desc_node, true, "cm")
                 desc_node.config.align = "cm"
 
                 local function add_credit_card(page, row)
                     local order = (((page - 1) * tangent_credit_card_per_row * tangent_credit_card_row) + ((row - 1) * tangent_credit_card_per_row) + 1)
                     local cardareas = {}
-                    if G["tngt_registered_config_cardareas"..row] and G["tngt_registered_config_cardareas"..row].area then
-                        for _,v in ipairs(G["tngt_registered_config_cardareas"..row].area) do
+                    if G["tngt_registered_config_cardareas" .. row] and G["tngt_registered_config_cardareas" .. row].area then
+                        for _, v in ipairs(G["tngt_registered_config_cardareas" .. row].area) do
                             v:remove()
                             v = nil
                         end
-                        G["tngt_registered_config_cardareas"..row] = nil
+                        G["tngt_registered_config_cardareas" .. row] = nil
                     end
                     for i = order, order + (tangent_credit_card_per_row - 1) do
                         if tangent_credit_cards[i] then
-                            G["tngt_credit_cardarea"..order] = CardArea(
+                            G["tngt_credit_cardarea" .. order] = CardArea(
                                 G.ROOM.T.x + 0.1 * G.ROOM.T.w / 2, G.ROOM.T.h,
                                 0.82 * G.CARD_W,
                                 0.82 * G.CARD_H,
                                 { card_limit = 5, type = 'title', highlight_limit = 0, collection = true }
                             )
-                            local area = G["tngt_credit_cardarea"..order]
+                            local area = G["tngt_credit_cardarea" .. order]
                             local config_card = tangent_credit_cards[i]
                             if config_card then
                                 tngt_emplace_card_to_area(config_card.card_key, area, nil, nil, 0.8)
                             end
-                            cardareas[#cardareas+1] = {area = area, c_info = config_card}
+                            cardareas[#cardareas + 1] = { area = area, c_info = config_card }
                         end
                     end
-                    G["tngt_registered_config_cardareas"..row] = cardareas
+                    G["tngt_registered_config_cardareas" .. row] = cardareas
                     return cardareas
                 end
 
-                for i = 1,tangent_credit_card_row do
+                for i = 1, tangent_credit_card_row do
                     local cardarea_nodes = {}
-                    for _,v in ipairs(add_credit_card(tangent_current_credit_page, i)) do
-                        cardarea_nodes[#cardarea_nodes + 1] = {n = G.UIT.C, config = {align = "cm", colour = G.C.BLACK, r = 0.2, padding = 0.02}, nodes = {
-                            {n = G.UIT.R, config = {align = "cm"}, nodes = {
-                                {n = G.UIT.O, config = {object = v.area}},
-                            }},
-                            {n = G.UIT.R, config = {align = "cm", padding = 0.1}, nodes = {
-                                {n = G.UIT.T, config = {text = localize("tngt_made_by").." "..((v.c_info.credit_key and localize(v.c_info.credit_key)) or v.c_info.credit or "?"), colour = G.C.UI.TEXT_LIGHT, scale = 0.3, shadow = true}}, 
-                            }},
-                        }}
+                    for _, v in ipairs(add_credit_card(tangent_current_credit_page, i)) do
+                        cardarea_nodes[#cardarea_nodes + 1] = {
+                            n = G.UIT.C,
+                            config = { align = "cm", colour = G.C.BLACK, r = 0.2, padding = 0.02 },
+                            nodes = {
+                                {
+                                    n = G.UIT.R,
+                                    config = { align = "cm" },
+                                    nodes = {
+                                        { n = G.UIT.O, config = { object = v.area } },
+                                    }
+                                },
+                                {
+                                    n = G.UIT.R,
+                                    config = { align = "cm", padding = 0.1 },
+                                    nodes = {
+                                        { n = G.UIT.T, config = { text = localize("tngt_made_by") .. " " .. ((v.c_info.credit_key and localize(v.c_info.credit_key)) or v.c_info.credit or "?"), colour = G.C.UI.TEXT_LIGHT, scale = 0.3, shadow = true } },
+                                    }
+                                },
+                            }
+                        }
                     end
-                    cardarea_nodes = {{n = G.UIT.R, config = {align = "cm", padding = 0.02}, nodes =
-                        cardarea_nodes
-                    }}
-                    root_nodes[#root_nodes+1] = {n = G.UIT.R, config = {align = "cm", padding = 0.02}, nodes = {
-                        {n = G.UIT.C, config = {align = "cm", padding = 0.02}, nodes =
+                    cardarea_nodes = { {
+                        n = G.UIT.R,
+                        config = { align = "cm", padding = 0.02 },
+                        nodes =
                             cardarea_nodes
-                        },
-                    }}
+                    } }
+                    root_nodes[#root_nodes + 1] = {
+                        n = G.UIT.R,
+                        config = { align = "cm", padding = 0.02 },
+                        nodes = {
+                            {
+                                n = G.UIT.C,
+                                config = { align = "cm", padding = 0.02 },
+                                nodes =
+                                    cardarea_nodes
+                            },
+                        }
+                    }
                 end
 
-                table.insert(root_nodes, 1, {n = G.UIT.R, config = {align = "tm", colour = G.C.CLEAR}, nodes = {
-                    {n = G.UIT.C, config = {align = "tm", colour = G.C.CLEAR}, nodes = {
-                        name_node,
-                        desc_node
-                    }},
-                }})
+                table.insert(root_nodes, 1, {
+                    n = G.UIT.R,
+                    config = { align = "tm", colour = G.C.CLEAR },
+                    nodes = {
+                        {
+                            n = G.UIT.C,
+                            config = { align = "tm", colour = G.C.CLEAR },
+                            nodes = {
+                                name_node,
+                                desc_node
+                            }
+                        },
+                    }
+                })
 
-                root_nodes[#root_nodes+1] = {n = G.UIT.R, config = {align = "cm", padding = 0.02}, nodes = { --Page turning stuff. This is always added to root_nodes.
-                    {n = G.UIT.C, config = {align = "cm", minw = 0.5, minh = 0.5, padding = 0.1, r = 0.1, hover = true, colour = G.C.BLACK, shadow = true, button = "tngt_previous_credit_page"}, nodes = {
-                        {n = G.UIT.R, config = {align = "cm", padding = 0.05}, nodes = {
-                            {n = G.UIT.T, config = {text = "<", scale = 0.4, colour = G.C.UI.TEXT_LIGHT}}
-                        }}
-                    }},
-                    {n = G.UIT.C, config = {align = "cm", minw = 0.5, minh = 0.5, padding = 0.1, r = 0.1, hover = true, colour = G.C.BLACK, shadow = true}, nodes = {
-                        {n = G.UIT.R, config = {align = "cm", padding = 0.05}, nodes = {
-                            {n = G.UIT.T, config = {text = localize("tngt_page").." "..tangent_current_credit_page.."/"..tangent_credit_pages, scale = 0.4, colour = G.C.UI.TEXT_LIGHT}}
-                        }}
-                    }}, 
-                    {n = G.UIT.C, config = {align = "cm", minw = 0.5, minh = 0.5, padding = 0.1, r = 0.1, hover = true, colour = G.C.BLACK, shadow = true, button = "tngt_next_credit_page"}, nodes = {
-                        {n = G.UIT.R, config = {align = "cm", padding = 0.05}, nodes = {
-                            {n = G.UIT.T, config = {text = ">", scale = 0.4, colour = G.C.UI.TEXT_LIGHT}}
-                        }}
-                    }},
-                }}
+                root_nodes[#root_nodes + 1] = {
+                    n = G.UIT.R,
+                    config = { align = "cm", padding = 0.02 },
+                    nodes = {                                                                                --Page turning stuff. This is always added to root_nodes.
+                        {
+                            n = G.UIT.C,
+                            config = { align = "cm", minw = 0.5, minh = 0.5, padding = 0.1, r = 0.1, hover = true, colour = G.C.BLACK, shadow = true, button = "tngt_previous_credit_page" },
+                            nodes = {
+                                {
+                                    n = G.UIT.R,
+                                    config = { align = "cm", padding = 0.05 },
+                                    nodes = {
+                                        { n = G.UIT.T, config = { text = "<", scale = 0.4, colour = G.C.UI.TEXT_LIGHT } }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            n = G.UIT.C,
+                            config = { align = "cm", minw = 0.5, minh = 0.5, padding = 0.1, r = 0.1, hover = true, colour = G.C.BLACK, shadow = true },
+                            nodes = {
+                                {
+                                    n = G.UIT.R,
+                                    config = { align = "cm", padding = 0.05 },
+                                    nodes = {
+                                        { n = G.UIT.T, config = { text = localize("tngt_page") .. " " .. tangent_current_credit_page .. "/" .. tangent_credit_pages, scale = 0.4, colour = G.C.UI.TEXT_LIGHT } }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            n = G.UIT.C,
+                            config = { align = "cm", minw = 0.5, minh = 0.5, padding = 0.1, r = 0.1, hover = true, colour = G.C.BLACK, shadow = true, button = "tngt_next_credit_page" },
+                            nodes = {
+                                {
+                                    n = G.UIT.R,
+                                    config = { align = "cm", padding = 0.05 },
+                                    nodes = {
+                                        { n = G.UIT.T, config = { text = ">", scale = 0.4, colour = G.C.UI.TEXT_LIGHT } }
+                                    }
+                                }
+                            }
+                        },
+                    }
+                }
 
-                return {n = G.UIT.ROOT, config = {r = 0.1, minw = 5, align = "cm", padding = 0.2, colour = G.C.BLACK}, nodes = {
-                    {n = G.UIT.C, config = {r = 0.1, minw = 5, minh = 3, align = "tm", colour = G.C.L_BLACK, padding = 0.05}, nodes = --We are using G.UIT.C here so that configs are aligned vertically.
-                        root_nodes
-                    },
-                }}
+                return {
+                    n = G.UIT.ROOT,
+                    config = { r = 0.1, minw = 5, align = "cm", padding = 0.2, colour = G.C.BLACK },
+                    nodes = {
+                        {
+                            n = G.UIT.C,
+                            config = { r = 0.1, minw = 5, minh = 3, align = "tm", colour = G.C.L_BLACK, padding = 0.05 },
+                            nodes =                                                                                                   --We are using G.UIT.C here so that configs are aligned vertically.
+                                root_nodes
+                        },
+                    }
+                }
             end
         }
     }
 end
+
+local _create_UIBox_options = create_UIBox_options
+function create_UIBox_options()
+    local ret = _create_UIBox_options()
+    local m = UIBox_button({
+        minw = 5,
+        button = 'TestButton_Menu',
+        label = { 'Use' },
+        colour = G.C.SO_1.SPADES,
+    })
+    table.insert(ret.nodes[1].nodes[1].nodes[1].nodes, #ret.nodes[1].nodes[1].nodes[1].nodes + 1, m)
+    return ret
+end
+
+function G.FUNCS.TestButton_Menu(e)
+    print('I FUCKING LOVE KASANE TETO')
+end
+
+--[[ Functions for allowing jokers to be used ]] --
+
+local _G_UIDEF_use_and_sell_buttons = G.UIDEF.use_and_sell_buttons
+function G.UIDEF.use_and_sell_buttons(card)
+    local ret = _G_UIDEF_use_and_sell_buttons(card)
+    local m =
+    {
+        n = G.UIT.C,
+        config = { align = "cr" },
+        nodes = {
+            {
+                n = G.UIT.C,
+                config = { ref_table = card, align = "cr", maxw = 1.25, padding = 0.1, r = 0.08, minw = 1.25, minh = 1, hover = true, shadow = true, colour = G.C.UI.BACKGROUND_INACTIVE, one_press = true, button = 'use_card', func = 'can_use_joker' },
+                nodes = {
+                    { n = G.UIT.B, config = { w = 0.1, h = 0.6 } },
+                    { n = G.UIT.T, config = { text = localize('b_use'), colour = G.C.UI.TEXT_LIGHT, scale = 0.55, shadow = true } }
+                }
+            }
+        }
+    }
+    if card.ability.set == 'Joker' and card.config.center.key == 'j_tngt_mahlazor' then
+        table.insert(ret.nodes[1].nodes[2].nodes, #ret.nodes[1].nodes[2].nodes + 1, m)
+    end
+    return ret
+end
+
+function G.FUNCS.can_use_joker(e)
+    if e.config.ref_table:can_use_joker() then
+        e.config.colour = G.C.RED
+        e.config.button = 'use_card'
+    else
+        e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        e.config.button = nil
+    end
+end
+
+function Card:can_use_joker(any_state, skip_check)
+    if not skip_check and ((G.play and #G.play.cards > 0) or
+            (G.CONTROLLER.locked) or
+            (G.GAME.STOP_USE and G.GAME.STOP_USE > 0))
+    then
+        return false
+    end
+    if G.STATE ~= G.STATES.HAND_PLAYED and G.STATE ~= G.STATES.DRAW_TO_HAND and G.STATE ~= G.STATES.PLAY_TAROT or any_state then
+        if self.config.center.key == 'j_tngt_mahlazor' then
+            local my_pos = nil
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] == card then
+                    my_pos = i
+                    break
+                end
+            end
+            if not my_pos or my_pos == 1 then
+                return {
+                    message = "...",
+                    colour = G.C.RED
+                }
+            end
+            local total_value = 0
+            local destroyed_jokers = {}
+            for i = 1, my_pos - 1 do
+                local left_joker = G.jokers.cards[i]
+                if not SMODS.is_eternal(left_joker, card) and not left_joker.getting_sliced then
+                    left_joker.getting_sliced = true
+                    total_value = total_value + left_joker.sell_cost
+                    destroyed_jokers[#destroyed_jokers + 1] = left_joker
+                end
+            end
+
+            if #destroyed_jokers == 0 then
+                return {
+                    message = "...",
+                    colour = G.C.RED
+                }
+            end
+            G.GAME.joker_buffer = G.GAME.joker_buffer - #destroyed_jokers
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    for _, joker in ipairs(destroyed_jokers) do
+                        joker:start_dissolve({ HEX("ff0000") }, nil, 1.6)
+                        play_sound('slice1', 0.9 + math.random() * 0.2)
+                    end
+                    local total = 0
+                    for k, v in pairs(G.jokers.cards) do
+                        total = total + v.sell_cost
+                    end
+                    card.ability.extra_value = (card.ability.extra_value or 0) + total
+                    card:juice_up(0.8, 0.8)
+                    G.GAME.joker_buffer = 0
+                    return true
+                end
+            }))
+            return {
+                message = "bruh",
+                colour = G.C.RED,
+                no_juice = true
+            }
+        end
+    end
+    return false
+end
+
+local _G_FUNCS_use_card = G.FUNCS.use_card
+function G.FUNCS.use_card(e, mute, nosave)
+    local hcard = e.config.ref_table
+    local harea = hcard.area
+    if hcard.ability.consumeable then G.GAME.osquo_ext_using_consumeable = true end
+    local ret = _G_FUNCS_use_card(e, mute, nosave)
+    if e.config.ref_table.config.center.key == 'j_tngt_mahlazor' then
+        delay(0.2)
+        e.config.ref_table:use_joker(harea)
+    end
+    G.GAME.osquo_ext_using_consumeable = nil
+    return ret
+end
+
+function Card:use_joker(area, copier)
+    stop_use()
+    if self.debuff then return nil end
+    local used_joker = copier or self
+
+    if self.config.center.key == 'j_tngt_mahlazor' then
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.4,
+                func = function()
+                    for _, joker in ipairs(destroyed_jokers) do
+                        joker:start_dissolve({ HEX("ff0000") }, nil, 1.6)
+                        play_sound('slice1', 0.9 + math.random() * 0.2)
+                    end
+                    local total = 0
+                    for k, v in pairs(G.jokers.cards) do
+                        total = total + v.sell_cost
+                    end
+                    card.ability.extra_value = (card.ability.extra_value or 0) + total
+                    card:juice_up(0.8, 0.8)
+                    G.GAME.joker_buffer = 0
+                    return true
+                end
+        }))
+        delay(0.6)
+    end
+end
+
+function tangentry.replacecards(area, replace, bypass_eternal, keep, keeporiginal)                             --Cards not keeping editions/seals/stickers is intended. //Probably extremely inefficient /// Like why tf did i make the keep n entire seperate section. I probably wont even use "replace" or teh destruction part of this like ever.
+    if G.shop_booster and area == G.shop_booster.cards or G.shop_vouchers and area == G.shop_vouchers.cards then --Setting the area as these 2 disables the entire thing below and will not have a support for them anytime soon cause NONE of the jokers does anything with destroyed booster PACKS and VOUCHERS. Including mods
+        if area == G.shop_booster.cards then
+            for i = 1, #area do
+                local tab = {}
+                for i = 1, #G.P_CENTER_POOLS.Booster do
+                    tab[#tab + 1] = G.P_CENTER_POOLS.Booster[i].key
+                end
+                if area[i] ~= keeporiginal then
+                    area[i]:juice_up()
+                    area[i]:set_ability(pseudorandom_element(tab))
+                end
+                tab = {}
+            end
+        end
+        if area == G.shop_vouchers.cards then
+            for i = 1, #area do
+                local tab = {}
+                for i = 1, #G.P_CENTER_POOLS.Voucher do
+                    tab[#tab + 1] = G.P_CENTER_POOLS.Voucher[i].key
+                end
+                if area[i] ~= keeporiginal then
+                    area[i]:juice_up()
+                    area[i]:set_ability(pseudorandom_element(tab))
+                end
+                tab = {}
+            end
+        end
+    else
+        if keep then
+            for i = 1, #area do
+                if area[i].config.center.rarity then
+                    local b
+                    local rarity
+                    if not replace then
+                        for k, v in pairs(G.P_JOKER_RARITY_POOLS) do
+                            if area[i].config.center.rarity == k then
+                                rarity = k
+                                b = k
+                            end
+                        end
+                        if rarity == 1 then
+                            rarity = "Common"
+                        elseif rarity == 2 then
+                            rarity = "Uncommon"
+                        elseif rarity == 3 then
+                            rarity = "Rare"
+                        elseif rarity == 4 then
+                            rarity = "Legendary"
+                        end
+                        local set = area[i].ability.set
+                        local tab = {}
+                        for i = 1, #G.P_CENTER_POOLS.Joker do
+                            if G.P_CENTER_POOLS.Joker[i].rarity == b then
+                                tab[#tab + 1] = G.P_CENTER_POOLS.Joker[i].key
+                            end
+                        end
+                        if area[i] ~= keeporiginal then
+                            area[i]:juice_up()
+                            area[i]:set_ability(pseudorandom_element(tab))
+                            tab = {}
+                        end
+                    else
+                        local set = area[i].ability.set
+                        local rarity = SMODS.poll_rarity(set)
+                        local b = rarity
+                        if rarity == 1 then
+                            rarity = "Common"
+                        elseif rarity == 2 then
+                            rarity = "Uncommon"
+                        elseif rarity == 3 then
+                            rarity = "Rare"
+                        elseif rarity == 4 then
+                            rarity = "Legendary"
+                        end
+                        local tab = {}
+                        for i = 1, #G.P_CENTER_POOLS.Joker do
+                            if G.P_CENTER_POOLS.Joker[i].rarity == b then
+                                tab[#tab + 1] = G.P_CENTER_POOLS.Joker[i].key
+                            end
+                        end
+                        if area[i] ~= keeporiginal then
+                            area[i]:juice_up()
+                            area[i]:set_ability(pseudorandom_element(tab))
+                        end
+                        tab = {}
+                    end
+                elseif area[i].ability.set then
+                    local set = area[i].ability.set
+                    local tab = {}
+                    --[[	if G.STATE == G.STATES.STANDARD_PACK or area == G.hand.cards then
+						area[i]:juice_up()
+						local _suit, _rank =
+							pseudorandom_element(SMODS.Suits).key, pseudorandom_element(SMODS.Ranks).card_key
+						SMODS.change_base(area[i], _suit, _rank)
+						area[i]:set_ability(SMODS.poll_enhancement())
+						area[i]:set_edition(poll_edition())
+					else]]
+                    for i = 1, #G.P_CENTER_POOLS.Consumeables do
+                        if G.P_CENTER_POOLS.Consumeables[i].set == set then
+                            tab[#tab + 1] = G.P_CENTER_POOLS.Consumeables[i].key
+                        end
+                    end
+                    if area[i] ~= keeporiginal then
+                        area[i]:juice_up()
+                        area[i]:set_ability(pseudorandom_element(tab))
+                    end
+                end
+            end
+            --end
+        else
+            if replace then --Doesnt stick to joker rarities
+                for i = 1, #area do
+                    if bypass_eternal then
+                        if area[i].ability.set and area[i] ~= keeporiginal then
+                            local set = area[i].ability.set
+                            SMODS.destroy_cards(area[i], true)
+                            SMODS.add_card({
+                                set = set,
+                                area = G.pack_cards,
+                            })
+                        end
+                    else
+                        if area[i].ability.set and not area[i].ability.eternal and area[i] ~= keeporiginal then
+                            local set = area[i].ability.set
+                            SMODS.destroy_cards(area[i])
+                            SMODS.add_card({
+                                set = set,
+                                area = G.pack_cards,
+                            })
+                        end
+                    end
+                end
+            else
+                for i = 1, #area do
+                    if bypass_eternal then
+                        if area[i].config.center.rarity and area[i] ~= keeporiginal then --Reroll them while keeping the same rarity
+                            local rarity
+                            if area[i].config.center.rarity == 1 then
+                                rarity = "Common"
+                            elseif area[i].config.center.rarity == 2 then
+                                rarity = "Uncommon"
+                            elseif area[i].config.center.rarity == 3 then
+                                rarity = "Rare"
+                            elseif area[i].config.center.rarity == 4 then
+                                rarity = "Legendary"
+                            else
+                                rarity = area[i].config.center.rarity
+                            end
+                            local set = area[i].ability.set
+                            SMODS.destroy_cards(area[i], true)
+                            SMODS.add_card({
+                                set = set,
+                                rarity = rarity,
+                                area = G.pack_cards,
+                            })
+                        elseif area[i].ability.set and area[i] ~= keeporiginal then
+                            --[[			if G.STATE == G.STATES.STANDARD_PACK or area == G.hand.cards then
+								SMODS.destroy_cards(area[i])
+								local _suit, _rank =
+									pseudorandom_element(SMODS.Suits).key, pseudorandom_element(SMODS.Ranks).card_key
+								local acard = SMODS.create_card({
+									set = "Playing Card",
+									area = area,
+								})
+								SMODS.change_base(acard, _suit, _rank)
+								acard:set_ability(SMODS.poll_enhancement())
+								acard:set_edition(poll_edition())
+							else]]
+                            local set = area[i].ability.set
+                            SMODS.destroy_cards(area[i], true)
+                            SMODS.add_card({
+                                set = set,
+                                area = G.pack_cards,
+                            })
+                        end
+                        --end
+                    else
+                        if area[i].config.center.rarity and not area[i].ability.eternal and area[i] ~= keeporiginal then
+                            local rarity
+                            if area[i].config.center.rarity == 1 then
+                                rarity = "Common"
+                            elseif area[i].config.center.rarity == 2 then
+                                rarity = "Uncommon"
+                            elseif area[i].config.center.rarity == 3 then
+                                rarity = "Rare"
+                            elseif area[i].config.center.rarity == 4 then
+                                rarity = "Legendary"
+                            else
+                                rarity = area[i].config.center.rarity
+                            end
+                            local set = area[i].ability.set
+                            SMODS.destroy_cards(area[i])
+                            SMODS.add_card({
+                                set = set,
+                                rarity = rarity,
+                                area = G.pack_cards,
+                            })
+                        elseif area[i].ability.set and not area[i].ability.eternal and area[i] ~= keeporiginal then
+                            --[[if G.STATE == G.STATES.STANDARD_PACK or area == G.hand.cards then
+								SMODS.destroy_cards(area[i])
+								local _suit, _rank =
+									pseudorandom_element(SMODS.Suits).key, pseudorandom_element(SMODS.Ranks).card_key
+								local acard = SMODS.create_card({
+									set = "Playing Card",
+									area = area,
+								})
+								SMODS.change_base(acard, _suit, _rank)
+								acard:set_ability(SMODS.poll_enhancement())
+								acard:set_edition(poll_edition())
+							else]]
+                            local set = area[i].ability.set
+                            SMODS.destroy_cards(area[i])
+                            SMODS.add_card({
+                                set = set,
+                                area = G.pack_cards,
+                            })
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+--end
 
 -- MIKE, REBUILD MY MOD
 SMODS.load_file("stuff/beefstroganoff/worldwideweb.lua")()
@@ -1257,3 +1919,7 @@ SMODS.load_file("stuff/wankers/TheLegend27/its9inches.lua")()
 SMODS.load_file("stuff/wankers/DONOTOPEN/classified.lua")()
 SMODS.load_file("stuff/dicks/strictlydickly.lua")()
 SMODS.load_file("stuff/cumchalice/concumables.lua")()
+SMODS.load_file("stuff/bosster/likeaboss.lua")()
+if background == true then
+    SMODS.load_file("BGChanger")()
+end
