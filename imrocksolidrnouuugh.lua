@@ -183,7 +183,21 @@ G.nxkoo_dies = {
         "...",
         "...",
         "...",
-        "...",  
+        "...",
+    },
+    desc_sprites = {
+        soul = {
+            atlas = "tngt_descsprite",
+            pos = {x = 0, y = 0},
+            w = 0.3,
+            h = 0.3,
+        },
+        susie = {
+            atlas = "tngt_descsprite",
+            pos = {x = 1, y = 0},
+            w = 0.3,
+            h = 0.3,
+        }
     }
 }
 
