@@ -986,6 +986,13 @@ SMODS.Atlas {
     py = 216
 }
 
+SMODS.Atlas {
+    key = "descsprite",
+    path = "descsprite.png",
+    px = 18,
+    py = 18
+}
+
 
 SMODS.Sound {
     key = 'THX',

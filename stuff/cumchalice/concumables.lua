@@ -1,16 +1,13 @@
---[[
 SMODS.Consumable {
-    key = "kingschariot",
+    key = "susiesidea",
     set = "Tarot",
     atlas = "CUM",
     pos = { x = 0, y = 0 },
     cost = 5,
     loc_txt = {
-        name = "THE KING'S CHARIOT CANNOT BE STOPPED",
+        name = "{f:tngt_DETERMINATION}Susie's Idea",
         text = {
-            "All cards {C:attention}held in hand{} either turn",
-            "into {C:attention}Queens{} and {C:red}self-destruct{},",
-            "or turn into {C:attention}Kings{} of {C:attention}Steel{}"
+            "{tngt_S:j_joker} {}{tngt_I:j_joker} {}{f:tngt_DETERMINATION}Susie's Idea"
         }
     },
     use = function(self, card, area, copier)
@@ -77,6 +74,7 @@ SMODS.Consumable {
     end
 }
 
+--[[
 SMODS.Consumable {
     key = "starwalker",
     set = "Tarot",

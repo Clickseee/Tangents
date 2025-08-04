@@ -18,7 +18,7 @@ SMODS.Booster {
     pos = { x = 2, y = 0 },
     kind = "Food",
     group_key = "tngt_booster_fridge",
-    create_card = function(self, card, i)
+    create_card = function(self, card, i)   
         local current_time = os.date("*t")
         local is_special_time = (current_time.hour == 2)
         if is_special_time then

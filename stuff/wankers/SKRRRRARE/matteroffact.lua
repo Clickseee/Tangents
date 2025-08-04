@@ -42,6 +42,80 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
+    key = 'grippy',
+    loc_txt = {
+        name = "pipe down pookie",
+        text = {
+            "Duplicates all {C:attention}Played{} cards if",
+            "it's the {C:attention}first hand{} of the round, but {C:tarot,E:2}pauses your game{}",
+            "whenever you enter a {C:attention}shop{}."
+        }
+    },
+    rarity = 3,
+    cost = 6,
+    discovered = true,
+    unlocked = true,
+    blueprint_compat = true,
+    perishable_compat = true,
+    atlas = 'ModdedVanilla9',
+    pos = { x = 3, y = 1 },
+    config = { extra = {} },
+
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+
+    -- thanks to senfinbrare for the code and help
+    calculate = function(self, card, context)
+        if context.before and context.main_eval and G.GAME.current_round.hands_played == 0 then
+            local copy_cards = {}
+            for _, original_card in ipairs(context.full_hand) do
+                G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+                local copy_card = copy_card(original_card, nil, nil, G.playing_card)
+                copy_card:add_to_deck()
+                G.deck.config.card_limit = G.deck.config.card_limit + 1
+                table.insert(G.playing_cards, copy_card)
+                G.hand:emplace(copy_card)
+                copy_card.states.visible = nil
+                copy_cards[#copy_cards + 1] = copy_card
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        copy_card:start_materialize()
+                        return true
+                    end
+                }))
+            end
+            return {
+                message = localize('k_copied_ex'),
+                colour = G.C.PURPLE,
+                card = card,
+                playing_cards_created = copy_cards
+            }
+        end
+        if context.first_hand_drawn and not context.blueprint then
+            local eval = function()
+                return G.GAME.current_round.hands_played == 0 and not G.RESET_JIGGLES
+            end
+            juice_card_until(card, eval, true)
+        end
+        if context.starting_shop and G.CONTROLLER then
+            return {
+                func = function()
+                    G.CONTROLLER:key_press_update("escape", true)
+                    G.CONTROLLER:key_press_update("escape", false)
+
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'after',
+                        delay = 0.1,
+                        func = function() return true end
+                    }))
+                end
+            }
+        end
+    end
+}
+
+SMODS.Joker {
     key = 'jojo',
     loc_txt = {
         name = "{C:gold,E:2,s:2}HOLY SHIT",
@@ -251,7 +325,6 @@ local hashtag_map = {
     ["one"] = "[REDACTED]"
 }
 
--- Modified UI generator
 function generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end, card)
     local tab = original_generate_card_ui(_c, full_UI_table, specific_vars, card_type, badges, hide_desc, main_start, main_end, card)
     

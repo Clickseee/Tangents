@@ -141,7 +141,7 @@ SMODS.Joker {
     end
 }
 
-
+--[[
 SMODS.Joker {
     key = 'sybau',
     loc_txt = {
@@ -219,7 +219,7 @@ SMODS.Joker {
         end
     end
 }
-
+]]
 
 SMODS.Joker {
     key = 'flamingo',
@@ -454,7 +454,7 @@ SMODS.Joker {
     end
 }
 
-
+--[[
 SMODS.Joker {
     key = 'flightreacts',
     loc_txt = {
@@ -537,7 +537,7 @@ SMODS.Joker {
         end
     end
 }
-
+]]
 
 SMODS.Joker {
     key = 'whuh',
@@ -759,6 +759,7 @@ SMODS.Joker {
     end
 }
 
+--[[
 SMODS.Joker {
     key = 'grief',
     loc_txt = {
@@ -817,7 +818,7 @@ SMODS.Joker {
             end
         end
     end
-}
+}]]
 
 SMODS.Joker {
     key = 'datboi',
@@ -884,8 +885,6 @@ SMODS.Joker {
             }
         end
     end
-    
-    -- Apply the current XMult during scoring
     if context.joker_main then
         return {
             xmult = card.ability.extra.xmult
@@ -949,6 +948,7 @@ SMODS.Joker {
     end,
 }
 
+--[[
 SMODS.Joker {
     key = 'ghetto',
     loc_txt = {
@@ -1003,6 +1003,7 @@ SMODS.Joker {
         end
     end,
 }
+]]
 
 SMODS.Joker {
     key = 'rushe',

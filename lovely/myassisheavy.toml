@@ -2,7 +2,7 @@
 version = "1.0.0"
 priority = 0
 
-# Sprite in description
+# Sprites in bio
 [[patches]]
 [patches.pattern]
 target = "functions/misc_functions.lua"
@@ -10,12 +10,15 @@ pattern = "elseif part.control.E then"
 position = "before"
 payload = '''
 elseif part.control.tngt_S then
+    local center = G.P_CENTERS[part.control.tngt_S]
+    if center then
         final_line[#final_line + 1] = {
             n = G.UIT.O,
             config = {
-                object = Sprite(0, 0, 7, 3, G.ASSET_ATLAS["tngt_goddamnit"], {x = 0, y = 0}), align = "cm"
+                object = Sprite(0, 0, 0.3, 0.3, G.ASSET_ATLAS["tngt_descsprite"], center.pos)
             }
         }
+    end
 '''
 match_indent = true
 
