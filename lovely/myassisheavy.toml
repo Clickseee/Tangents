@@ -10,12 +10,12 @@ pattern = "elseif part.control.E then"
 position = "before"
 payload = '''
 elseif part.control.tngt_S then
-    local center = G.P_CENTERS[part.control.tngt_S]
-    if center then
+    local sprite = G.nxkoo_dies.desc_sprites[part.control.tngt_S]
+    if sprite then
         final_line[#final_line + 1] = {
             n = G.UIT.O,
             config = {
-                object = Sprite(0, 0, 0.3, 0.3, G.ASSET_ATLAS["tngt_descsprite"], center.pos)
+                object = Sprite(0, 0, sprite.w, sprite.h, G.ASSET_ATLAS[sprite.atlas], sprite.pos)
             }
         }
     end

@@ -7,7 +7,7 @@ SMODS.Consumable {
     loc_txt = {
         name = "{f:tngt_DETERMINATION}Susie's Idea",
         text = {
-            "{tngt_S:j_joker} {}{tngt_I:j_joker} {}{f:tngt_DETERMINATION}Susie's Idea"
+            "{tngt_S:soul} {}{tngt_S:susie} {}{f:tngt_DETERMINATION}Susie's Idea"
         }
     },
     use = function(self, card, area, copier)
@@ -66,7 +66,7 @@ SMODS.Consumable {
                 end
             }))
         end
-        
+
         delay(0.5)
     end,
     can_use = function(self, card)
