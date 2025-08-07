@@ -27,4 +27,13 @@
 
 
 # HOW TO DOWNLOAD??????????
-download the latest release on the far right, in green
+big obvious button abvoe the damn mod's directory, in green, enjyo
+
+# Contact (wow hello!!!)
+Reach me out on Discord (nxkoo_) if you have any feedback/suggestions/or bug report!
+
+Or you could join the official Balatro discord server (discord.gg/balatro) and contact me through #modding-chat, i'm always active there! ^^
+
+If you'd like to, you can check out my ko-fi by mere generosity! (I put this here because no one will read this deep ;<;)
+
+## <a href='https://ko-fi.com/F2F11IBSYX' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi3.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
