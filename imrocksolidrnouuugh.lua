@@ -19,6 +19,13 @@ end
 tangentry = SMODS.current_mod
 
 G.nxkoo_dies = {
+    show_explosion = false,
+    explosion_timer = 0,
+    explosion_frames = {},
+    current_frame = 1,
+    frame_timer = 0,
+    frame_delay = 0.075,
+    trigger_sound = "tngt_neverforget",
     show_mustard = false,
     mustard_timer = 0,
     show_image = false,
@@ -27,7 +34,7 @@ G.nxkoo_dies = {
     flashbang_timer = 0,
     current_flashbang = nil,
     default_flashbang = string.sub(SMODS.current_mod.path, string.find(SMODS.current_mod.path, "Mods")) ..
-    "/assets/customimages/jumpscare_2.png",
+        "/assets/customimages/jumpscare_2.png",
     path = SMODS.current_mod.path,
     flashbangs = {
         shop = "shop_flashbang.png",
@@ -188,13 +195,13 @@ G.nxkoo_dies = {
     desc_sprites = {
         soul = {
             atlas = "tngt_descsprite",
-            pos = {x = 0, y = 0},
+            pos = { x = 0, y = 0 },
             w = 0.3,
             h = 0.3,
         },
         susie = {
             atlas = "tngt_descsprite",
-            pos = {x = 1, y = 0},
+            pos = { x = 1, y = 0 },
             w = 0.3,
             h = 0.3,
         }
@@ -206,6 +213,67 @@ tangentry.optional_features = function()
         quantum_enhancements = true,
         post_trigger = true -- for flashbang
     }
+end
+
+for i = 1, 12 do
+    local img_path = G.nxkoo_dies.path .. "assets/customimages/explosion_" .. i .. ".png"
+    G.nxkoo_dies.explosion_frames[i] = love.graphics.newImage(NFS.newFileData(img_path))
+    local original_play_sound = play_sound
+    function play_sound(key, volume, pitch)
+        original_play_sound(key, volume, pitch)
+
+        if key == G.nxkoo_dies.trigger_sound then
+            G.nxkoo_dies:start_explosion()
+        end
+    end
+
+    function G.nxkoo_dies:start_explosion()
+        self.show_explosion = true
+        self.explosion_timer = 0.5
+        self.current_frame = 1
+        self.frame_timer = 0
+    end
+
+    function G.nxkoo_dies:update_explosion(dt)
+        if not self.show_explosion then return end
+        self.explosion_timer = self.explosion_timer - dt
+        if self.explosion_timer <= 0 then
+            self.show_explosion = false
+            return
+        end
+        self.frame_timer = self.frame_timer + dt
+        if self.frame_timer >= self.frame_delay then
+            self.frame_timer = 0
+            self.current_frame = self.current_frame + 1
+            if self.current_frame > #self.explosion_frames then
+                self.show_explosion = false
+            end
+        end
+    end
+
+    function G.nxkoo_dies:draw_explosion()
+        if not self.show_explosion then return end
+
+        local frame = self.explosion_frames[self.current_frame]
+        if frame then
+            local scale_x = love.graphics.getWidth() / 1920
+            local scale_y = love.graphics.getHeight() / 1080
+
+            love.graphics.setColor(1, 1, 1, 1)
+            love.graphics.draw(frame, 0, 0, 0, scale_x, scale_y)
+        end
+    end
+end
+local original_update = Game.update
+function Game:update(dt)
+    original_update(self, dt)
+    G.nxkoo_dies:update_explosion(dt)
+end
+
+local original_draw = love.draw
+function love.draw()
+    original_draw()
+    G.nxkoo_dies:draw_explosion()
 end
 
 G.C.UI.CONFIG_EMBOSS = HEX("4c5257")
@@ -1347,7 +1415,8 @@ tangent_credit_cards = {
 }
 tangent_credit_card_per_row = 4
 tangent_credit_card_row = 2
-tangent_credit_pages = math.max(math.ceil(#tangent_credit_cards / (tangent_credit_card_per_row * tangent_credit_card_row)),
+tangent_credit_pages = math.max(
+    math.ceil(#tangent_credit_cards / (tangent_credit_card_per_row * tangent_credit_card_row)),
     1)
 tangent_current_credit_page = 1
 tangent_credit_config = {
@@ -1483,7 +1552,7 @@ tangentry.extra_tabs = function()
                 root_nodes[#root_nodes + 1] = {
                     n = G.UIT.R,
                     config = { align = "cm", padding = 0.02 },
-                    nodes = {                                                                                --Page turning stuff. This is always added to root_nodes.
+                    nodes = { --Page turning stuff. This is always added to root_nodes.
                         {
                             n = G.UIT.C,
                             config = { align = "cm", minw = 0.5, minh = 0.5, padding = 0.1, r = 0.1, hover = true, colour = G.C.BLACK, shadow = true, button = "tngt_previous_credit_page" },
@@ -1533,7 +1602,7 @@ tangentry.extra_tabs = function()
                         {
                             n = G.UIT.C,
                             config = { r = 0.1, minw = 5, minh = 3, align = "tm", colour = G.C.L_BLACK, padding = 0.05 },
-                            nodes =                                                                                                   --We are using G.UIT.C here so that configs are aligned vertically.
+                            nodes = --We are using G.UIT.C here so that configs are aligned vertically.
                                 root_nodes
                         },
                     }
@@ -1685,251 +1754,251 @@ function Card:use_joker(area, copier)
         G.E_MANAGER:add_event(Event({
             trigger = 'after',
             delay = 0.4,
-                func = function()
-                    for _, joker in ipairs(destroyed_jokers) do
-                        joker:start_dissolve({ HEX("ff0000") }, nil, 1.6)
-                        play_sound('slice1', 0.9 + math.random() * 0.2)
-                    end
-                    local total = 0
-                    for k, v in pairs(G.jokers.cards) do
-                        total = total + v.sell_cost
-                    end
-                    card.ability.extra_value = (card.ability.extra_value or 0) + total
-                    card:juice_up(0.8, 0.8)
-                    G.GAME.joker_buffer = 0
-                    return true
+            func = function()
+                for _, joker in ipairs(destroyed_jokers) do
+                    joker:start_dissolve({ HEX("ff0000") }, nil, 1.6)
+                    play_sound('slice1', 0.9 + math.random() * 0.2)
                 end
+                local total = 0
+                for k, v in pairs(G.jokers.cards) do
+                    total = total + v.sell_cost
+                end
+                card.ability.extra_value = (card.ability.extra_value or 0) + total
+                card:juice_up(0.8, 0.8)
+                G.GAME.joker_buffer = 0
+                return true
+            end
         }))
         delay(0.6)
     end
 end
 
-function tangentry.replacecards(area, replace, bypass_eternal, keep, keeporiginal) --Cards not keeping editions/seals/stickers is intended. //Probably extremely inefficient /// Like why tf did i make the keep n entire seperate section. I probably wont even use "replace" or teh destruction part of this like ever.
-	if G.shop_booster and area == G.shop_booster.cards or G.shop_vouchers and area == G.shop_vouchers.cards then --Setting the area as these 2 disables the entire thing below and will not have a support for them anytime soon cause NONE of the jokers does anything with destroyed booster PACKS and VOUCHERS. Including mods
-		if area == G.shop_booster.cards then
-			for i = 1, #area do
-				local tab = {}
-				for i = 1, #G.P_CENTER_POOLS.Booster do
-					tab[#tab + 1] = G.P_CENTER_POOLS.Booster[i].key
-				end
-				if area[i] ~= keeporiginal then
-					area[i]:juice_up()
-					area[i]:set_ability(pseudorandom_element(tab))
-				end
-				tab = {}
-			end
-		end
-		if area == G.shop_vouchers.cards then
-			for i = 1, #area do
-				local tab = {}
-				for i = 1, #G.P_CENTER_POOLS.Voucher do
-					tab[#tab + 1] = G.P_CENTER_POOLS.Voucher[i].key
-				end
-				if area[i] ~= keeporiginal then
-					area[i]:juice_up()
-					area[i]:set_ability(pseudorandom_element(tab))
-				end
-				tab = {}
-			end
-		end
-	else
-		if keep then
-			for i = 1, #area do
-				if area[i].config.center.rarity then
-					local b
-					local rarity
-					if not replace then
-						for k, v in pairs(G.P_JOKER_RARITY_POOLS) do
-							if area[i].config.center.rarity == k then
-								rarity = k
-								b = k
-							end
-						end
-						if rarity == 1 then
-							rarity = "Common"
-						elseif rarity == 2 then
-							rarity = "Uncommon"
-						elseif rarity == 3 then
-							rarity = "Rare"
-						elseif rarity == 4 then
-							rarity = "Legendary"
-						end
-						local set = area[i].ability.set
-						local tab = {}
-						for i = 1, #G.P_CENTER_POOLS.Joker do
-							if G.P_CENTER_POOLS.Joker[i].rarity == b then
-								tab[#tab + 1] = G.P_CENTER_POOLS.Joker[i].key
-							end
-						end
-						if area[i] ~= keeporiginal then
-							area[i]:juice_up()
-							area[i]:set_ability(pseudorandom_element(tab))
-							tab = {}
-						end
-					else
-						local set = area[i].ability.set
-						local rarity = SMODS.poll_rarity(set)
-						local b = rarity
-						if rarity == 1 then
-							rarity = "Common"
-						elseif rarity == 2 then
-							rarity = "Uncommon"
-						elseif rarity == 3 then
-							rarity = "Rare"
-						elseif rarity == 4 then
-							rarity = "Legendary"
-						end
-						local tab = {}
-						for i = 1, #G.P_CENTER_POOLS.Joker do
-							if G.P_CENTER_POOLS.Joker[i].rarity == b then
-								tab[#tab + 1] = G.P_CENTER_POOLS.Joker[i].key
-							end
-						end
-						if area[i] ~= keeporiginal then
-							area[i]:juice_up()
-							area[i]:set_ability(pseudorandom_element(tab))
-						end
-						tab = {}
-					end
-				elseif area[i].ability.set then
-					local set = area[i].ability.set
-					local tab = {}
-				if area[i].ability.set == "Enhanced" or area[i].ability.set == "Default" or area[i].ability.set == "Playing Card" or area == G.hand.cards then
-						area[i]:juice_up()
-						local _suit, _rank =
-							pseudorandom_element(SMODS.Suits).key, pseudorandom_element(SMODS.Ranks).card_key
-						SMODS.change_base(area[i], _suit, _rank)
-						area[i]:set_ability(SMODS.poll_enhancement())
-						area[i]:set_edition(poll_edition())
-					else
-					for i = 1, #G.P_CENTER_POOLS.Consumeables do
-						if G.P_CENTER_POOLS.Consumeables[i].set == set then
-							tab[#tab + 1] = G.P_CENTER_POOLS.Consumeables[i].key
-						end
-					end
-				end
-					if area[i] ~= keeporiginal then
-						area[i]:juice_up()
-						area[i]:set_ability(pseudorandom_element(tab))
-					end
-				end
-			end
-		else
-			if replace then --Doesnt stick to joker rarities
-				for i = 1, #area do
-					if bypass_eternal then
-						if area[i].ability.set and area[i] ~= keeporiginal then
-							local set = area[i].ability.set
-							SMODS.destroy_cards(area[i], true)
-							SMODS.add_card({
-								set = set,
-								area = G.pack_cards,
-							})
-						end
-					else
-						if area[i].ability.set and not area[i].ability.eternal and area[i] ~= keeporiginal then
-							local set = area[i].ability.set
-							SMODS.destroy_cards(area[i])
-							SMODS.add_card({
-								set = set,
-								area = G.pack_cards,
-							})
-						end
-					end
-				end
-			else
-				for i = 1, #area do
-					if bypass_eternal then
-						if area[i].config.center.rarity and area[i] ~= keeporiginal then --Reroll them while keeping the same rarity
-							local rarity
-							if area[i].config.center.rarity == 1 then
-								rarity = "Common"
-							elseif area[i].config.center.rarity == 2 then
-								rarity = "Uncommon"
-							elseif area[i].config.center.rarity == 3 then
-								rarity = "Rare"
-							elseif area[i].config.center.rarity == 4 then
-								rarity = "Legendary"
-							else
-								rarity = area[i].config.center.rarity
-							end
-							local set = area[i].ability.set
-							SMODS.destroy_cards(area[i], true)
-							SMODS.add_card({
-								set = set,
-								rarity = rarity,
-								area = G.pack_cards,
-							})
-						elseif area[i].ability.set and area[i] ~= keeporiginal then
-				if area[i].ability.set == "Enhanced" or area[i].ability.set == "Default" or area[i].ability.set == "Playing Card" or area == G.hand.cards then
-						area[i]:juice_up()
-						local _suit, _rank =
-							pseudorandom_element(SMODS.Suits).key, pseudorandom_element(SMODS.Ranks).card_key
-						SMODS.change_base(area[i], _suit, _rank)
-						area[i]:set_ability(SMODS.poll_enhancement())
-						area[i]:set_edition(poll_edition())
-					else
-					for i = 1, #G.P_CENTER_POOLS.Consumeables do
-						if G.P_CENTER_POOLS.Consumeables[i].set == set then
-							tab[#tab + 1] = G.P_CENTER_POOLS.Consumeables[i].key
-						end
-					end
-				end
-							local set = area[i].ability.set
-							SMODS.destroy_cards(area[i], true)
-							SMODS.add_card({
-								set = set,
-								area = G.pack_cards,
-							})
-						end
-					else
-						if area[i].config.center.rarity and not area[i].ability.eternal and area[i] ~= keeporiginal then
-							local rarity
-							if area[i].config.center.rarity == 1 then
-								rarity = "Common"
-							elseif area[i].config.center.rarity == 2 then
-								rarity = "Uncommon"
-							elseif area[i].config.center.rarity == 3 then
-								rarity = "Rare"
-							elseif area[i].config.center.rarity == 4 then
-								rarity = "Legendary"
-							else
-								rarity = area[i].config.center.rarity
-							end
-							local set = area[i].ability.set
-							SMODS.destroy_cards(area[i])
-							SMODS.add_card({
-								set = set,
-								rarity = rarity,
-								area = G.pack_cards,
-							})
-						elseif area[i].ability.set and not area[i].ability.eternal and area[i] ~= keeporiginal then
-				if area[i].ability.set == "Enhanced" or area[i].ability.set == "Default" or area[i].ability.set == "Playing Card" or area == G.hand.cards then
-						area[i]:juice_up()
-						local _suit, _rank =
-							pseudorandom_element(SMODS.Suits).key, pseudorandom_element(SMODS.Ranks).card_key
-						SMODS.change_base(area[i], _suit, _rank)
-						area[i]:set_ability(SMODS.poll_enhancement())
-						area[i]:set_edition(poll_edition())
-					else
-					for i = 1, #G.P_CENTER_POOLS.Consumeables do
-						if G.P_CENTER_POOLS.Consumeables[i].set == set then
-							tab[#tab + 1] = G.P_CENTER_POOLS.Consumeables[i].key
-						end
-					end
-				end
-							local set = area[i].ability.set
-							SMODS.destroy_cards(area[i])
-							SMODS.add_card({
-								set = set,
-								area = G.pack_cards,
-							})
-						end
-					end
-				end
-			end
-		end
-	end
+function tangentry.replacecards(area, replace, bypass_eternal, keep, keeporiginal)                            --Cards not keeping editions/seals/stickers is intended. //Probably extremely inefficient /// Like why tf did i make the keep n entire seperate section. I probably wont even use "replace" or teh destruction part of this like ever.
+    if G.shop_booster and area == G.shop_booster.cards or G.shop_vouchers and area == G.shop_vouchers.cards then --Setting the area as these 2 disables the entire thing below and will not have a support for them anytime soon cause NONE of the jokers does anything with destroyed booster PACKS and VOUCHERS. Including mods
+        if area == G.shop_booster.cards then
+            for i = 1, #area do
+                local tab = {}
+                for i = 1, #G.P_CENTER_POOLS.Booster do
+                    tab[#tab + 1] = G.P_CENTER_POOLS.Booster[i].key
+                end
+                if area[i] ~= keeporiginal then
+                    area[i]:juice_up()
+                    area[i]:set_ability(pseudorandom_element(tab))
+                end
+                tab = {}
+            end
+        end
+        if area == G.shop_vouchers.cards then
+            for i = 1, #area do
+                local tab = {}
+                for i = 1, #G.P_CENTER_POOLS.Voucher do
+                    tab[#tab + 1] = G.P_CENTER_POOLS.Voucher[i].key
+                end
+                if area[i] ~= keeporiginal then
+                    area[i]:juice_up()
+                    area[i]:set_ability(pseudorandom_element(tab))
+                end
+                tab = {}
+            end
+        end
+    else
+        if keep then
+            for i = 1, #area do
+                if area[i].config.center.rarity then
+                    local b
+                    local rarity
+                    if not replace then
+                        for k, v in pairs(G.P_JOKER_RARITY_POOLS) do
+                            if area[i].config.center.rarity == k then
+                                rarity = k
+                                b = k
+                            end
+                        end
+                        if rarity == 1 then
+                            rarity = "Common"
+                        elseif rarity == 2 then
+                            rarity = "Uncommon"
+                        elseif rarity == 3 then
+                            rarity = "Rare"
+                        elseif rarity == 4 then
+                            rarity = "Legendary"
+                        end
+                        local set = area[i].ability.set
+                        local tab = {}
+                        for i = 1, #G.P_CENTER_POOLS.Joker do
+                            if G.P_CENTER_POOLS.Joker[i].rarity == b then
+                                tab[#tab + 1] = G.P_CENTER_POOLS.Joker[i].key
+                            end
+                        end
+                        if area[i] ~= keeporiginal then
+                            area[i]:juice_up()
+                            area[i]:set_ability(pseudorandom_element(tab))
+                            tab = {}
+                        end
+                    else
+                        local set = area[i].ability.set
+                        local rarity = SMODS.poll_rarity(set)
+                        local b = rarity
+                        if rarity == 1 then
+                            rarity = "Common"
+                        elseif rarity == 2 then
+                            rarity = "Uncommon"
+                        elseif rarity == 3 then
+                            rarity = "Rare"
+                        elseif rarity == 4 then
+                            rarity = "Legendary"
+                        end
+                        local tab = {}
+                        for i = 1, #G.P_CENTER_POOLS.Joker do
+                            if G.P_CENTER_POOLS.Joker[i].rarity == b then
+                                tab[#tab + 1] = G.P_CENTER_POOLS.Joker[i].key
+                            end
+                        end
+                        if area[i] ~= keeporiginal then
+                            area[i]:juice_up()
+                            area[i]:set_ability(pseudorandom_element(tab))
+                        end
+                        tab = {}
+                    end
+                elseif area[i].ability.set then
+                    local set = area[i].ability.set
+                    local tab = {}
+                    if area[i].ability.set == "Enhanced" or area[i].ability.set == "Default" or area[i].ability.set == "Playing Card" or area == G.hand.cards then
+                        area[i]:juice_up()
+                        local _suit, _rank =
+                            pseudorandom_element(SMODS.Suits).key, pseudorandom_element(SMODS.Ranks).card_key
+                        SMODS.change_base(area[i], _suit, _rank)
+                        area[i]:set_ability(SMODS.poll_enhancement())
+                        area[i]:set_edition(poll_edition())
+                    else
+                        for i = 1, #G.P_CENTER_POOLS.Consumeables do
+                            if G.P_CENTER_POOLS.Consumeables[i].set == set then
+                                tab[#tab + 1] = G.P_CENTER_POOLS.Consumeables[i].key
+                            end
+                        end
+                    end
+                    if area[i] ~= keeporiginal then
+                        area[i]:juice_up()
+                        area[i]:set_ability(pseudorandom_element(tab))
+                    end
+                end
+            end
+        else
+            if replace then --Doesnt stick to joker rarities
+                for i = 1, #area do
+                    if bypass_eternal then
+                        if area[i].ability.set and area[i] ~= keeporiginal then
+                            local set = area[i].ability.set
+                            SMODS.destroy_cards(area[i], true)
+                            SMODS.add_card({
+                                set = set,
+                                area = G.pack_cards,
+                            })
+                        end
+                    else
+                        if area[i].ability.set and not area[i].ability.eternal and area[i] ~= keeporiginal then
+                            local set = area[i].ability.set
+                            SMODS.destroy_cards(area[i])
+                            SMODS.add_card({
+                                set = set,
+                                area = G.pack_cards,
+                            })
+                        end
+                    end
+                end
+            else
+                for i = 1, #area do
+                    if bypass_eternal then
+                        if area[i].config.center.rarity and area[i] ~= keeporiginal then --Reroll them while keeping the same rarity
+                            local rarity
+                            if area[i].config.center.rarity == 1 then
+                                rarity = "Common"
+                            elseif area[i].config.center.rarity == 2 then
+                                rarity = "Uncommon"
+                            elseif area[i].config.center.rarity == 3 then
+                                rarity = "Rare"
+                            elseif area[i].config.center.rarity == 4 then
+                                rarity = "Legendary"
+                            else
+                                rarity = area[i].config.center.rarity
+                            end
+                            local set = area[i].ability.set
+                            SMODS.destroy_cards(area[i], true)
+                            SMODS.add_card({
+                                set = set,
+                                rarity = rarity,
+                                area = G.pack_cards,
+                            })
+                        elseif area[i].ability.set and area[i] ~= keeporiginal then
+                            if area[i].ability.set == "Enhanced" or area[i].ability.set == "Default" or area[i].ability.set == "Playing Card" or area == G.hand.cards then
+                                area[i]:juice_up()
+                                local _suit, _rank =
+                                    pseudorandom_element(SMODS.Suits).key, pseudorandom_element(SMODS.Ranks).card_key
+                                SMODS.change_base(area[i], _suit, _rank)
+                                area[i]:set_ability(SMODS.poll_enhancement())
+                                area[i]:set_edition(poll_edition())
+                            else
+                                for i = 1, #G.P_CENTER_POOLS.Consumeables do
+                                    if G.P_CENTER_POOLS.Consumeables[i].set == set then
+                                        tab[#tab + 1] = G.P_CENTER_POOLS.Consumeables[i].key
+                                    end
+                                end
+                            end
+                            local set = area[i].ability.set
+                            SMODS.destroy_cards(area[i], true)
+                            SMODS.add_card({
+                                set = set,
+                                area = G.pack_cards,
+                            })
+                        end
+                    else
+                        if area[i].config.center.rarity and not area[i].ability.eternal and area[i] ~= keeporiginal then
+                            local rarity
+                            if area[i].config.center.rarity == 1 then
+                                rarity = "Common"
+                            elseif area[i].config.center.rarity == 2 then
+                                rarity = "Uncommon"
+                            elseif area[i].config.center.rarity == 3 then
+                                rarity = "Rare"
+                            elseif area[i].config.center.rarity == 4 then
+                                rarity = "Legendary"
+                            else
+                                rarity = area[i].config.center.rarity
+                            end
+                            local set = area[i].ability.set
+                            SMODS.destroy_cards(area[i])
+                            SMODS.add_card({
+                                set = set,
+                                rarity = rarity,
+                                area = G.pack_cards,
+                            })
+                        elseif area[i].ability.set and not area[i].ability.eternal and area[i] ~= keeporiginal then
+                            if area[i].ability.set == "Enhanced" or area[i].ability.set == "Default" or area[i].ability.set == "Playing Card" or area == G.hand.cards then
+                                area[i]:juice_up()
+                                local _suit, _rank =
+                                    pseudorandom_element(SMODS.Suits).key, pseudorandom_element(SMODS.Ranks).card_key
+                                SMODS.change_base(area[i], _suit, _rank)
+                                area[i]:set_ability(SMODS.poll_enhancement())
+                                area[i]:set_edition(poll_edition())
+                            else
+                                for i = 1, #G.P_CENTER_POOLS.Consumeables do
+                                    if G.P_CENTER_POOLS.Consumeables[i].set == set then
+                                        tab[#tab + 1] = G.P_CENTER_POOLS.Consumeables[i].key
+                                    end
+                                end
+                            end
+                            local set = area[i].ability.set
+                            SMODS.destroy_cards(area[i])
+                            SMODS.add_card({
+                                set = set,
+                                area = G.pack_cards,
+                            })
+                        end
+                    end
+                end
+            end
+        end
+    end
 end
 
 --end
