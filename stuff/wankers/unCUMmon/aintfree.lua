@@ -4783,7 +4783,7 @@ SMODS.Joker {
     discovered = true,
     config = {
         extra = {
-            xmult = 4
+            xmult = 5
         }
     },
     loc_vars = function(self, info_queue, card)
