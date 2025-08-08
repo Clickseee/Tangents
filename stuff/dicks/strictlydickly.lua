@@ -318,3 +318,89 @@ function love.draw()
         end
     end
 end
+
+--[[
+local original_Game_update = Game.update
+function Game:update(dt)
+    original_Game_update(self, dt)
+    if G.GAME and G.GAME.blind and G.GAME.blind.boss and G.GAME.blind.defeated then
+        tangentry.reset_jokers_on_boss_defeat()
+    end
+end
+
+function tangentry.reset_jokers_on_boss_defeat()
+    if not G.jokers or not G.jokers.cards then return end
+    for _, joker in ipairs(G.jokers.cards) do
+        if not joker.ability or joker.edition and joker.edition.negative then
+            goto continue
+        end
+        local joker_key = joker.config.center.key
+        local joker_center = G.P_CENTERS[joker_key]
+        if joker_center and joker_center.config then
+            joker.ability = {}
+            for k, v in pairs(joker_center.config.extra or {}) do
+                joker.ability[k] = v
+            end
+            if joker.ability.mult then
+                joker.ability.mult = joker.ability.mult * 0.25
+            end
+            if joker.ability.xmult then
+                joker.ability.xmult = joker.ability.xmult * 0.25
+            end
+            if joker.ability.chips then
+                joker.ability.chips = joker.ability.chips * 0.25
+            end
+            joker:juice_up(0.5, 0.5)
+        end
+
+        ::continue::
+    end
+    G.E_MANAGER:add_event(Event({
+        func = function()
+            SMODS.calculate_effect({
+                message = "One must imagine.",
+                colour = G.C.RED
+            })
+            return true
+        end
+    }))
+end
+
+local original_joker_calculate = SMODS.Joker.calculate
+function SMODS.Joker:calculate(card, context)
+    if G.GAME and G.GAME.selected_back.effect.center.key == "b_tngt_sisyphus" then
+        if card.ability.mult then
+            card.ability.mult = card.ability.mult * 0.25
+        end
+        if card.ability.xmult then
+            card.ability.xmult = card.ability.xmult * 0.25
+        end
+    end
+    return original_joker_calculate(self, card, context)
+end
+
+SMODS.Back {
+    key = "sisyphus",
+    loc_txt = {
+        name = "Sissyphus Deck",
+        text = {
+            "When {C:attention}Boss Blind{} is defeated,",
+            "resets all of your {C:attention}Joker{}'s stats",
+            "and multiply the scaling by {X:mult,C:white}X0.25"
+        }
+    },
+    unlocked = true,
+    discovered = true,
+    atlas = "dicks",
+    pos = { x = 4, y = 1 },
+    config = {  },
+    apply = function(self)
+        local original_Game_update = Game.update
+        function Game:update(dt)
+            original_Game_update(self, dt)
+            if G.GAME and G.GAME.blind and G.GAME.blind.boss and G.GAME.blind.defeated then
+                SMODS.current_mod.reset_jokers_on_boss_defeat()
+            end
+        end
+    end
+}]]
