@@ -4535,18 +4535,18 @@ SMODS.Joker {
     perishable_compat = true,
     unlocked = true,
     discovered = true,
-    config = { extra = {xmult = 3}},
+    config = { extra = { xmult = 3 } },
     loc_vars = function(self, info_queue, center)
-		return { vars = { center.ability.extra.xmult }  }
-	end,
+        return { vars = { center.ability.extra.xmult } }
+    end,
     calculate = function(self, card, context)
         if context.joker_main then
-                G.E_MANAGER:add_event(Event({
-                    func = function()
-                        play_sound("tngt_fries", 1, 1)
-                        return true
-                    end,
-                    }))
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    play_sound("tngt_fries", 1, 1)
+                    return true
+                end,
+            }))
             for i = 1, #G.nxkoo_dies.theworldcrispiestfries do
                 card.ability.extra.xmult = 3
                 G.E_MANAGER:add_event(Event({
@@ -4554,10 +4554,11 @@ SMODS.Joker {
                     blocking = false,
                     delay = 0,
                     func = function()
-                        card_eval_status_text(card,'extra',nil,nil,nil,{message = G.nxkoo_dies.theworldcrispiestfries[i]})
+                        card_eval_status_text(card, 'extra', nil, nil, nil,
+                            { message = G.nxkoo_dies.theworldcrispiestfries[i] })
                         return true
                     end,
-                    }))
+                }))
             end
             return {
                 xmult = card.ability.extra.xmult
@@ -4588,16 +4589,17 @@ SMODS.Joker {
     config = { extra = { required_rank = "Ace", required_suit = "Hearts" } },
     loc_vars = function(self, info_queue, card)
         info_queue[#info_queue + 1] = G.P_CENTERS.c_hanged_man
-        return { vars = { 
-            localize(card.ability.extra.required_rank, 'ranks'),
-            localize(card.ability.extra.required_suit, 'suits_singular'),
-            localize{type='name_text', key='c_hanged_man', set='Tarot'}
-        } }
+        return {
+            vars = {
+                localize(card.ability.extra.required_rank, 'ranks'),
+                localize(card.ability.extra.required_suit, 'suits_singular'),
+                localize { type = 'name_text', key = 'c_hanged_man', set = 'Tarot' }
+            }
+        }
     end,
     calculate = function(self, card, context)
-        if context.joker_main and 
-           #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
-            
+        if context.joker_main and
+            #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
             local has_ace_hearts = false
             local other_scoring_cards = 0
             for _, played_card in ipairs(context.scoring_hand) do
@@ -4650,18 +4652,19 @@ SMODS.Joker {
     atlas = 'ModdedVanilla15',
     pos = { x = 3, y = 1 },
     cost = 4,
-    config = { 
-        extra = { 
+    config = {
+        extra = {
             rounds_held = 0,
             tags_per_cycle = 1,
             cycle_length = 2
-        } 
+        }
     },
     loc_vars = function(self, info_queue, card)
         local cycles_completed = math.floor(card.ability.extra.rounds_held / card.ability.extra.cycle_length)
-        local next_cycle_in = card.ability.extra.cycle_length - (card.ability.extra.rounds_held % card.ability.extra.cycle_length)
-        
-        return { 
+        local next_cycle_in = card.ability.extra.cycle_length -
+        (card.ability.extra.rounds_held % card.ability.extra.cycle_length)
+
+        return {
             vars = {
                 card.ability.extra.rounds_held,
                 card.ability.extra.tags_per_cycle,
@@ -4682,21 +4685,22 @@ SMODS.Joker {
             end
         end
         if context.selling_self and not context.blueprint then
-            local total_tags = (math.floor(card.ability.extra.rounds_held / card.ability.extra.cycle_length) + 1) * card.ability.extra.tags_per_cycle
-            
+            local total_tags = (math.floor(card.ability.extra.rounds_held / card.ability.extra.cycle_length) + 1) *
+            card.ability.extra.tags_per_cycle
+
             G.E_MANAGER:add_event(Event({
                 func = function()
                     for i = 1, total_tags do
                         add_tag(Tag('tag_double'))
-                        play_sound('holo1', 0.9 + i*0.05)
-                        card:juice_up(0.3 + i*0.1)
+                        play_sound('holo1', 0.9 + i * 0.05)
+                        card:juice_up(0.3 + i * 0.1)
                     end
                     return true
                 end
             }))
-            
+
             return {
-                message = localize{type='variable', key='a_tags_granted', vars={total_tags}},
+                message = localize { type = 'variable', key = 'a_tags_granted', vars = { total_tags } },
                 colour = G.C.MONEY,
                 card = card
             }
@@ -4721,20 +4725,20 @@ SMODS.Joker {
     atlas = 'ModdedVanilla16',
     pos = { x = 3, y = 1 },
     cost = 4,
-    config = { 
-        extra = { 
+    config = {
+        extra = {
             time_threshold = 60,
             xmult_bonus = 5,
             xchips_bonus = 6.5,
             timer_start = nil
-        } 
+        }
     },
     loc_vars = function(self, info_queue, card)
-        return { 
-            vars = { 
+        return {
+            vars = {
                 card.ability.extra.time_threshold,
                 card.ability.extra.xmult_bonus,
-                card.ability.extra.xchips_bonus 
+                card.ability.extra.xchips_bonus
             }
         }
     end,
@@ -4746,7 +4750,7 @@ SMODS.Joker {
         if context.joker_main and card.ability.extra.timer_start then
             local duration = os.time() - card.ability.extra.timer_start
             card.ability.extra.timer_start = nil
-            
+
             if duration >= card.ability.extra.time_threshold then
                 card:juice_up(1.5)
                 play_sound('tngt_neverforget')
@@ -4755,6 +4759,60 @@ SMODS.Joker {
                     xchips = card.ability.extra.xchips_bonus,
                     message = "YEAH BOIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII",
                     colour = G.C.PURPLE
+                }
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = 'hotsingles',
+    loc_txt = {
+        name = "Sketchy Website",
+        text = {
+            "{X:mult,C:white}X5{} Mult, when {C:attention}Blind{}",
+            "is selected, randomize a {C:attention}Joker{} in your slot",
+            "and random cards {C:attention}held in hand{}"
+        }
+    },
+    rarity = 2,
+    atlas = 'ModdedVanilla14',
+    pos = { x = 2, y = 0 },
+    cost = 4,
+    unlocked = true,
+    discovered = true,
+    config = {
+        extra = {
+            xmult = 4
+        }
+    },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = { card.ability.extra.xmult }
+        }
+    end,
+    blueprint_compat = true,
+    calculate = function(self, card, context)
+        if context.first_hand_drawn then
+            play_sound("tngt_neverforget", 1, 1 )
+            local replace_table = {}
+            local jokers = {}
+            for i = 1, #G.jokers.cards do
+                local area = G.jokers.cards
+                if area[i] ~= card then
+                    jokers[#jokers + 1] = area[i]
+                end
+            end
+            for i = 1, #G.hand.cards do
+                replace_table[#replace_table + 1] = G.hand.cards[i]
+            end
+            local result = pseudorandom_element(jokers, pseudoseed("iNEEDyourseedbro"))
+            replace_table[#replace_table + 1] = result
+            tangentry.replacecards(replace_table, true, nil, true)
+        else
+            if context.joker_main then
+                return {
+                    xmult = card.ability.extra.xmult
                 }
             end
         end
