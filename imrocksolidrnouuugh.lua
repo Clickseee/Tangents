@@ -246,7 +246,7 @@ for i = 1, 12 do
             self.frame_timer = 0
             self.current_frame = self.current_frame + 1
             if self.current_frame > #self.explosion_frames then
-                self.show_explosion = false
+            self.current_frame = 1
             end
         end
     end
