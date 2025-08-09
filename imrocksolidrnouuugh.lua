@@ -1102,7 +1102,7 @@ SMODS.Sound {
 
 SMODS.Sound {
     key = 'tngt_weedeveryday',
-    path = 'weedeveryday.wav',
+    path = 'weedeveryday.ogg',
 }
 
 SMODS.Atlas {
@@ -1342,7 +1342,7 @@ SMODS.Edition {
 		per = 1,
 		vol = 0.3,
 	},
-    weight = 2,
+    weight = 21,
 	shader = "weed",
 	in_shop = true,
 	extra_cost = 3,

@@ -4480,45 +4480,6 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-    key = 'normaldaniel',
-    loc_txt = {
-        name = 'Daniel 2',
-        text = {
-            "Last played {C:attention}face{} cards gives",
-            "{X:mult,C:white}X#1#{} Mult when scored"
-        }
-    },
-    unlocked = true,
-    discovered = true,
-    blueprint_compat = false,
-    rarity = 2,
-    atlas = 'ModdedVanilla13',
-    pos = { x = 2, y = 1 },
-    cost = 5,
-    config = { extra = { xmult = 1.5 } },
-    loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.xmult } }
-    end,
-    calculate = function(self, card, context)
-        if context.joker_main then
-            local last_face_card = nil
-            for i = #context.scoring_hand, 1, -1 do
-                if context.scoring_hand[i]:is_face() then
-                    last_face_card = context.scoring_hand[i]
-                    break
-                end
-            end
-            if last_face_card and context.card_eval and context.card_eval.other_card == last_face_card then
-                return {
-                    xmult = card.ability.extra.xmult
-                }
-            end
-        end
-    end
-}
-
-
-SMODS.Joker {
     key = 'fries',
     loc_txt = {
         name = "Let's find out",
@@ -4662,7 +4623,7 @@ SMODS.Joker {
     loc_vars = function(self, info_queue, card)
         local cycles_completed = math.floor(card.ability.extra.rounds_held / card.ability.extra.cycle_length)
         local next_cycle_in = card.ability.extra.cycle_length -
-        (card.ability.extra.rounds_held % card.ability.extra.cycle_length)
+            (card.ability.extra.rounds_held % card.ability.extra.cycle_length)
 
         return {
             vars = {
@@ -4686,7 +4647,7 @@ SMODS.Joker {
         end
         if context.selling_self and not context.blueprint then
             local total_tags = (math.floor(card.ability.extra.rounds_held / card.ability.extra.cycle_length) + 1) *
-            card.ability.extra.tags_per_cycle
+                card.ability.extra.tags_per_cycle
 
             G.E_MANAGER:add_event(Event({
                 func = function()
@@ -4794,7 +4755,7 @@ SMODS.Joker {
     blueprint_compat = true,
     calculate = function(self, card, context)
         if context.first_hand_drawn then
-            play_sound("tngt_neverforget", 1, 1 )
+            play_sound("tngt_neverforget", 1, 1)
             local replace_table = {}
             local jokers = {}
             for i = 1, #G.jokers.cards do
@@ -4811,6 +4772,44 @@ SMODS.Joker {
             tangentry.replacecards(replace_table, true, nil, true)
         else
             if context.joker_main then
+                return {
+                    xmult = card.ability.extra.xmult
+                }
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = 'normaldaniel',
+    loc_txt = {
+        name = 'Daniel 2',
+        text = {
+            "Last played {C:attention}face{} cards gives",
+            "{X:mult,C:white}X#1#{} Mult when scored"
+        }
+    },
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    rarity = 2,
+    atlas = 'ModdedVanilla13',
+    pos = { x = 2, y = 1 },
+    cost = 5,
+    config = { extra = { xmult = 1.5 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.xmult } }
+    end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play then
+            local last_face_card
+            for i = #context.scoring_hand, 1, -1 do
+                if context.scoring_hand[i]:is_face() then
+                    last_face_card = context.scoring_hand[i]
+                    break
+                end
+            end
+            if last_face_card and context.other_card == last_face_card then
                 return {
                     xmult = card.ability.extra.xmult
                 }
