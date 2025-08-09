@@ -4795,7 +4795,7 @@ SMODS.Joker {
     rarity = 2,
     atlas = 'ModdedVanilla13',
     pos = { x = 2, y = 1 },
-    cost = 5,
+    cost = 4,
     config = { extra = { xmult = 1.5 } },
     loc_vars = function(self, info_queue, card)
         return { vars = { card.ability.extra.xmult } }
