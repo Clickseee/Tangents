@@ -1100,6 +1100,11 @@ SMODS.Sound {
     replace = 'magic_crumple3'
 }
 
+SMODS.Sound {
+    key = 'tngt_weedeveryday',
+    path = 'weedeveryday.wav',
+}
+
 SMODS.Atlas {
     key = "npe",
     path = "npe.jpg",
@@ -1314,6 +1319,58 @@ SMODS.Font {
     FONTSCALE = 0.075,
     squish = 1,
     DESCSCALE = 1
+}
+
+SMODS.Shader {
+    key = "weed",
+    path = "weed.fs"
+}
+
+SMODS.Edition {
+    key = "weed",
+    order = 1,
+    loc_txt = {
+        name = "Weed",
+        label = "420BLAZEIT",
+        text = {
+            "{X:green,C:white}X#1#{} odds of",
+            "any listed probabilities (ALL cards)"
+        }
+    },
+	sound = {
+		sound = "tngt_weedeveryday",
+		per = 1,
+		vol = 0.3,
+	},
+    weight = 2,
+	shader = "weed",
+	in_shop = true,
+	extra_cost = 3,
+	get_weight = function(self)
+		return G.GAME.edition_rate * self.weight
+	end,
+    loc_vars = function(self, info_queue)
+        return { vars = { '4.20' } }
+    end,
+    calculate = function(self, card, context)
+        if context.mod_probability then
+            return {
+                numerator = context.numerator * 4.20
+            }
+        end
+        if (context.edition and context.cardarea == G.jokers and card.config.trigger) or
+           (context.main_scoring and context.cardarea == G.play) then
+            return { x_chips = self.config.x_chips }
+        end
+        
+        if context.joker_main then
+            card.config.trigger = true
+        end
+
+        if context.after then
+            card.config.trigger = nil
+        end
+    end
 }
 
 local function reset_card_picker_selection()
