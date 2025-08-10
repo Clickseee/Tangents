@@ -3,5 +3,5 @@ return {
     premium = false,
     hyperdeath = false,
     homosexual = true,
-    background = true
+    background = false
 }
