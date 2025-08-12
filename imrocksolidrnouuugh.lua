@@ -450,14 +450,7 @@ tangentry.config_tab = function()
                 ref_table =
                     tangentry.config,
                 ref_value = "homosexual"
-            }),
-            create_toggle_spec({
-                label = "{C:white}GMod",
-                desc = "{C:white}Leave the server?",
-                ref_table =
-                    tangentry.config,
-                ref_value = "background"
-            }),
+            })
         }
     }
 end
