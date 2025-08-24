@@ -19,6 +19,9 @@ end
 tangentry = SMODS.current_mod
 
 G.nxkoo_dies = {
+    discord_timer = 0,
+    discord_interval = 120,
+    discord_chance = 0.01,
     show_explosion = false,
     explosion_timer = 0,
     explosion_frames = {},
@@ -213,6 +216,16 @@ tangentry.optional_features = function()
         quantum_enhancements = true,
         post_trigger = true -- for flashbang
     }
+end
+
+function love.update(dt)
+    discord_timer = discord_timer + dt
+    if discord_timer >= 120 then
+        timer = 0
+        if SMODS.pseudorandom_probability(card, ':3', 1, 10) then
+            play_sound("tngt_ping", 1, 1)
+        end
+    end
 end
 
 for i = 1, 12 do
@@ -1097,6 +1110,12 @@ SMODS.Sound {
     key = 'tngt_weedeveryday',
     path = 'weedeveryday.ogg',
 }
+
+SMODS.Sound {
+    key = 'tngt_ping',
+    path = 'ping.ogg',
+}
+
 
 SMODS.Atlas {
     key = "npe",
