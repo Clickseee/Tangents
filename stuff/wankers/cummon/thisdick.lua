@@ -1,4 +1,37 @@
 SMODS.Joker {
+    key = "whysoserious",
+    loc_txt = {
+        name = "Jonkler",
+        text = {
+            "{X:green,C:white}4!{} Mult"
+        }
+    },
+    rarity = 1,
+    atlas = 'ModdedVanilla15',
+    pos = { x = 1, y = 1 },
+    cost = math.huge,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    config = { extra = {} },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+        return {
+          Xmult_mod = mult ^ 24,
+          message = "4! Mult",
+          sound = "tngt_neverforget",
+          colour = G.C.GREEN
+        }
+    end
+end
+}
+
+SMODS.Joker {
     key = 'watericesalt',
     loc_txt = {
         name = 'A waterballoon?',

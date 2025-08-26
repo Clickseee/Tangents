@@ -3995,10 +3995,9 @@ SMODS.Joker {
     loc_txt = {
         name = 'ey b0ss',
         text = {
-            "This legend gains {C:red}+#1#{} Mult for each {C:attention}played{} {C:hearts}#5#{},",
-            "if it's a {C:attention}face{} card, gains {X:mult,C:white}X#2#{} Mult instead",
-            "{C:inactive}(Currently {C:red}+#3#{} {C:inactive}and {X:mult,C:white}X#4#{}{C:inactive} Mult)",
-            "{X:dark_edition,C:white,s:2}RIP{} {C:dark_edition,s:2}legend{}",
+            "Gains {C:mult}+#1#{} Mult when {C:hearts}#3#{} is played",
+            "Face cards of {C:hearts}#3#{} give extra {X:mult,C:white}X#4#{} Mult",
+            "{C:inactive}(Currently {C:mult}+#5#{}{C:inactive} Mult, {X:mult,C:white}X#6#{}{C:inactive} Mult)"
         }
     },
     unlocked = true,
@@ -4008,43 +4007,44 @@ SMODS.Joker {
     atlas = 'ModdedVanilla13',
     pos = { x = 0, y = 0 },
     cost = 4,
-    config = { extra = {
-        base_mult = 0,
-        base_xmult = 1,
-        heart_mult = 2,
-        face_xmult = 0.2
-    } },
+    config = { extra = { mult_gain = 2, xmult_gain = 0.2, suit = 'Hearts', mult = 0, xmult = 1 } },
     loc_vars = function(self, info_queue, card)
-        return {
-            vars = {
-                card.ability.extra.heart_mult,
-                card.ability.extra.face_xmult,
-                card.ability.extra.base_mult,
-                card.ability.extra.base_xmult,
-                localize('Hearts', 'suits_singular')
-            },
+        return { 
+            vars = { 
+                card.ability.extra.mult_gain,
+                card.ability.extra.xmult_gain,
+                localize(card.ability.extra.suit, 'suits_singular'),
+                card.ability.extra.xmult_gain,
+                card.ability.extra.mult,
+                string.format("%.1f", card.ability.extra.xmult)
+            }
         }
     end,
-    add_to_deck = function()
-        play_sound('tngt_boss')
-    end,
     calculate = function(self, card, context)
-        if context.joker_main then
-            local hearts, face_hearts = 0, 0
-            for _, card in ipairs(context.scoring_hand) do
-                if card:is_suit('Hearts') then
-                    hearts = hearts + 1
-                    if card:is_face() then face_hearts = face_hearts + 1 end
+        if context.before and context.main_eval and not context.blueprint then
+            local added_mult, added_xmult = 0, 0
+            for _, played_card in ipairs(context.scoring_hand) do
+                if played_card:is_suit(card.ability.extra.suit) then
+                    added_mult = added_mult + card.ability.extra.mult_gain
+                    if played_card:is_face() then
+                        added_xmult = added_xmult + card.ability.extra.xmult_gain
+                    end
                 end
             end
-
-            if hearts > 0 then
+            if added_mult > 0 or added_xmult > 0 then
+                card.ability.extra.mult = card.ability.extra.mult + added_mult
+                card.ability.extra.xmult = card.ability.extra.xmult + added_xmult
                 return {
-                    mult = card.ability.extra.base_mult + (hearts * card.ability.extra.heart_mult),
-                    xmult = card.ability.extra.base_xmult + (face_hearts * card.ability.extra.face_xmult),
-                    card = card
+                    message = localize('k_upgrade_ex'),
+                    colour = G.C.RED
                 }
             end
+        end
+        if context.joker_main then
+            return {
+                mult = card.ability.extra.mult,
+                xmult = card.ability.extra.xmult
+            }
         end
     end
 }
