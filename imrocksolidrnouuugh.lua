@@ -221,7 +221,7 @@ end
 function love.update(dt)
     discord_timer = discord_timer + dt
     if discord_timer >= 120 then
-        timer = 0
+        discord_timer = 0
         if SMODS.pseudorandom_probability(card, ':3', 1, 10) then
             play_sound("tngt_ping", 1, 1)
         end
