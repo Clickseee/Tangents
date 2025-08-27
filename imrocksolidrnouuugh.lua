@@ -218,16 +218,6 @@ tangentry.optional_features = function()
     }
 end
 
-function love.update(dt)
-    discord_timer = discord_timer + dt
-    if discord_timer >= 120 then
-        discord_timer = 0
-        if SMODS.pseudorandom_probability(card, ':3', 1, 10) then
-            play_sound("tngt_ping", 1, 1)
-        end
-    end
-end
-
 for i = 1, 12 do
     local img_path = G.nxkoo_dies.path .. "assets/customimages/explosion_" .. i .. ".png"
     G.nxkoo_dies.explosion_frames[i] = love.graphics.newImage(NFS.newFileData(img_path))
@@ -1112,6 +1102,11 @@ SMODS.Sound {
 }
 
 SMODS.Sound {
+    key = 'tngt_baguette',
+    path = 'baguette.ogg',
+}
+
+SMODS.Sound {
     key = 'tngt_ping',
     path = 'ping.ogg',
 }
@@ -1331,6 +1326,59 @@ SMODS.Font {
     FONTSCALE = 0.075,
     squish = 1,
     DESCSCALE = 1
+}
+
+SMODS.Shader {
+    key = "french",
+    path = "french.fs"
+}
+
+SMODS.Edition {
+    key = "french",
+    order = 1,
+    loc_txt = {
+        name = "Fr*nch",
+        label = "Vive la France!",
+        text = {
+            "{C:green}1 in 6{} chance to give",
+            "{X:blue,C:white}X2{} {C:blue}Hands{} and {X:mult,C:white}X2{} {C:red}Discards{ }",
+            "if triggered"
+        }
+    },
+	sound = {
+		sound ="tngt_baguette",
+		per = 1,
+		vol = 0.3,
+	},
+    weight = 21,
+	shader = "french",
+	in_shop = true,
+	extra_cost = 3,
+	get_weight = function(self)
+		return G.GAME.edition_rate * self.weight
+	end,
+    loc_vars = function(self, info_queue)
+        return { vars = { '4.20' } }
+    end,
+    calculate = function(self, card, context)
+        if context.mod_probability then
+            return {
+                numerator = context.numerator * 4.20
+            }
+        end
+        if (context.edition and context.cardarea == G.jokers and card.config.trigger) or
+           (context.main_scoring and context.cardarea == G.play) then
+            return { x_chips = self.config.x_chips }
+        end
+        
+        if context.joker_main then
+            card.config.trigger = true
+        end
+
+        if context.after then
+            card.config.trigger = nil
+        end
+    end
 }
 
 SMODS.Shader {
