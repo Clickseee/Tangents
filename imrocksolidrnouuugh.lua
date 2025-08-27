@@ -1328,6 +1328,7 @@ SMODS.Font {
     DESCSCALE = 1
 }
 
+--[[
 SMODS.Shader {
     key = "french",
     path = "french.fs"
@@ -1380,6 +1381,7 @@ SMODS.Edition {
         end
     end
 }
+]]
 
 SMODS.Shader {
     key = "weed",
