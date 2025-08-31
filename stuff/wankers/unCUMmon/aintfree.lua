@@ -27,70 +27,100 @@ SMODS.Scoring_Calculation {
     end,
     text = '?',
     colour = G.C.WHITE,
-    
+
     get_random_operator = function(self)
         local operators = {
-            {symbol = "+", key = "add", color = G.C.GREEN, weight = 15},
-            {symbol = "-", key = "subtract", color = G.C.RED, weight = 10},
-            {symbol = "×", key = "multiply", color = G.C.GOLD, weight = 20},
-            {symbol = "÷", key = "divide", color = G.C.BLUE, weight = 8},
-            {symbol = "^", key = "exponent", color = G.C.PURPLE, weight = 5},
-            {symbol = "%", key = "modulus", color = G.C.YELLOW, weight = 7},
-            {symbol = "min", key = "min", color = G.C.PURPLE, weight = 5},
-            {symbol = "max", key = "max", color = G.C.PURPLE, weight = 5},
-            {symbol = "√", key = "root", color = G.C.GOLD, weight = 3}  -- geometric mean-ish
+            { symbol = "+", key = "add", color = G.C.GREEN, weight = 15 },
+            { symbol = "-", key = "subtract", color = G.C.RED, weight = 10 },
+            { symbol = "×", key = "multiply", color = G.C.GOLD, weight = 20 },
+            { symbol = "÷", key = "divide", color = G.C.BLUE, weight = 8 },
+            { symbol = "^", key = "exponent", color = G.C.PURPLE, weight = 5 },
+            { symbol = "%", key = "modulus", color = G.C.YELLOW, weight = 7 },
+            { symbol = "min", key = "min", color = G.C.PURPLE, weight = 5 },
+            { symbol = "max", key = "max", color = G.C.PURPLE, weight = 5 },
+            { symbol = "√", key = "root", color = G.C.GOLD, weight = 3 } -- geometric mean-ish
         }
-        
-        return pseudorandom_weighted_element(operators, "instant_random_op_" .. G.GAME.round_resets.ante .. "_" .. os.time())
+
+        return pseudorandom_weighted_element(operators,
+            "instant_random_op_" .. G.GAME.round_resets.ante .. "_" .. os.time())
     end,
-    
+
     replace_ui = function(self)
         return {
-            n = G.UIT.R, 
-            config = {align = "cm", minh = 1.4, padding = 0.1}, 
+            n = G.UIT.R,
+            config = { align = "cm", minh = 1.4, padding = 0.1 },
             nodes = {
-                {n = G.UIT.C, config = {align = 'cm', id = 'hand_chips'}, nodes = {
-                    SMODS.GUI.score_container({
-                        type = 'chips',
-                        align = 'cr',
-                        w = 1.1,
-                        scale = 0.3
-                    })
-                }},
-                {n = G.UIT.C, config = {align = 'cm', id = 'random_operator_display', padding = 0.1}, nodes = {
-                    {n = G.UIT.T, config = {
-                        text = self.text or "?", 
-                        scale = 0.5, 
-                        colour = self.colour or G.C.WHITE,
-                        shadow = true
-                    }}
-                }},
-                {n = G.UIT.C, config = {align = 'cm', id = 'hand_mult'}, nodes = {
-                    SMODS.GUI.score_container({
-                        type = 'mult',
-                        align = 'cl',
-                        w = 1.1,
-                        scale = 0.3
-                    })
-                }},
-                {n = G.UIT.R, config = {align = 'cm', padding = 0.05}, nodes = {
-                    {n = G.UIT.T, config = {
-                        text = "???", 
-                        scale = 0.18, 
-                        colour = G.C.UI.TEXT_LIGHT
-                    }}
-                }},
-                {n = G.UIT.R, config = {align = 'cm', padding = 0.02}, nodes = {
-                    {n = G.UIT.T, config = {
-                        text = "?!#",
-                        scale = 0.25, 
-                        colour = G.C.YELLOW
-                    }}
-                }}
+                {
+                    n = G.UIT.C,
+                    config = { align = 'cm', id = 'hand_chips' },
+                    nodes = {
+                        SMODS.GUI.score_container({
+                            type = 'chips',
+                            align = 'cr',
+                            w = 1.1,
+                            scale = 0.3
+                        })
+                    }
+                },
+                {
+                    n = G.UIT.C,
+                    config = { align = 'cm', id = 'random_operator_display', padding = 0.1 },
+                    nodes = {
+                        {
+                            n = G.UIT.T,
+                            config = {
+                                text = self.text or "?",
+                                scale = 0.5,
+                                colour = self.colour or G.C.WHITE,
+                                shadow = true
+                            }
+                        }
+                    }
+                },
+                {
+                    n = G.UIT.C,
+                    config = { align = 'cm', id = 'hand_mult' },
+                    nodes = {
+                        SMODS.GUI.score_container({
+                            type = 'mult',
+                            align = 'cl',
+                            w = 1.1,
+                            scale = 0.3
+                        })
+                    }
+                },
+                {
+                    n = G.UIT.R,
+                    config = { align = 'cm', padding = 0.05 },
+                    nodes = {
+                        {
+                            n = G.UIT.T,
+                            config = {
+                                text = "???",
+                                scale = 0.18,
+                                colour = G.C.UI.TEXT_LIGHT
+                            }
+                        }
+                    }
+                },
+                {
+                    n = G.UIT.R,
+                    config = { align = 'cm', padding = 0.02 },
+                    nodes = {
+                        {
+                            n = G.UIT.T,
+                            config = {
+                                text = "?!#",
+                                scale = 0.25,
+                                colour = G.C.YELLOW
+                            }
+                        }
+                    }
+                }
             }
         }
     end,
-    
+
     update_ui = function(self, container, chip_display, mult_display, operator)
         if operator then
             operator.config.text = self.text or "?"
@@ -115,18 +145,18 @@ function pseudorandom_weighted_element(items, seed)
     for _, item in ipairs(items) do
         total_weight = total_weight + (item.weight or 1)
     end
-    
+
     local random_value = pseudorandom(seed or "weighted_random", 1, total_weight)
     local current_weight = 0
-    
+
     for _, item in ipairs(items) do
         current_weight = current_weight + (item.weight or 1)
         if random_value <= current_weight then
             return item
         end
     end
-    
-    return items[1] or {symbol = "?", key = "unknown", color = G.C.WHITE}
+
+    return items[1] or { symbol = "?", key = "unknown", color = G.C.WHITE }
 end
 
 SMODS.Joker {
@@ -4140,8 +4170,8 @@ SMODS.Joker {
     cost = 4,
     config = { extra = { mult_gain = 2, xmult_gain = 0.2, suit = 'Hearts', mult = 0, xmult = 1 } },
     loc_vars = function(self, info_queue, card)
-        return { 
-            vars = { 
+        return {
+            vars = {
                 card.ability.extra.mult_gain,
                 card.ability.extra.xmult_gain,
                 localize(card.ability.extra.suit, 'suits_singular'),
@@ -4488,30 +4518,23 @@ SMODS.Joker {
         return { vars = {} }
     end,
     calculate = function(self, card, context)
-        if context.individual and context.cardarea == G.play then
-            local is_first_face = false
-            for i = 1, #context.scoring_hand do
-                    is_first_face = context.scoring_hand[i] == context.other_card
-                    break
-            end
-            if is_first_face then
-                context.scoring_hand[1]:set_ability("m_bonus")
+        if context.individual and context.cardarea == G.play and not context.blueprint then
+            local first_card = context.scoring_hand[1]
+            local last_card = context.scoring_hand[#context.scoring_hand]
+            if context.other_card == first_card then
+                local enhancement = SMODS.poll_enhancement({ guaranteed = true, type_key = 'FUCK' })
+                context.other_card:set_ability(enhancement, nil, true)
                 return {
-                    message = localize("k_upgrade_ex"),
+                    message = "HAWK",
+                    colour = G.C.DARK_EDITION,
                     sound = "tngt_hawk"
                 }
-            end
-        end
-        if context.individual and context.cardarea == G.play then
-            local last_card
-            for i = #context.scoring_hand, 1, -1 do
-                    last_card = context.scoring_hand[i]
-                    break
-            end
-            if last_card and context.other_card == last_card then
-                context.scoring_hand[#context.scoring_hand]:set_seal("Red", silent, immediate)
+            elseif context.other_card == last_card then
+                local seal = SMODS.poll_seal({ guaranteed = true, type_key = 'I do not "edge". I do not goon, i do not coom, i do not fap, i do not jerk, I do not crank my hog, I MASTURBATE. And if i dont love it, I dont cum.' })
+                context.other_card:set_seal(seal, nil, true)
                 return {
-                    message = localize("k_upgrade_ex"),
+                    message = "TUAH",
+                    colour = G.C.RED,
                     sound = "tngt_tuah"
                 }
             end
@@ -4933,7 +4956,7 @@ SMODS.Joker {
             "to gain {C:attention}#1#{} retrigger"
         }
     },
-    rarity = 2, 
+    rarity = 2,
     atlas = 'ModdedVanilla15',
     pos = { x = 2, y = 0 },
     cost = 4,
@@ -4941,7 +4964,8 @@ SMODS.Joker {
     discovered = true,
     config = { extra = { mario = 1, numerator = 1, denominator = 3 } },
     loc_vars = function(self, info_queue, card)
-        local numerator, denumerator = SMODS.get_probability_vars(card, card.ability.extra.denominator, card.ability.extra.numerator, 'bruh')
+        local numerator, denumerator = SMODS.get_probability_vars(card, card.ability.extra.denominator,
+            card.ability.extra.numerator, 'bruh')
         return {
             vars = { card.ability.extra.mario, numerator, denominator }
         }
