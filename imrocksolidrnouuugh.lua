@@ -1048,6 +1048,11 @@ SMODS.Sound {
     path = "theworldmostcrispyfries.ogg"
 }
 
+SMODS.Sound {
+    key = "tngt_hellomario",
+    path = "hellomario.ogg"
+}
+
 SMODS.Atlas {
     key = "modicon",
     path = "modicon.png",
@@ -2129,7 +2134,7 @@ SMODS.load_file("stuff/wankers/unCUMmon/aintfree.lua")()
 SMODS.load_file("stuff/wankers/SKRRRRARE/matteroffact.lua")()
 SMODS.load_file("stuff/wankers/TheLegend27/its9inches.lua")()
 SMODS.load_file("stuff/wankers/DONOTOPEN/classified.lua")()
-SMODS.load_file("stuff/dicks/strictlydickly.lua")()
+SMODS.load_file("stuff/dicks/strictlydickly.lua")() 
 SMODS.load_file("stuff/cumchalice/concumables.lua")()
 SMODS.load_file("stuff/bosster/likeaboss.lua")()
 if background == true then

@@ -1,3 +1,134 @@
+SMODS.Scoring_Calculation {
+    key = "instant_random_operator",
+    func = function(self, chips, mult, flames)
+        local random_op = self:get_random_operator()
+        self.config.current_operator = random_op.key
+        self.text = random_op.symbol
+        self.colour = random_op.color
+        if random_op.key == "add" then
+            return chips + mult
+        elseif random_op.key == "subtract" then
+            return math.max(0, chips - mult)
+        elseif random_op.key == "multiply" then
+            return chips * mult
+        elseif random_op.key == "divide" then
+            return mult > 0 and (chips / mult) or 0
+        elseif random_op.key == "exponent" then
+            return chips ^ math.min(mult, 10)
+        elseif random_op.key == "modulus" then
+            return mult > 0 and (chips % mult) or 0
+        elseif random_op.key == "min" then
+            return math.min(chips, mult)
+        elseif random_op.key == "max" then
+            return math.max(chips, mult)
+        else
+            return chips * mult
+        end
+    end,
+    text = '?',
+    colour = G.C.WHITE,
+    
+    get_random_operator = function(self)
+        local operators = {
+            {symbol = "+", key = "add", color = G.C.GREEN, weight = 15},
+            {symbol = "-", key = "subtract", color = G.C.RED, weight = 10},
+            {symbol = "×", key = "multiply", color = G.C.GOLD, weight = 20},
+            {symbol = "÷", key = "divide", color = G.C.BLUE, weight = 8},
+            {symbol = "^", key = "exponent", color = G.C.PURPLE, weight = 5},
+            {symbol = "%", key = "modulus", color = G.C.YELLOW, weight = 7},
+            {symbol = "min", key = "min", color = G.C.PURPLE, weight = 5},
+            {symbol = "max", key = "max", color = G.C.PURPLE, weight = 5},
+            {symbol = "√", key = "root", color = G.C.GOLD, weight = 3}  -- geometric mean-ish
+        }
+        
+        return pseudorandom_weighted_element(operators, "instant_random_op_" .. G.GAME.round_resets.ante .. "_" .. os.time())
+    end,
+    
+    replace_ui = function(self)
+        return {
+            n = G.UIT.R, 
+            config = {align = "cm", minh = 1.4, padding = 0.1}, 
+            nodes = {
+                {n = G.UIT.C, config = {align = 'cm', id = 'hand_chips'}, nodes = {
+                    SMODS.GUI.score_container({
+                        type = 'chips',
+                        align = 'cr',
+                        w = 1.1,
+                        scale = 0.3
+                    })
+                }},
+                {n = G.UIT.C, config = {align = 'cm', id = 'random_operator_display', padding = 0.1}, nodes = {
+                    {n = G.UIT.T, config = {
+                        text = self.text or "?", 
+                        scale = 0.5, 
+                        colour = self.colour or G.C.WHITE,
+                        shadow = true
+                    }}
+                }},
+                {n = G.UIT.C, config = {align = 'cm', id = 'hand_mult'}, nodes = {
+                    SMODS.GUI.score_container({
+                        type = 'mult',
+                        align = 'cl',
+                        w = 1.1,
+                        scale = 0.3
+                    })
+                }},
+                {n = G.UIT.R, config = {align = 'cm', padding = 0.05}, nodes = {
+                    {n = G.UIT.T, config = {
+                        text = "???", 
+                        scale = 0.18, 
+                        colour = G.C.UI.TEXT_LIGHT
+                    }}
+                }},
+                {n = G.UIT.R, config = {align = 'cm', padding = 0.02}, nodes = {
+                    {n = G.UIT.T, config = {
+                        text = "?!#",
+                        scale = 0.25, 
+                        colour = G.C.YELLOW
+                    }}
+                }}
+            }
+        }
+    end,
+    
+    update_ui = function(self, container, chip_display, mult_display, operator)
+        if operator then
+            operator.config.text = self.text or "?"
+            operator.config.colour = self.colour or G.C.WHITE
+        end
+    end,
+    on_scoring_start = function(self)
+        G.E_MANAGER:add_event(Event({
+            func = function()
+                if G.hand_text_area and G.hand_text_area.operator then
+                    G.hand_text_area.operator:juice_up(0.7, 0.3)
+                    play_sound('tngt_neverforget', 0.8 + math.random() * 0.4)
+                end
+                return true
+            end
+        }))
+    end
+}
+
+function pseudorandom_weighted_element(items, seed)
+    local total_weight = 0
+    for _, item in ipairs(items) do
+        total_weight = total_weight + (item.weight or 1)
+    end
+    
+    local random_value = pseudorandom(seed or "weighted_random", 1, total_weight)
+    local current_weight = 0
+    
+    for _, item in ipairs(items) do
+        current_weight = current_weight + (item.weight or 1)
+        if random_value <= current_weight then
+            return item
+        end
+    end
+    
+    return items[1] or {symbol = "?", key = "unknown", color = G.C.WHITE}
+end
+
 SMODS.Joker {
     key = 'cope',
     loc_txt = {
@@ -4357,57 +4488,31 @@ SMODS.Joker {
         return { vars = {} }
     end,
     calculate = function(self, card, context)
-        if context.end_of_round and not context.blueprint and not context.destroyed then
-            local first_card, last_card
-            if G.play and #G.play.cards > 0 then
-                first_card = G.play.cards[1]
-                last_card = G.play.cards[#G.play.cards]
+        if context.individual and context.cardarea == G.play then
+            local is_first_face = false
+            for i = 1, #context.scoring_hand do
+                    is_first_face = context.scoring_hand[i] == context.other_card
+                    break
             end
-            if first_card and not first_card.debuff then
-                local valid_enhancements = {}
-                for _, key in pairs(SMODS.get_enhancement_keys()) do
-                    if not SMODS.has_enhancement(first_card, key) then
-                        table.insert(valid_enhancements, key)
-                    end
-                end
-                if #valid_enhancements > 0 then
-                    local enhancement = pseudorandom_element(valid_enhancements, 'hawk')
-                    first_card:set_ability(enhancement, nil, true)
-                    card:juice_up(0.5, 0.5)
-                    G.E_MANAGER:add_event(Event({
-                        func = function()
-                            play_sound("tngt_hawk")
-                            first_card:juice_up()
-                            return true
-                        end
-                    }))
-                end
-            end
-            if last_card and not last_card.debuff then
-                local valid_seals = {}
-                for _, key in pairs(SMODS.get_seal_keys()) do
-                    if not SMODS.has_seal(last_card, key) then
-                        table.insert(valid_seals, key)
-                    end
-                end
-
-                if #valid_seals > 0 then
-                    local seal = pseudorandom_element(valid_seals, 'tuah')
-                    last_card:set_seal(seal, true)
-                    card:juice_up(0.5, 0.5)
-                    G.E_MANAGER:add_event(Event({
-                        func = function()
-                            play_sound("tngt_tuah")
-                            last_card:juice_up()
-                            return true
-                        end
-                    }))
-                end
-            end
-            if first_card or last_card then
+            if is_first_face then
+                context.scoring_hand[1]:set_ability("m_bonus")
                 return {
-                    message = localize('k_upgrade_ex'),
-                    colour = G.C.PURPLE
+                    message = localize("k_upgrade_ex"),
+                    sound = "tngt_hawk"
+                }
+            end
+        end
+        if context.individual and context.cardarea == G.play then
+            local last_card
+            for i = #context.scoring_hand, 1, -1 do
+                    last_card = context.scoring_hand[i]
+                    break
+            end
+            if last_card and context.other_card == last_card then
+                context.scoring_hand[#context.scoring_hand]:set_seal("Red", silent, immediate)
+                return {
+                    message = localize("k_upgrade_ex"),
+                    sound = "tngt_tuah"
                 }
             end
         end
@@ -4731,7 +4836,7 @@ SMODS.Joker {
     loc_txt = {
         name = "Sketchy Website",
         text = {
-            "{X:mult,C:white}X5{} Mult, when {C:attention}Blind{}",
+            "{X:mult,C:white}X#1#{} Mult, when {C:attention}Blind{}",
             "is selected, randomize a {C:attention}Joker{} in your slot",
             "and random cards {C:attention}held in hand{}"
         }
@@ -4812,6 +4917,45 @@ SMODS.Joker {
             if last_face_card and context.other_card == last_face_card then
                 return {
                     xmult = card.ability.extra.xmult
+                }
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = 'pratt',
+    loc_txt = {
+        name = "Chris Pratt.",
+        text = {
+            "Played {C:attention}unenhanced{} cards",
+            "have {C:green}#2# in #3#{} chance",
+            "to gain {C:attention}#1#{} retrigger"
+        }
+    },
+    rarity = 2, 
+    atlas = 'ModdedVanilla15',
+    pos = { x = 2, y = 0 },
+    cost = 4,
+    unlocked = true,
+    discovered = true,
+    config = { extra = { mario = 1, numerator = 1, denominator = 3 } },
+    loc_vars = function(self, info_queue, card)
+        local numerator, denumerator = SMODS.get_probability_vars(card, card.ability.extra.denominator, card.ability.extra.numerator, 'bruh')
+        return {
+            vars = { card.ability.extra.mario, numerator, denominator }
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play and not context.blueprint then
+            if not next(SMODS.get_enhancements(context.other_card)) and SMODS.pseudorandom_probability(card, 'meth', card.ability.extra.numerator, card.ability.extra.denominator) then
+                context.other_card.ability.perma_repetitions = (context.other_card.ability.perma_repetitions or 0) +
+                    card.ability.extra.mario
+                card:juice_up(0.5, 0.5)
+                return {
+                    sound = 'tngt_hellomario',
+                    message = localize('k_upgrade_ex'),
+                    card = card
                 }
             end
         end
