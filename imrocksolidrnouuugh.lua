@@ -1044,6 +1044,11 @@ SMODS.Sound {
 }
 
 SMODS.Sound {
+    key = "tngt_boom",
+    path = "boom.ogg"
+}
+
+SMODS.Sound {
     key = "tngt_fries",
     path = "theworldmostcrispyfries.ogg"
 }
