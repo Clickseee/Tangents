@@ -116,7 +116,20 @@ return {
             "{C:inactive,f:tngt_DETERMINATION}(Currently {X:mult,C:white,f:tngt_DETERMINATION}X#2#{C:inactive,f:tngt_DETERMINATION} Mult)",
             "{C:blue,s:0.7,f:tngt_DETERMINATION}https://discord.gg/balatro{}",
         }
-            }
+            },
+            j_tngt_Ligma = {
+                name = {
+                    "Chad {f:tngt_emoji}🗿{}",
+			        "(The better one)"
+                },
+            },
+            j_tngt_spongemanicecone = {
+                name = {
+                    "{f:tngt_chinese,s:2}海綿寶寶人{}",
+                    "{f:tngt_chinese,s:2}蛋捲冰淇淋{}",
+			        "{s:0.4}(sponge man ice cone)"
+                },
+            },
         },
         Other = {
             artist = {
