@@ -2160,14 +2160,16 @@ SMODS.Joker {
     end
 }
 
+local mewingstreak = G.PROFILES[G.SETTINGS.profile].high_scores.current_streak.amt
+
 SMODS.Joker {
     key = 'Ligma',
     loc_txt = {
-        name = "Sigma {f:tngt_emoji}🗿{}",
         text = {
-            "Earn {C:gold}$#1#{} at end of round,",
-            "payout increases by {C:gold}$2{} for each defeated blind,",
-            "Decreases by {C:red}$#2#{} after defeating a boss blind."
+            "{X:mult,C:white}X#1#{} Mult",
+            "for each {C:attention}winstreak",
+            "in this profile",
+            "{C:inactive}(Currently {X:mult,C:white}X#2#{}{C:inactive} Mult)"
         }
     },
     rarity = 2,
@@ -2178,38 +2180,19 @@ SMODS.Joker {
     perishable_compat = true,
     atlas = 'ModdedVanilla8',
     pos = { x = 3, y = 1 },
-    config = { extra = { normal_reward = 2, boss_penalty = -3 } },
+    config = { extra = { xmew = 0.5} },
     loc_vars = function(self, info_queue, card)
         return {
             vars = {
-                card.ability.extra.normal_reward,
-                card.ability.extra.boss_penalty
+                card.ability.extra.xmew,
+                card.ability.extra.xmew * mewingstreak
             }
         }
     end,
-
     calculate = function(self, card, context)
-        if context.end_of_round and context.game_over == false and context.main_eval then
-            local amount = G.GAME.blind.boss and card.ability.extra.boss_penalty
-                or card.ability.extra.normal_reward
-
-            G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + amount
-
+        if context.joker_main then
             return {
-                message = localize {
-                    type = 'variable',
-                    key = amount > 0 and 'a_dollars' or 'a_dollars_minus',
-                    vars = { math.abs(amount) }
-                },
-                colour = amount > 0 and G.C.MONEY or G.C.RED,
-                func = function()
-                    G.E_MANAGER:add_event(Event({
-                        func = function()
-                            G.GAME.dollar_buffer = 0
-                            return true
-                        end
-                    }))
-                end
+                xmult = card.ability.extra.xmew * mewingstreak
             }
         end
     end
@@ -4131,13 +4114,11 @@ SMODS.Joker {
         return { vars = { localize('Hearts', 'suits_plural') } }
     end,
     calculate = function(self, card, context)
-        if context.check_enhancement and context.other_card:is_suit('Hearts') then
+        if context.check_enhancement and context.other_card.base.suit == 'Hearts' then
             return { m_lucky = true }
         end
-        if context.individual and context.cardarea == G.play and context.other_card:is_suit('Hearts') then
+        if context.individual and context.cardarea == G.play and context.other_card.base.suit == 'Hearts' then
             return {
-                message = localize('k_lucky_ex'),
-                colour = G.C.CHIPS,
                 card = context.other_card
             }
         end
@@ -4147,7 +4128,7 @@ SMODS.Joker {
 SMODS.Joker {
     key = 'stonks',
     loc_txt = {
-        name = "STONKS^^^",
+        name = "STONKS{C:dark_edition}^^^",
         text = {
             "{C:inactive}Does nothing..{} buuut.. it's {C:money}sell value{} is randomized",
             "{C:attention}sell{} this Joker when it skyrocketed"
@@ -4747,40 +4728,43 @@ SMODS.Joker {
     end
 }
 
+local musicvol = G.SETTINGS.SOUND.music_volume
+
 SMODS.Joker {
-    key = 'normaldaniel',
+    key = 'spityoshit',
     loc_txt = {
-        name = 'Daniel 2',
+        name = ":speaking_head:",
         text = {
-            "Last played {C:attention}face{} cards gives",
-            "{X:mult,C:white}X#1#{} Mult when scored"
+            "{C:red}+#1#{} Mult",
+            "{C:inactive}(Music Volume = Mult)"
         }
     },
+    blueprint_compat = true,
+    perishable_compat = false,
+    eternal_compat = true,
+    rarity = 2,
+    cost = 4,
     unlocked = true,
     discovered = true,
-    blueprint_compat = false,
-    rarity = 2,
-    atlas = 'ModdedVanilla13',
-    pos = { x = 2, y = 1 },
-    cost = 4,
-    config = { extra = { xmult = 1.5 } },
+    config = { extra = {  } },
+    atlas = 'ModdedVanilla4',
+    pos = { x = 5, y = 0 },
     loc_vars = function(self, info_queue, card)
-        return { vars = { card.ability.extra.xmult } }
+        return {
+            vars = {
+                musicvol
+            }
+        }
+    end,
+    config = { extra = { musicvol = 0 } },
+    update = function(self, card, dt)
+        card.ability.musicvol = G.SETTINGS.SOUND.music_volume
     end,
     calculate = function(self, card, context)
-        if context.individual and context.cardarea == G.play then
-            local last_face_card
-            for i = #context.scoring_hand, 1, -1 do
-                if context.scoring_hand[i]:is_face() then
-                    last_face_card = context.scoring_hand[i]
-                    break
-                end
-            end
-            if last_face_card and context.other_card == last_face_card then
-                return {
-                    xmult = card.ability.extra.xmult
-                }
-            end
+        if context.joker_main then
+            return {
+                mult = musicvol
+            }
         end
     end
 }
@@ -4819,6 +4803,88 @@ SMODS.Joker {
                     sound = 'tngt_hellomario',
                     message = localize('k_upgrade_ex'),
                     card = card
+                }
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = 'geekvsnerd',
+    loc_txt = {
+        name = "{s:4}N{}eeerd.",
+        text = {
+            "{C:attention}Steel card{} now gives",
+            "{X:mult,C:white}X2{} Mult and {X:chips,C:white}X1.5{} Chips"
+        }
+    },
+    rarity = 2,
+    atlas = 'ModdedVanilla15',
+    pos = { x = 4, y = 0 },
+    cost = 4,
+    unlocked = true,
+    discovered = true,
+    config = { extra = {} },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play and not context.blueprint then
+            local first_card = context.scoring_hand[1]
+            local last_card = context.scoring_hand[#context.scoring_hand]
+            if context.other_card == first_card then
+                local enhancement = SMODS.poll_enhancement({ guaranteed = true, type_key = 'FUCK' })
+                context.other_card:set_ability(enhancement, nil, true)
+                return {
+                    message = "HAWK",
+                    colour = G.C.DARK_EDITION,
+                    sound = "tngt_hawk"
+                }
+            elseif context.other_card == last_card then
+                local seal = SMODS.poll_seal({ guaranteed = true, type_key = 'I do not "edge". I do not goon, i do not coom, i do not fap, i do not jerk, I do not crank my hog, I MASTURBATE. And if i dont love it, I dont cum.' })
+                context.other_card:set_seal(seal, nil, true)
+                return {
+                    message = "TUAH",
+                    colour = G.C.RED,
+                    sound = "tngt_tuah"
+                }
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = 'normaldaniel',
+    loc_txt = {
+        name = 'Daniel 2',
+        text = {
+            "Last played {C:attention}face{} cards gives",
+            "{X:mult,C:white}X#1#{} Mult when scored"
+        }
+    },
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = false,
+    rarity = 2,
+    atlas = 'ModdedVanilla13',
+    pos = { x = 2, y = 1 },
+    cost = 4,
+    config = { extra = { xmult = 1.5 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = { card.ability.extra.xmult } }
+    end,
+    calculate = function(self, card, context)
+        if context.individual and context.cardarea == G.play then
+            local last_face_card
+            for i = #context.scoring_hand, 1, -1 do
+                if context.scoring_hand[i]:is_face() then
+                    last_face_card = context.scoring_hand[i]
+                    break
+                end
+            end
+            if last_face_card and context.other_card == last_face_card then
+                return {
+                    xmult = card.ability.extra.xmult
                 }
             end
         end
