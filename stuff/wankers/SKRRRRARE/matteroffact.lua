@@ -2182,59 +2182,6 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-    key = 'proceed',
-    loc_txt = {
-        name = "{f:DETERMINATION,C:gold}PROCEED.{}",
-        text = {
-            "When starting a {C:attention}new round{}, immediately draw",
-            "Ace of {C:red}Hearts{} and play it.",
-            "{C:inactive}There's no such thing as free will."
-        }
-    },
-    blueprint_compat = true,
-    perishable_compat = false,
-    eternal_compat = true,
-    rarity = 3,
-    cost = 6,
-    unlocked = true,
-    discovered = true,
-    config = { extra = { chips = 0, chip_mod = 3 } },
-    atlas = 'ModdedVanilla4',
-    pos = { x = 5, y = 0 },
-    loc_vars = function(self, info_queue, card)
-        return {
-        }
-    end,
-    calculate = function(self, card, context)
-        if context.setting_blind and not context.blueprint then
-            G.E_MANAGER:add_event(Event({
-                delay = 0.2,
-                func = function()
-                    local _card = SMODS.add_card({
-                        set = "Playing Card",
-                        rank = "Ace",
-                        suit = "Hearts"
-                    })
-                    G.hand:add_to_highlighted(_card)
-                    G.FUNCS.play_cards_from_highlighted()
-                    return true
-                end
-            }))
-            return {
-                message = "P R O C E E D.",
-                colour = G.C.SUITS.Hearts
-            }
-        end
-        if context.individual and context.joker_main then
-            return {
-                sound = "tngt_snowgrave",
-                xmult = 99999999999999999999999,
-            }
-        end
-    end
-}
-
-SMODS.Joker {
     key = 'ashbaby',
     loc_txt = {
         name = "{C:inactive}AAAAAAAAAAAAA{}",
@@ -2562,22 +2509,14 @@ SMODS.Joker {
     end
 }
 
-local last_purchased_joker = nil
-local original_buy_card = buy_card
-function buy_card(self, card, area, skip_check)
-    local ret = original_buy_card(self, card, area, skip_check)
-    if ret and card and card.ability and card.ability.set == 'Joker' then
-        last_purchased_joker = card.config.center.key
-    end
-    return ret
-end
-
 SMODS.Joker {
     key = 'bigchungus',
     loc_txt = {
         name = "That'll hold em, alwight? hehehehe..",
         text = {
-            "Copies ability of last purchased {C:attention}Joker{}"
+            "{X:mult,C:white}X#1#{} Mult for",
+            "each played {C:attention}enhanced{} card",
+            "{C:red}self destructs{} if {C:attention}Alt-Tabbed{}"
         }
     },
     unlocked = true,
@@ -2587,58 +2526,46 @@ SMODS.Joker {
     atlas = 'ModdedVanilla14',
     pos = { x = 2, y = 1 },
     cost = 8,
+    config = {
+        extra = { xtuah = 1.5 }
+    },
     loc_vars = function(self, info_queue, card)
-        local main_end = nil
-        if last_purchased_joker then
-            main_end = {
-                {
-                    n = G.UIT.C,
-                    config = { align = "cm", minh = 0.4, padding = 0.1 },
-                    nodes = {
-                        {
-                            n = G.UIT.C,
-                            config = { align = "cm", minw = 2.5, minh = 0.4, r = 0.1, padding = 0.1, colour = G.C.JOKER_GREY },
-                            nodes = {
-                                { n = G.UIT.T, config = { text = localize(last_purchased_joker, 'jokers'), scale = 0.3, colour = G.C.UI.TEXT_LIGHT } }
-                            }
-                        }
-                    }
-                }
-            }
-        end
-        return { main_end = main_end }
+        return { vars = { card.ability.extra.xtuah } }
     end,
     calculate = function(self, card, context)
-        if not last_purchased_joker then return end
-        local target_joker = nil
-        for _, j in ipairs(G.jokers.cards) do
-            if j.config.center.key == last_purchased_joker and j ~= card then
-                target_joker = j
-                break
-            end
+        if (not love.window.hasMouseFocus and not love.window.hasFocus) and not context.blueprint then
+            G.E_MANAGER:add_event(Event({
+                func = function()
+                    play_sound('tngt_neverforget')
+                    card:juice_up(2, 2)
+                    G.E_MANAGER:add_event(Event({
+                        trigger = 'after',
+                        delay = 0.3,
+                        blockable = false,
+                        func = function()
+                            card:start_dissolve()
+                            return true
+                        end
+                    }))
+                    return true
+                end
+            }))
+            return {
+                message = "Tcuih",
+                colour = G.C.RED
+            }
         end
-        
-        if target_joker then
-            local original_joker = SMODS.find_joker(last_purchased_joker)
-            if original_joker and original_joker.calculate then
-                local original_context = context or {}
-                original_context.echo_source = card
-                local ret = original_joker.calculate(target_joker, original_context)
-                if ret then
-                    ret.colour = ret.colour or G.C.BLUE
-                    ret.message = (ret.message or "") .. " (Echo)"
-                    return ret
+        if context.joker_main then
+            local enhanced_cards_count = 0
+            for _, playing_card in ipairs(context.scoring_hand) do
+                if next(SMODS.get_enhancements(playing_card)) then
+                    enhanced_cards_count = enhanced_cards_count + 1
                 end
             end
-        end
-    end,
-    add_to_deck = function(self, card, from_debuff)
-        if not last_purchased_joker then
-            for i = 1, #G.jokers.cards do
-                if G.jokers.cards[i] == card and i > 1 then
-                    last_purchased_joker = G.jokers.cards[i-1].config.center.key
-                    break
-                end
+            if enhanced_cards_count > 0 then
+                return {
+                    xmult = card.ability.extra.xmult * enhanced_cards_count
+                }
             end
         end
     end
