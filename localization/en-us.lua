@@ -2,7 +2,6 @@ return {
     misc = {
         dictionary = {
             ph_you_win= "W",
-            ["$"] = "PP ", 
             tngt_booster_fridge = "Fridge",
             ph_improve_run = "I'm not calling you a good boy, that run was shit",
 	        tngt_page = "Page",
