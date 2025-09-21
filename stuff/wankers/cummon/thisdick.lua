@@ -869,3 +869,126 @@ SMODS.Joker {
         end
     end
 }
+
+SMODS.Joker {
+    key = 'spongemanicecone',
+    loc_txt = {
+        text = {
+            "This fucker gains",
+            "{C:chips}+#1#{} Chips if adjacent",
+            "{C:attention}Joker{} doesn't {C:attention}trigger{}",
+            "{C:inactive}(Currently {C:chips}+#2#{}{C:inactive} Chips)"
+        }
+    },
+    blueprint_compat = true,
+    perishable_compat = false,
+    eternal_compat = true,
+    rarity = 1,
+    cost = 3,
+    unlocked = true,
+    discovered = true,
+    atlas = 'ModdedVanilla15',
+    pos = { x = 5, y = 0 },
+    config = { extra = { base_chips = 25, total_chips = 0 } },
+    loc_vars = function(self, info_queue, card)
+        return {
+            vars = {
+                card.ability.extra.base_chips,
+                card.ability.extra.total_chips
+            }
+        }
+    end,
+    calculate = function(self, card, context)
+        if context.joker_main then
+            local my_pos = nil
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i] == card then
+                    my_pos = i
+                    break
+                end
+            end
+            if my_pos then
+                local adjacent_triggered = false
+                local adjacent_indices = {my_pos - 1, my_pos + 1}
+                for _, adj_pos in ipairs(adjacent_indices) do
+                    if adj_pos >= 1 and adj_pos <= #G.jokers.cards then
+                        local adj_joker = G.jokers.cards[adj_pos]
+                        if adj_joker and adj_joker ~= card and context.other_joker_effects then
+                            for _, effect in ipairs(context.other_joker_effects) do
+                                if effect.card == adj_joker then
+                                    adjacent_triggered = true
+                                    break
+                                end
+                            end
+                        end
+                        if adjacent_triggered then break end
+                    end
+                end
+                if not adjacent_triggered and not context.blueprint then
+                    local previous_total = card.ability.extra.total_chips
+                    card.ability.extra.total_chips = card.ability.extra.total_chips + card.ability.extra.base_chips
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            card:juice_up(0.5, 0.5)
+                            return true
+                        end
+                    }))
+                    
+                    return {
+                        chips = card.ability.extra.total_chips,
+                        colour = G.C.CHIPS
+                    }
+                else
+                    return {
+                        chips = card.ability.extra.total_chips
+                    }
+                end
+            end
+        end
+    end
+}
+
+SMODS.Joker {
+    key = 'dinnerbone',
+    loc_txt = {
+        name = "#",
+        text = {
+            "Dinnerbone"
+        }
+    },
+    rarity = 1,
+    atlas = 'ModdedVanilla16',
+    pos = { x = 2, y = 1 },
+    cost = 3,
+    unlocked = true,
+    discovered = true,
+    config = { extra = { extra_slots_used = -1 } },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+    add_to_deck = function(self, card, from_debuff)
+        G.GAME.inverted_joker_active = true
+    end,
+    remove_from_deck = function(self, card, from_debuff)
+        G.GAME.inverted_joker_active = nil
+        if G.jokers then
+            for k, joker_card in ipairs(G.jokers.cards) do
+                if joker_card ~= card then
+                    joker_card.T.r = 0
+                end
+            end
+        end
+    end
+}
+
+local cardarea_align_cards_ref = CardArea.align_cards
+function CardArea:align_cards()
+    cardarea_align_cards_ref(self)
+    if self.config.type == 'joker' and G.GAME.inverted_joker_active then
+        for k, card in ipairs(self.cards) do
+            if not card.states.drag.is and card.config.center.key ~= "inverted" then
+                card.T.r = math.pi
+            end
+        end
+    end
+end
