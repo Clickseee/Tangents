@@ -1203,6 +1203,42 @@ SMODS.Atlas {
 }
 
 SMODS.Atlas {
+    key = "despair",
+    path = "despair.png",
+    px = 71,
+    py = 95,
+}
+
+SMODS.Joker {
+    key = "despair",
+    loc_txt = {
+        name = ":despair2:",
+        text = {
+            "You are not supposed to see this."
+        }
+    },
+    rarity = 1,
+    atlas = 'despair',
+    pos = { x = 0, y = 0 },
+    no_collection = true,
+    cost = math.huge,
+    unlocked = true,
+    discovered = true,
+    blueprint_compat = true,
+    eternal_compat = true,
+    perishable_compat = true,
+    config = { extra = {} },
+    loc_vars = function(self, info_queue, card)
+        return { vars = {} }
+    end,
+    calculate = function(self, card, context)
+      if context.joker_main then
+        return { mult = -math.huge }
+    end
+end
+}
+
+SMODS.Atlas {
     key = "donotredeem",
     path = "donotredeem.png",
     px = 71,
