@@ -870,6 +870,7 @@ SMODS.Joker {
     end
 }
 
+--[[
 SMODS.Joker {
     key = 'spongemanicecone',
     loc_txt = {
@@ -947,6 +948,7 @@ SMODS.Joker {
         end
     end
 }
+]]
 
 SMODS.Joker {
     key = 'dinnerbone',
